@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findAllUsers(@PathVariable Long id) {
+    public ResponseEntity<?> findUserById(@PathVariable Long id) {
         User user = userService.handleFindById(id);
 
         if (user == null) return ResponseEntity.notFound().build();
@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
         User user = userService.handleDeleteById(id);
 
         if (user == null) return ResponseEntity.notFound().build();
