@@ -16,45 +16,44 @@ import java.util.List;
  **/
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/todos")
 public class TodoController {
 
     private final TodoService todoService;
 
-    @PostMapping("/todo")
+    @PostMapping("")
     public ResponseEntity<Todo> create(@RequestBody TodoDto todoDto) {
         Todo todo = this.todoService.handleCreateTodo(todoDto);
 
-        return new ResponseEntity(todo, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.CREATED).body(todo);
     }
 
-    @GetMapping("/todo")
+    @GetMapping("")
     public ResponseEntity<List<Todo>> findAll() {
-
-        return new ResponseEntity(this.todoService.handlefindAll(), HttpStatus.OK);
+        return ResponseEntity.ok(this.todoService.handlefindAll());
     }
 
-    @GetMapping("/todo/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Todo> findById(@PathVariable int id) {
         Todo todo = this.todoService.handleFindById(id);
 
-        if (todo == null) return new ResponseEntity(HttpStatus.NOT_FOUND);
-        else return new ResponseEntity(todo, HttpStatus.OK);
+        if (todo == null) return ResponseEntity.notFound().build();
+        else return ResponseEntity.ok(todo);
     }
 
-    @PutMapping("/todo/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Todo> update(@PathVariable int id, @RequestBody TodoDto todoDto) {
         Todo todo = this.todoService.handleUpdateTodo(id, todoDto);
 
-        return new ResponseEntity(todo, HttpStatus.OK);
+        return ResponseEntity.ok(todo);
     }
 
-    @DeleteMapping("/todo/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Todo> remove(@PathVariable int id) {
-
         Todo todo = this.todoService.handleDeleteTodo(id);
 
-        if (todo == null) return new ResponseEntity(HttpStatus.NOT_FOUND);
-        else return new ResponseEntity(todo, HttpStatus.OK);
+        if (todo == null) return ResponseEntity.notFound().build();
+        else return ResponseEntity.ok(todo);
     }
 
 
