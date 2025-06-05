@@ -14,8 +14,9 @@ export const addUser = async (user) => {
   });
 
   if (!res.ok) {
-    if (res.text) throw new Error(await res.text());
-    throw new Error(await res.json());
+    const resJson = await res.json();
+
+    throw new Error(resJson.message);
   }
 
   return await res.json();
@@ -40,8 +41,9 @@ export const updateUser = async (id, user) => {
   });
 
   if (!res.ok) {
-    if (res.text) throw new Error(await res.text());
-    throw new Error(await res.json());
+    const resJson = await res.json();
+
+    throw new Error(resJson.message);
   }
 
   return await res.json();

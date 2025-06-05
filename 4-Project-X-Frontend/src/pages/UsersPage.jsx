@@ -20,8 +20,8 @@ const UsersPage = () => {
 
   useEffect(() => {
     const doFetch = async () => {
-      const users = await fetchUser();
-      setUsers(users);
+      const res = await fetchUser();
+      setUsers(res.data);
     };
 
     doFetch();

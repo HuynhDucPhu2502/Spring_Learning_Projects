@@ -36,7 +36,9 @@ public class UserServiceImpl implements me.huynhducphu.project_x.service.UserSer
 
     @Override
     public User handleFindUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository
+                .findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
     @Override
@@ -46,22 +48,22 @@ public class UserServiceImpl implements me.huynhducphu.project_x.service.UserSer
                 .map(user -> {
 
                     if (userRepository.existsByEmailAndIdNot(userDTO.getEmail(), id))
-                        return null;
+                        throw new IllegalArgumentException("Email already exists");
 
                     user.setName(userDTO.getName());
                     user.setEmail(userDTO.getEmail());
                     return userRepository.saveAndFlush(user);
-                }).orElse(null);
+                }).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
     @Override
-    public boolean handleDeleteUserById(Long id) {
+    public User handleDeleteUserById(Long id) {
         User user = userRepository.findById(id).orElse(null);
 
-        if (user == null) return false;
+        if (user == null)
+            throw new IllegalArgumentException("User not found");
+
         userRepository.delete(user);
-        return true;
+        return user;
     }
-
-
 }
