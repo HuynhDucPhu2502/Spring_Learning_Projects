@@ -5,9 +5,11 @@ import me.huynhducphu.job_hunter.model.ApiResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.stream.Collectors;
 
@@ -55,6 +57,30 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse<>(
                         ex.getMessage(),
                         "DATA_INTEGRITY_VIOLATION"
+                ));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiResponse<?>> handleMethodArgumentTypeMismatchException(
+            MethodArgumentTypeMismatchException ex
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse<>(
+                        ex.getName() + " phải là " + ex.getRequiredType().getSimpleName(),
+                        "PARAM_TYPE_MISMATCH"
+                ));
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleUsernameNotFoundException(
+            UsernameNotFoundException ex
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ApiResponse<>(
+                        ex.getMessage(),
+                        "USER_NOT_FOUND"
                 ));
     }
 

@@ -2,11 +2,12 @@ package me.huynhducphu.job_hunter.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.job_hunter.dto.request.UserRequestDto;
+import me.huynhducphu.job_hunter.dto.request.CreateUserRequestDto;
 import me.huynhducphu.job_hunter.dto.response.UserResponseDto;
 import me.huynhducphu.job_hunter.model.User;
 import me.huynhducphu.job_hunter.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,17 +20,18 @@ import java.util.List;
 public class UserServiceImpl implements me.huynhducphu.job_hunter.service.UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponseDto saveUser(UserRequestDto userRequestDto) {
+    public UserResponseDto saveUser(CreateUserRequestDto createUserRequestDto) {
 
-        if (userRepository.existsByEmail(userRequestDto.getEmail()))
+        if (userRepository.existsByEmail(createUserRequestDto.getEmail()))
             throw new DataIntegrityViolationException("Email đã tồn tại");
 
         User user = new User();
-        user.setName(userRequestDto.getName());
-        user.setEmail(userRequestDto.getEmail());
-        user.setPassword(userRequestDto.getPassword());
+        user.setName(createUserRequestDto.getName());
+        user.setEmail(createUserRequestDto.getEmail());
+        user.setPassword(passwordEncoder.encode(createUserRequestDto.getPassword()));
 
         User savedUser = userRepository.saveAndFlush(user);
 
@@ -60,18 +62,18 @@ public class UserServiceImpl implements me.huynhducphu.job_hunter.service.UserSe
     }
 
     @Override
-    public UserResponseDto updateUser(UserRequestDto userRequestDto, Long id) {
+    public UserResponseDto updateUser(CreateUserRequestDto createUserRequestDto, Long id) {
 
         User user = userRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
 
-        if (userRepository.existsByEmailAndIdNot(userRequestDto.getEmail(), user.getId()))
+        if (userRepository.existsByEmailAndIdNot(createUserRequestDto.getEmail(), user.getId()))
             throw new DataIntegrityViolationException("Email đã tồn tại");
 
-        user.setEmail(userRequestDto.getEmail());
-        user.setPassword(userRequestDto.getPassword());
-        user.setName(userRequestDto.getName());
+        user.setEmail(createUserRequestDto.getEmail());
+        user.setPassword(createUserRequestDto.getPassword());
+        user.setName(createUserRequestDto.getName());
 
         User savedUser = userRepository.save(user);
         return new UserResponseDto(

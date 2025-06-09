@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
  * Admin 6/7/2025
  **/
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class ApiResponse<T> {
 
