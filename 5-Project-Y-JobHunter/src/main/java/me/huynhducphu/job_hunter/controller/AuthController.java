@@ -3,12 +3,15 @@ package me.huynhducphu.job_hunter.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.job_hunter.dto.request.LoginRequestDto;
+import me.huynhducphu.job_hunter.dto.response.AuthTokenResponseDto;
 import me.huynhducphu.job_hunter.model.ApiResponse;
 import me.huynhducphu.job_hunter.util.SecurityUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,12 +34,17 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(token);
 
         String jwtToken = securityUtil.createToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        AuthTokenResponseDto authTokenResponseDto = new AuthTokenResponseDto(
+                jwtToken,
+                null
+        );
 
         return ResponseEntity.ok(
                 new ApiResponse<>(
-                        "Đăng nhập thành công",
-                        null,
-                        jwtToken
+                        "Xác thực thành công",
+                        authTokenResponseDto
                 )
         );
     }

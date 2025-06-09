@@ -2,6 +2,7 @@ package me.huynhducphu.job_hunter.config;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
+import com.nimbusds.jose.util.Base64URL;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +40,25 @@ public class AuthConfiguration {
     @Bean
     public JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(getSecretKey()));
+
     }
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder
+                .withSecretKey(getSecretKey())
+                .macAlgorithm(MAC_ALGORITHM).build();
+
+        return token -> {
+            try {
+                return jwtDecoder.decode(token);
+            } catch (Exception e) {
+                System.out.println(">>> JWT error: " + e.getMessage());
+                throw e;
+            }
+        };
+    }
+
 
     public SecretKey getSecretKey() {
         byte[] keyBytes = Base64.from(jwtKey).decode();

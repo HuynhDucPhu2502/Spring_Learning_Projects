@@ -34,6 +34,10 @@ public class SecurityUtil {
         Instant now = Instant.now();
         Instant validity = now.plus(jwtExpiration, ChronoUnit.SECONDS);
 
+        // Header
+        JwsHeader jwsHeader = JwsHeader.with(AuthConfiguration.MAC_ALGORITHM).build();
+
+        // Payload
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
@@ -41,7 +45,7 @@ public class SecurityUtil {
                 .claim("authorities", authentication)
                 .build();
 
-        JwsHeader jwsHeader = JwsHeader.with(AuthConfiguration.MAC_ALGORITHM).build();
+
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 

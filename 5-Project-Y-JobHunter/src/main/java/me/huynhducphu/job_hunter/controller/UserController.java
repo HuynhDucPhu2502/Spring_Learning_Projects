@@ -6,7 +6,7 @@ package me.huynhducphu.job_hunter.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.job_hunter.dto.request.CreateUserRequestDto;
+import me.huynhducphu.job_hunter.dto.request.UserRequestDto;
 import me.huynhducphu.job_hunter.model.ApiResponse;
 import me.huynhducphu.job_hunter.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -21,12 +21,12 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> saveUser(@Valid @RequestBody CreateUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ApiResponse<?>> saveUser(@Valid @RequestBody UserRequestDto userRequestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(
                         "Tạo tài khoản thành công",
-                        userService.saveUser(createUserRequestDto)
+                        userService.saveUser(userRequestDto)
                 ));
     }
 
@@ -53,12 +53,12 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody CreateUserRequestDto createUserRequestDto
+            @Valid @RequestBody UserRequestDto userRequestDto
     ) {
         return ResponseEntity.ok(
                 new ApiResponse<>(
                         "Lấy toàn bộ danh sách người dùng",
-                        userService.updateUser(createUserRequestDto, id)
+                        userService.updateUser(userRequestDto, id)
                 )
         );
     }

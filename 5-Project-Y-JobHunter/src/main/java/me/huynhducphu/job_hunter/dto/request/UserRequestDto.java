@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreateUserRequestDto {
+public class UserRequestDto {
 
     @NotBlank(message = "Tên người dùng không được để trống")
     private String name;

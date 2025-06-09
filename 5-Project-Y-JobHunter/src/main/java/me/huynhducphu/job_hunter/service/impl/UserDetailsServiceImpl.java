@@ -25,12 +25,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
 
-        Optional<me.huynhducphu.job_hunter.model.User> savedUser = userRepository.findByEmail(username);
-        if (savedUser.get().equals(null)) throw new UsernameNotFoundException("Không tìm thấy người dùng");
+        me.huynhducphu.job_hunter.model.User savedUser =
+                userRepository
+                        .findByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException(null));
 
         return User.builder()
-                .username(savedUser.get().getEmail())
-                .password(savedUser.get().getPassword())
+                .username(savedUser.getEmail())
+                .password(savedUser.getPassword())
                 .authorities(Collections.emptyList())
                 .build();
     }

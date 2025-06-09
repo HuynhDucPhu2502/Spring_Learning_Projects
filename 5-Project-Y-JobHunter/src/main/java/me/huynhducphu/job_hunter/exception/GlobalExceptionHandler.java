@@ -5,6 +5,7 @@ import me.huynhducphu.job_hunter.model.ApiResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -72,15 +73,18 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ApiResponse<?>> handleUsernameNotFoundException(
-            UsernameNotFoundException ex
+    @ExceptionHandler(value = {
+            UsernameNotFoundException.class,
+            BadCredentialsException.class
+    })
+    public ResponseEntity<ApiResponse<?>> handleBadCredentialsException(
+            Exception ex
     ) {
         return ResponseEntity
-                .status(HttpStatus.CONFLICT)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(new ApiResponse<>(
-                        ex.getMessage(),
-                        "USER_NOT_FOUND"
+                        "Thông tin đăng nhập không hợp lệ",
+                        "BAD_CREDENTIALS"
                 ));
     }
 
