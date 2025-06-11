@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>me.huynhducphu</groupId>
-    <artifactId>5-Project-Y-JobHunter</artifactId>
+    <artifactId>5-Project-Y-TalentBridge</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>5-Project-Y-JobHunter</name>
-    <description>Demo project for Spring Boot</description>
+    <name>5-Project-Y-TalentBridge</name>
+    <description>Demo ứng dụng Spring Boot cho nền tảng kết nối nhà tuyển dụng và ứng viên TalentBridge</description>
     <url/>
     <licenses>
         <license/>

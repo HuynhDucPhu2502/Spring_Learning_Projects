@@ -33,7 +33,9 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
 
-        if (body instanceof ApiResponse<?>) return body;
+        if (body instanceof ApiResponse<?> || body instanceof String)
+            return body;
+
 
         if (status >= 400)
             return new ApiResponse<>("Error", status);

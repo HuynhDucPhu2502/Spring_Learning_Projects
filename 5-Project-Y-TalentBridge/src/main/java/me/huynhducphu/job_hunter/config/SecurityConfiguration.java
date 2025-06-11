@@ -44,7 +44,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         auth ->
                                 auth
-                                        .requestMatchers("/login").permitAll()
+                                        .requestMatchers("/login", "/").permitAll()
                                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 ->
@@ -52,14 +52,11 @@ public class SecurityConfiguration {
                                 .jwt(Customizer.withDefaults())
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
-                .exceptionHandling(exceptions ->
-                        exceptions
-                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-                ).sessionManagement(
+                .sessionManagement(
                         session ->
                                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                ).csrf(csrf -> csrf.disable())
+                )
+                .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable());
 
