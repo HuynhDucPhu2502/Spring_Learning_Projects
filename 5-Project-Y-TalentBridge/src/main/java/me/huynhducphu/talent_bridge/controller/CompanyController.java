@@ -1,16 +1,12 @@
 package me.huynhducphu.talent_bridge.controller;
 
-/**
- * Admin 6/7/2025
- **/
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.talent_bridge.dto.request.UserRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.CompanyRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
 import me.huynhducphu.talent_bridge.model.ApiResponse;
-import me.huynhducphu.talent_bridge.model.User;
-import me.huynhducphu.talent_bridge.service.UserService;
+import me.huynhducphu.talent_bridge.model.Company;
+import me.huynhducphu.talent_bridge.service.CompanyService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -19,25 +15,31 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+/**
+ * Admin 6/12/2025
+ **/
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/companies")
 @RequiredArgsConstructor
-public class UserController {
+public class CompanyController {
 
-    private final UserService userService;
+    private final CompanyService companyService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> saveUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<?> saveCompany(@Valid @RequestBody CompanyRequestDto companyRequestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(
-                        "Tạo tài khoản",
-                        userService.saveUser(userRequestDto)
-                ));
+                .body(
+                        new ApiResponse<>(
+                                "Tạo công ty",
+                                companyService.saveCompany(companyRequestDto)
+                        )
+                );
     }
 
+
     @GetMapping
-    public ResponseEntity<ApiResponse<?>> findAllUsers(
+    public ResponseEntity<?> findAllCompanies(
             @RequestParam(value = "current", required = false) Optional<String> currentOptional,
             @RequestParam(value = "pageSize", required = false) Optional<String> pageSizeOptional
     ) {
@@ -48,9 +50,9 @@ public class UserController {
                 .map(Integer::parseInt)
                 .orElse(5);
 
-        Page<User> page = userService.findAllUser(PageRequest.of(current, pageSize));
+        Page<Company> page = companyService.findAllCompany(PageRequest.of(current, pageSize));
 
-        PageResponseDto<User> res = new PageResponseDto<>(
+        PageResponseDto<Company> res = new PageResponseDto<>(
                 page.getContent(),
                 page.getNumber() + 1,
                 page.getSize(),
@@ -60,41 +62,41 @@ public class UserController {
 
         return ResponseEntity.ok(
                 new ApiResponse<>(
-                        "Lấy danh sách người dùng trang " + (current + 1),
+                        "Lấy danh sách công ty trang " + (current + 1),
                         res
                 )
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> findUserById(@PathVariable Long id) {
+    public ResponseEntity<?> findCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(
                 new ApiResponse<>(
-                        "Lấy người dùng theo mã",
-                        userService.findUserById(id)
+                        "Lấy công ty theo mã",
+                        companyService.findCompanyById(id)
                 )
         );
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> updateUser(
-            @PathVariable Long id,
-            @Valid @RequestBody UserRequestDto userRequestDto
+    public ResponseEntity<?> updateCompany(
+            @Valid @RequestBody CompanyRequestDto companyRequestDto,
+            @PathVariable Long id
     ) {
         return ResponseEntity.ok(
                 new ApiResponse<>(
-                        "Cập nhật người dùng",
-                        userService.updateUser(userRequestDto, id)
+                        "Cập nhật công ty",
+                        companyService.updateCompany(companyRequestDto, id)
                 )
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> deleteUserById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(
                 new ApiResponse<>(
-                        "Xóa người dùng",
-                        userService.deleteUserById(id)
+                        "Xóa công ty",
+                        companyService.deleteCompanyById(id)
                 )
         );
     }

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.LoginRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.model.ApiResponse;
-import me.huynhducphu.talent_bridge.util.SecurityUtil;
+import me.huynhducphu.talent_bridge.service.impl.AuthServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final SecurityUtil securityUtil;
+    private final AuthServiceImpl securityUtil;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {

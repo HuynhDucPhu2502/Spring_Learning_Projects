@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.util;
+package me.huynhducphu.talent_bridge.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.config.AuthConfiguration;
@@ -18,13 +18,14 @@ import java.time.temporal.ChronoUnit;
  **/
 @Service
 @RequiredArgsConstructor
-public class SecurityUtil {
+public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.AuthService {
 
     private final JwtEncoder jwtEncoder;
 
     @Value("${jwt.expiration}")
     public Long jwtExpiration;
 
+    @Override
     public String createToken(Authentication authentication) {
         Instant now = Instant.now();
         Instant validity = now.plus(jwtExpiration, ChronoUnit.SECONDS);
@@ -37,7 +38,7 @@ public class SecurityUtil {
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(authentication.getName())
-                .claim("authorities", authentication)
+                .claim("roles", authentication.getAuthorities())
                 .build();
 
 
