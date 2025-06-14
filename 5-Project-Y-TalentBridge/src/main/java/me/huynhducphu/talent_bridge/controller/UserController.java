@@ -8,20 +8,18 @@ import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
-import me.huynhducphu.talent_bridge.dto.request.UserRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.user.UserCreateRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.user.UserUpdateRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
-import me.huynhducphu.talent_bridge.model.ApiResponse;
+import me.huynhducphu.talent_bridge.dto.response.user.UserResponseDto;
 import me.huynhducphu.talent_bridge.model.User;
 import me.huynhducphu.talent_bridge.service.UserService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -32,10 +30,10 @@ public class UserController {
 
     @PostMapping
     @ApiMessage(value = "Tạo tài khoản")
-    public ResponseEntity<?> saveUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<?> saveUser(@Valid @RequestBody UserCreateRequestDto userCreateRequestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userService.saveUser(userRequestDto));
+                .body(userService.saveUser(userCreateRequestDto));
     }
 
     @GetMapping
@@ -46,9 +44,9 @@ public class UserController {
     ) {
 
 
-        Page<User> page = userService.findAllUser(spec, pageable);
+        Page<UserResponseDto> page = userService.findAllUser(spec, pageable);
 
-        PageResponseDto<User> res = new PageResponseDto<>(
+        PageResponseDto<UserResponseDto> res = new PageResponseDto<>(
                 page.getContent(),
                 pageable.getPageNumber() + 1,
                 pageable.getPageSize(),
@@ -65,13 +63,12 @@ public class UserController {
         return ResponseEntity.ok(userService.findUserById(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @ApiMessage(value = "Cập nhật người dùng")
     public ResponseEntity<?> updateUser(
-            @PathVariable Long id,
-            @Valid @RequestBody UserRequestDto userRequestDto
+            @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto
     ) {
-        return ResponseEntity.ok(userService.updateUser(userRequestDto, id));
+        return ResponseEntity.ok(userService.updateUser(userUpdateRequestDto));
     }
 
     @DeleteMapping("/{id}")

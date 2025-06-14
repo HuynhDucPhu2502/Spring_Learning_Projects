@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import me.huynhducphu.talent_bridge.model.constant.Gender;
 
 /**
  * Admin 6/7/2025
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@JsonPropertyOrder({"id", "name", "email", "password"})
+@JsonPropertyOrder({"id", "name", "email", "password", "age", "address", "gender", "refreshToken"})
 public class User extends BaseEntity {
 
     @Id
@@ -32,6 +33,15 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String password;
+
+    private Integer age;
+
+    private String address;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    private String refreshToken;
 
 }
 

@@ -2,8 +2,8 @@ package me.huynhducphu.talent_bridge.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.talent_bridge.dto.request.LoginRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.AuthTokenResponseDto;
+import me.huynhducphu.talent_bridge.dto.request.user.LoginRequestDto;
+import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.model.ApiResponse;
 import me.huynhducphu.talent_bridge.service.impl.AuthServiceImpl;
 import org.springframework.http.ResponseEntity;

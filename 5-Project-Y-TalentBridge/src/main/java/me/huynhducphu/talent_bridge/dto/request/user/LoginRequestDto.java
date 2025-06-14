@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.dto.request;
+package me.huynhducphu.talent_bridge.dto.request.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

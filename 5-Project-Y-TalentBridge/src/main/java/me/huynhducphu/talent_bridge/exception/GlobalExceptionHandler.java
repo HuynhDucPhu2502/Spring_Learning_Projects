@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.model.ApiResponse;
+import org.apache.el.parser.ParseException;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
 
@@ -25,14 +27,14 @@ import java.util.stream.Collectors;
  **/
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiResponse<?>> handleEntityNotFoundException(EntityNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ApiResponse<>(
                         ex.getMessage(),
-                        "RESOURCE_NOT_FOUND"
+                        "ENTITY_NOT_FOUND"
                 ));
     }
 
@@ -84,10 +86,22 @@ public class GlobalExceptionHandler {
     })
     public ResponseEntity<ApiResponse<?>> handleAuthenticationException() {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiResponse<>(
                         "Thông tin đăng nhập không hợp lệ",
                         "BAD_CREDENTIALS"
+                ));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiResponse<?>> handleNoResourceFoundException(
+            NoResourceFoundException ex
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ApiResponse<>(
+                        "Không tìm thấy URL này",
+                        "RESOURCE_NOT_FOUND"
                 ));
     }
 

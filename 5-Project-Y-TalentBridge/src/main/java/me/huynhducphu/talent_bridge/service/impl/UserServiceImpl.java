@@ -2,8 +2,9 @@ package me.huynhducphu.talent_bridge.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.talent_bridge.dto.request.UserRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.UserResponseDto;
+import me.huynhducphu.talent_bridge.dto.request.user.UserCreateRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.user.UserUpdateRequestDto;
+import me.huynhducphu.talent_bridge.dto.response.user.UserResponseDto;
 import me.huynhducphu.talent_bridge.model.User;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Admin 6/7/2025
@@ -26,64 +25,58 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponseDto saveUser(UserRequestDto userRequestDto) {
+    public UserResponseDto saveUser(UserCreateRequestDto userCreateRequestDto) {
 
-        if (userRepository.existsByEmail(userRequestDto.getEmail()))
+        if (userRepository.existsByEmail(userCreateRequestDto.getEmail()))
             throw new DataIntegrityViolationException("Email đã tồn tại");
 
         User user = new User();
-        user.setName(userRequestDto.getName());
-        user.setEmail(userRequestDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
+        user.setName(userCreateRequestDto.getName());
+        user.setEmail(userCreateRequestDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userCreateRequestDto.getPassword()));
+        user.setAge(userCreateRequestDto.getAge());
+        user.setAddress(userCreateRequestDto.getAddress());
+        user.setGender(userCreateRequestDto.getGender());
 
         User savedUser = userRepository.saveAndFlush(user);
 
-        return new UserResponseDto(
-                savedUser.getId(),
-                savedUser.getName(),
-                savedUser.getEmail()
-        );
+        return mapToUserResponseDto(savedUser);
     }
 
     @Override
-    public Page<User> findAllUser(Specification<User> spec, Pageable pageable) {
-        return userRepository.findAll(spec, pageable);
+    public Page<UserResponseDto> findAllUser(Specification<User> spec, Pageable pageable) {
+        return userRepository
+                .findAll(spec, pageable)
+                .map(user -> mapToUserResponseDto(user));
     }
 
     @Override
     public UserResponseDto findUserById(Long id) {
         return userRepository
                 .findById(id)
-                .map(user -> new UserResponseDto(
-                        user.getId(),
-                        user.getName(),
-                        user.getEmail()
-                ))
+                .map(user -> mapToUserResponseDto(user))
                 .orElseThrow(() ->
                         new EntityNotFoundException("Không tìm thấy người dùng")
                 );
     }
 
     @Override
-    public UserResponseDto updateUser(UserRequestDto userRequestDto, Long id) {
+    public UserResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto) {
 
         User user = userRepository
-                .findById(id)
+                .findById(userUpdateRequestDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
 
-        if (userRepository.existsByEmailAndIdNot(userRequestDto.getEmail(), user.getId()))
-            throw new DataIntegrityViolationException("Email đã tồn tại");
-
-        user.setEmail(userRequestDto.getEmail());
-        user.setPassword(userRequestDto.getPassword());
-        user.setName(userRequestDto.getName());
+        user.setName(userUpdateRequestDto.getName());
+        user.setAge(userUpdateRequestDto.getAge());
+        user.setAddress(userUpdateRequestDto.getAddress());
+        user.setGender(userUpdateRequestDto.getGender());
 
         User savedUser = userRepository.save(user);
-        return new UserResponseDto(
-                savedUser.getId(),
-                savedUser.getName(),
-                savedUser.getEmail()
-        );
+        UserResponseDto res = mapToUserResponseDto(savedUser);
+        res.setCreatedAt(null);
+
+        return res;
     }
 
     @Override
@@ -95,10 +88,20 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                 );
 
         userRepository.delete(user);
+        return mapToUserResponseDto(user);
+    }
+
+
+    private UserResponseDto mapToUserResponseDto(User user) {
         return new UserResponseDto(
                 user.getId(),
                 user.getName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getAge(),
+                user.getAddress(),
+                user.getGender(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
         );
     }
 

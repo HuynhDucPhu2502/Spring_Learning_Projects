@@ -27,12 +27,12 @@ public class BaseEntity {
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd:HH:mm:ss a", timezone = "GMT+7")
-    private Instant createDate;
+    private Instant createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at")
     @JsonFormat(pattern = "yyyy-MM-dd:HH:mm:ss a", timezone = "GMT+7")
-    private Instant updateDate;
+    private Instant updatedAt;
 
     @CreatedBy
     @Column(name = "created_by", updatable = false)
