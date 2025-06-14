@@ -1,6 +1,7 @@
 package me.huynhducphu.talent_bridge.util;
 
 import jakarta.servlet.http.HttpServletResponse;
+import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.model.ApiResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -36,11 +37,20 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
         if (body instanceof ApiResponse<?> || body instanceof String)
             return body;
 
+        ApiMessage apiMessage = returnType.getMethodAnnotation(ApiMessage.class);
+        
 
         if (status >= 400)
-            return new ApiResponse<>("Error", status);
+            return new ApiResponse<>(
+                    apiMessage == null ? "Fail" : apiMessage.value(),
+                    status
+            );
 
-        return new ApiResponse<>("Success", body);
+
+        return new ApiResponse<>(
+                apiMessage == null ? "Success" : apiMessage.value(),
+                body
+        );
 
     }
 }

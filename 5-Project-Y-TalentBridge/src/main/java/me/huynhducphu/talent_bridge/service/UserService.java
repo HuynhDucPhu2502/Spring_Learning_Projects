@@ -5,6 +5,7 @@ import me.huynhducphu.talent_bridge.dto.response.UserResponseDto;
 import me.huynhducphu.talent_bridge.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface UserService {
     UserResponseDto saveUser(UserRequestDto userRequestDto);
 
-    Page<User> findAllUser(Pageable pageable);
+    Page<User> findAllUser(Specification<User> spec, Pageable pageable);
 
     UserResponseDto findUserById(Long id);
 

@@ -9,6 +9,7 @@ import me.huynhducphu.talent_bridge.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,8 +46,8 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     }
 
     @Override
-    public Page<User> findAllUser(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<User> findAllUser(Specification<User> spec, Pageable pageable) {
+        return userRepository.findAll(spec, pageable);
     }
 
     @Override

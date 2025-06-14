@@ -8,6 +8,7 @@ import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,8 +44,8 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
     }
 
     @Override
-    public Page<Company> findAllCompany(Pageable pageable) {
-        return companyRepository.findAll(pageable);
+    public Page<Company> findAllCompany(Specification<Company> spec, Pageable pageable) {
+        return companyRepository.findAll(spec, pageable);
     }
 
     @Override

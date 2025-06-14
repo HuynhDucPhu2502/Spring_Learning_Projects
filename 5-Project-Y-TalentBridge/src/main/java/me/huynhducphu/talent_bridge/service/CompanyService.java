@@ -5,8 +5,8 @@ import me.huynhducphu.talent_bridge.dto.response.CompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
 
 /**
  * Admin 6/12/2025
@@ -14,7 +14,7 @@ import java.util.List;
 public interface CompanyService {
     CompanyResponseDto saveCompany(CompanyRequestDto companyRequestDto);
 
-    Page<Company> findAllCompany(Pageable pageable);
+    Page<Company> findAllCompany(Specification<Company> spec, Pageable pageable);
 
     Company findCompanyById(Long id);
 
