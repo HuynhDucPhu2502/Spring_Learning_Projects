@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.BadJwtException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -102,6 +104,30 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse<>(
                         "Không tìm thấy URL này",
                         "RESOURCE_NOT_FOUND"
+                ));
+    }
+
+    @ExceptionHandler(MissingRequestCookieException.class)
+    public ResponseEntity<ApiResponse<?>> handleMissingRequestCookieException(
+            MissingRequestCookieException ex
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiResponse<>(
+                        "Không tìm thấy cookie " + ex.getCookieName(),
+                        "MISSING_COOKIE"
+                ));
+    }
+
+    @ExceptionHandler(BadJwtException.class)
+    public ResponseEntity<ApiResponse<?>> handleBadJwtException(
+            BadJwtException ex
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiResponse<>(
+                        "JWT Không hợp lệ",
+                        "BAD_JWT"
                 ));
     }
 

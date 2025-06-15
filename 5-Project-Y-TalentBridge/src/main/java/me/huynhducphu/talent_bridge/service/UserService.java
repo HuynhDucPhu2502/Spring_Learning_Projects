@@ -21,4 +21,8 @@ public interface UserService {
     UserResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto);
 
     UserResponseDto deleteUserById(Long id);
+
+    void updateRefreshToken(String token, String email);
+
+    User findByEmail(String email);
 }

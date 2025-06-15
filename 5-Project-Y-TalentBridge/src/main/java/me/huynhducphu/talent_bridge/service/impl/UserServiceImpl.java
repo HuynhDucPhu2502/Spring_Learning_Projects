@@ -47,14 +47,14 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     public Page<UserResponseDto> findAllUser(Specification<User> spec, Pageable pageable) {
         return userRepository
                 .findAll(spec, pageable)
-                .map(user -> mapToUserResponseDto(user));
+                .map(this::mapToUserResponseDto);
     }
 
     @Override
     public UserResponseDto findUserById(Long id) {
         return userRepository
                 .findById(id)
-                .map(user -> mapToUserResponseDto(user))
+                .map(this::mapToUserResponseDto)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Không tìm thấy người dùng")
                 );
@@ -89,6 +89,23 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
 
         userRepository.delete(user);
         return mapToUserResponseDto(user);
+    }
+
+    @Override
+    public void updateRefreshToken(String token, String email) {
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+        user.setRefreshToken(token);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
     }
 
 
