@@ -119,8 +119,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiResponse<>(
-                        "JWT Không hợp lệ",
-                        "BAD_JWT"
+                        "Token không hợp lệ (không đúng định dạng, hết hạn)",
+                        "UNAUTHORIZED"
                 ));
     }
 

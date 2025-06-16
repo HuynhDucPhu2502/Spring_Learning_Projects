@@ -67,7 +67,7 @@ public class AuthController {
         return ResponseEntity.ok(userInformation);
     }
 
-    @GetMapping("/refresh")
+    @PostMapping("/refresh")
     @ApiMessage(value = "Lấy refresh token")
     public ResponseEntity<?> refreshToken(
             @CookieValue(value = "refresh_token") String refreshToken
