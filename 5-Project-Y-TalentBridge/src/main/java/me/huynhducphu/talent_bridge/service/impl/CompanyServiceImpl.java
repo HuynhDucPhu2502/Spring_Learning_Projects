@@ -3,15 +3,13 @@ package me.huynhducphu.talent_bridge.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.CompanyRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.CompanyResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Admin 6/12/2025

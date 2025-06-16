@@ -22,7 +22,5 @@ public interface UserService {
 
     UserResponseDto deleteUserById(Long id);
 
-    void updateRefreshToken(String token, String email);
-
     User findByEmail(String email);
 }

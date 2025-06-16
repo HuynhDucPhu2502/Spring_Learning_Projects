@@ -6,7 +6,9 @@ import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.user.LoginRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.model.User;
+import me.huynhducphu.talent_bridge.repository.RefreshTokenRepository;
 import me.huynhducphu.talent_bridge.service.AuthService;
+import me.huynhducphu.talent_bridge.service.RefreshTokenService;
 import me.huynhducphu.talent_bridge.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -26,8 +28,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+
     private final AuthService authService;
     private final UserService userService;
+    private final RefreshTokenService refreshTokenService;
 
 
     @PostMapping("/login")
@@ -46,27 +50,18 @@ public class AuthController {
 
         // FIND USER IN DATABASE AND CREATE USER INFORMATION INSTANCE
         User user = userService.findByEmail(loginRequestDto.getEmail());
-        AuthTokenResponseDto.UserInformation userInformation = new AuthTokenResponseDto.UserInformation(
-                user.getEmail(),
-                user.getName(),
-                user.getId()
-        );
 
         // CREATE ACCESS TOKEN AND REFRESH TOKEN WITH CLAIM "user": USER INFORMATION
-        return buildAuthResponse(user, userInformation);
+        return buildAuthResponse(user);
     }
 
     @GetMapping("/account")
     @ApiMessage(value = "Lấy thông tin người dùng")
     public ResponseEntity<?> getAccount() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.findByEmail(email);
 
-        AuthTokenResponseDto.UserInformation userInformation = new AuthTokenResponseDto.UserInformation(
-                user.getEmail(),
-                user.getName(),
-                user.getId()
-        );
+        AuthTokenResponseDto.UserInformation userInformation =
+                authService.mapToUserInformation(email);
 
 
         return ResponseEntity.ok(userInformation);
@@ -78,21 +73,23 @@ public class AuthController {
             @CookieValue(value = "refresh_token") String refreshToken
     ) {
         String email = authService.validateToken(refreshToken).getSubject();
+        refreshTokenService.verifyAndDeleteOldRefreshToken(email, refreshToken);
+
         User user = userService.findByEmail(email);
-
-        AuthTokenResponseDto.UserInformation userInformation = new AuthTokenResponseDto.UserInformation(
-                user.getEmail(),
-                user.getName(),
-                user.getId()
-        );
-
-        return buildAuthResponse(user, userInformation);
+        return buildAuthResponse(user);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<?> logout(
+            @CookieValue(value = "refresh_token", required = false) String refreshToken
+    ) {
+        if (refreshToken != null) {
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            refreshTokenService.verifyAndDeleteOldRefreshToken(email, refreshToken);
+        }
+
         ResponseCookie responseCookie = ResponseCookie
-                .from("refresh_token", null)
+                .from("refresh_token", "")
                 .httpOnly(true)
                 .path("/")
                 .sameSite("Strict")
@@ -105,12 +102,16 @@ public class AuthController {
                 .build();
     }
 
-    private ResponseEntity<?> buildAuthResponse(User user, AuthTokenResponseDto.UserInformation userInformation) {
-        String accessToken = authService.createAccessToken(user.getEmail(), userInformation);
-        String newRefreshToken = authService.createRefreshToken(user.getEmail(), userInformation);
+    private ResponseEntity<?> buildAuthResponse(User user) {
+        String accessToken = authService.createAccessToken(user);
+        String refreshToken = authService.createRefreshToken(user);
 
-        AuthTokenResponseDto authTokenResponseDto = new AuthTokenResponseDto(userInformation, accessToken);
-        ResponseCookie responseCookie = authService.createCookie(newRefreshToken);
+
+        AuthTokenResponseDto authTokenResponseDto = new AuthTokenResponseDto(
+                authService.mapToUserInformation(user),
+                accessToken
+        );
+        ResponseCookie responseCookie = authService.createCookie(refreshToken);
 
 
         return ResponseEntity

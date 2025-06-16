@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.model;
+package me.huynhducphu.talent_bridge.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

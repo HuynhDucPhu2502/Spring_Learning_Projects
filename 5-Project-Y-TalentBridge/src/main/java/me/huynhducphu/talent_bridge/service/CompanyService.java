@@ -1,7 +1,7 @@
 package me.huynhducphu.talent_bridge.service;
 
 import me.huynhducphu.talent_bridge.dto.request.CompanyRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.CompanyResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

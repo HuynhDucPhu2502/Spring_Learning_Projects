@@ -1,8 +1,13 @@
 package me.huynhducphu.talent_bridge.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.config.AuthConfiguration;
 import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
+import me.huynhducphu.talent_bridge.model.RefreshToken;
+import me.huynhducphu.talent_bridge.model.User;
+import me.huynhducphu.talent_bridge.repository.RefreshTokenRepository;
+import me.huynhducphu.talent_bridge.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.oauth2.jwt.*;
@@ -21,6 +26,9 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
+
     @Value("${jwt.access-token-expiration}")
     public Long accessTokenExpiration;
 
@@ -28,19 +36,13 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     public Long refreshTokenExpiration;
 
     @Override
-    public String createAccessToken(
-            String email,
-            AuthTokenResponseDto.UserInformation userInformation
-    ) {
-        return buildJwt(accessTokenExpiration, userInformation);
+    public String createAccessToken(User user) {
+        return buildJwt(accessTokenExpiration, user, false);
     }
 
     @Override
-    public String createRefreshToken(
-            String email,
-            AuthTokenResponseDto.UserInformation userInformation
-    ) {
-        return buildJwt(refreshTokenExpiration, userInformation);
+    public String createRefreshToken(User user) {
+        return buildJwt(refreshTokenExpiration, user, true);
     }
 
     @Override
@@ -59,7 +61,37 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         return jwtDecoder.decode(token);
     }
 
-    private String buildJwt(Long expirationRate, AuthTokenResponseDto.UserInformation userInformation) {
+    @Override
+    public AuthTokenResponseDto.UserInformation mapToUserInformation(User user) {
+        if (user == null)
+            throw new EntityNotFoundException("Không tìm thấy người dùng");
+
+
+        return new AuthTokenResponseDto.UserInformation(
+                user.getEmail(),
+                user.getName(),
+                user.getId()
+        );
+    }
+
+    @Override
+    public AuthTokenResponseDto.UserInformation mapToUserInformation(String email) {
+        if (email == null || email.isBlank())
+            throw new EntityNotFoundException("Email không được để trống");
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+
+        return mapToUserInformation(user);
+    }
+
+    private String buildJwt(
+            Long expirationRate,
+            User user,
+            boolean isCreatingRefreshToken
+    ) {
         Instant now = Instant.now();
         Instant validity = now.plus(expirationRate, ChronoUnit.SECONDS);
 
@@ -70,11 +102,24 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
-                .subject(userInformation.getEmail())
-                .claim("user", userInformation)
+                .subject(user.getEmail())
+                .claim("user", mapToUserInformation(user))
                 .build();
 
-        return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+        String res = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+
+        if (isCreatingRefreshToken) {
+            RefreshToken refreshToken = new RefreshToken(
+                    null,
+                    res,
+                    validity,
+                    user
+            );
+            refreshTokenRepository.save(refreshToken);
+        }
+
+        return res;
     }
+
 
 }

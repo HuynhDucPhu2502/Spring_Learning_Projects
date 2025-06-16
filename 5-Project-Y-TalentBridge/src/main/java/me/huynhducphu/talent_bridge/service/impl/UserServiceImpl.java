@@ -92,24 +92,13 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     }
 
     @Override
-    public void updateRefreshToken(String token, String email) {
-        User user = userRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
-        user.setRefreshToken(token);
-
-        userRepository.save(user);
-    }
-
-    @Override
     public User findByEmail(String email) {
         return userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
     }
-
-
-    private UserResponseDto mapToUserResponseDto(User user) {
+    
+    public UserResponseDto mapToUserResponseDto(User user) {
         return new UserResponseDto(
                 user.getId(),
                 user.getName(),

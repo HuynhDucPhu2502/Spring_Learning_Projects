@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.dto.response;
+package me.huynhducphu.talent_bridge.dto.response.company;
 
 
 import lombok.AllArgsConstructor;
@@ -18,5 +18,5 @@ public class CompanyResponseDto {
     private String description;
     private String address;
     private String logo;
-    
+
 }

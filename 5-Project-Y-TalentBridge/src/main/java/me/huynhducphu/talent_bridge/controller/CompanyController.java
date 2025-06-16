@@ -6,18 +6,15 @@ import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.CompanyRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
-import me.huynhducphu.talent_bridge.model.ApiResponse;
+import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.service.CompanyService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 /**
  * Admin 6/12/2025

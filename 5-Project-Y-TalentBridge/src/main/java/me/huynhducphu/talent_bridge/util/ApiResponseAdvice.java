@@ -2,7 +2,7 @@ package me.huynhducphu.talent_bridge.util;
 
 import jakarta.servlet.http.HttpServletResponse;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
-import me.huynhducphu.talent_bridge.model.ApiResponse;
+import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -38,7 +38,7 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
             return body;
 
         ApiMessage apiMessage = returnType.getMethodAnnotation(ApiMessage.class);
-        
+
 
         if (status >= 400)
             return new ApiResponse<>(
