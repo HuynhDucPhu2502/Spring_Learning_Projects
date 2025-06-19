@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.config;
+package me.huynhducphu.talent_bridge.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

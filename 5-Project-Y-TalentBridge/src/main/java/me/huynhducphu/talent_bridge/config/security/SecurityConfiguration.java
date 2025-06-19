@@ -1,7 +1,6 @@
-package me.huynhducphu.talent_bridge.config;
+package me.huynhducphu.talent_bridge.config.security;
 
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.talent_bridge.exception.CustomAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;

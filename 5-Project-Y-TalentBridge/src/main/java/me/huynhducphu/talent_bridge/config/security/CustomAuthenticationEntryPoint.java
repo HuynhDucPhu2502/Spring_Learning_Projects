@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.exception;
+package me.huynhducphu.talent_bridge.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
