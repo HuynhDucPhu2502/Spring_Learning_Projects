@@ -2,8 +2,11 @@ import { RouterProvider } from "react-router-dom";
 import router from "./router";
 import { Provider } from "react-redux";
 import { store } from "@/features/store";
+import { setupAxiosInterceptors } from "./lib/axiosClient";
 
 const App = () => {
+  setupAxiosInterceptors(store.dispatch);
+
   return (
     <Provider store={store}>
       <RouterProvider router={router} />

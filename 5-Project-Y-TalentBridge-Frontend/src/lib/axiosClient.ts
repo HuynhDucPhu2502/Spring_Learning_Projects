@@ -2,6 +2,10 @@ import type { ApiResponse } from "@/types/apiResponse";
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
+import { logout, updateTokenManually } from "@/features/slices/authSlice";
+import type { AuthResponse } from "@/types/user";
+import type { AppDispatch } from "@/features/store";
+
 // ============================================================
 // Cấu hình mặc định cho các request
 // ============================================================
@@ -46,8 +50,18 @@ const processQueue = (error: unknown, token: string | null = null) => {
 };
 
 // ============================================================
+// Biến & setup dispatch
+// ============================================================
+let dispatchRef: AppDispatch;
+
+export const setupAxiosInterceptors = (dispatch: AppDispatch) => {
+  dispatchRef = dispatch;
+};
+
+// ============================================================
 // Interceptor: Xử lý lỗi 401 và errorCode UNAUTHORIZED
 // ============================================================
+
 let isRefreshing = false;
 
 axiosClient.interceptors.response.use(
@@ -76,21 +90,23 @@ axiosClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post(
-          "http://localhost:8080/auth/refresh",
+        const res = await axios.post<ApiResponse<AuthResponse>>(
+          "http://localhost:8080/auth/refresh-token",
           {},
           { withCredentials: true }
         );
 
-        const newAccessToken = res.data.accessToken;
-        localStorage.setItem("access_token", newAccessToken);
+        const accessToken = res.data.data.accessToken;
 
-        processQueue(null, newAccessToken);
+        dispatchRef(updateTokenManually(res.data.data));
+        processQueue(null, accessToken);
 
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axiosClient(originalRequest);
       } catch (refreshError) {
+        dispatchRef(logout());
         processQueue(refreshError, null);
+
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

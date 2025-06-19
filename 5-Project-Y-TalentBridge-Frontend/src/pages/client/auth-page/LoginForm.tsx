@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/features/hooks";
+import { useAppDispatch } from "@/features/hooks";
 import { login } from "@/features/slices/authSlice";
 import type { loginForm } from "@/types/user";
 import { useState } from "react";
@@ -8,7 +8,6 @@ export default function LoginPage() {
   const [form, setForm] = useState<loginForm>({ email: "", password: "" });
   const [error, setError] = useState<string>("");
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state.auth);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,8 +33,6 @@ export default function LoginPage() {
 
     dispatch(login(form));
   };
-
-  console.log(selector);
 
   return (
     <div className="flex flex-col-reverse lg:flex-row w-11/12 max-w-6xl mx-auto my-20 shadow-xl rounded-xl overflow-hidden">

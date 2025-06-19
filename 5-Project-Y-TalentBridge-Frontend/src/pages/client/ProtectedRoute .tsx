@@ -1,4 +1,3 @@
-// components/ProtectedRoute.tsx
 import { useAppSelector } from "@/features/hooks";
 import { Navigate, Outlet } from "react-router-dom";
 
