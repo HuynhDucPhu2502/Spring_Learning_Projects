@@ -6,7 +6,6 @@ import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.user.LoginRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.model.User;
-import me.huynhducphu.talent_bridge.repository.RefreshTokenRepository;
 import me.huynhducphu.talent_bridge.service.AuthService;
 import me.huynhducphu.talent_bridge.service.RefreshTokenService;
 import me.huynhducphu.talent_bridge.service.UserService;
@@ -67,7 +66,7 @@ public class AuthController {
         return ResponseEntity.ok(userInformation);
     }
 
-    @PostMapping("/refresh")
+    @PostMapping("/refresh-token")
     @ApiMessage(value = "Lấy refresh token")
     public ResponseEntity<?> refreshToken(
             @CookieValue(value = "refresh_token") String refreshToken
@@ -83,10 +82,7 @@ public class AuthController {
     public ResponseEntity<?> logout(
             @CookieValue(value = "refresh_token", required = false) String refreshToken
     ) {
-        if (refreshToken != null) {
-            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            refreshTokenService.verifyAndDeleteOldRefreshToken(email, refreshToken);
-        }
+        if (refreshToken != null) refreshTokenService.deleteByToken(refreshToken);
 
         ResponseCookie responseCookie = ResponseCookie
                 .from("refresh_token", "")
@@ -95,6 +91,7 @@ public class AuthController {
                 .sameSite("Strict")
                 .maxAge(0)
                 .build();
+
 
         return ResponseEntity
                 .ok()
