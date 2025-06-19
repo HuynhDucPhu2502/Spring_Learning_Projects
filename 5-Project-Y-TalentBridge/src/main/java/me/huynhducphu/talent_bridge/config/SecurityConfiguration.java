@@ -10,8 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -39,7 +38,8 @@ public class SecurityConfiguration {
                                 auth
                                         .requestMatchers(
                                                 "/auth/login",
-                                                "/auth/refresh",
+                                                "/auth/logout",
+                                                "/auth/refresh-token",
                                                 "/").permitAll()
                                         .anyRequest().authenticated()
                 )
@@ -47,6 +47,7 @@ public class SecurityConfiguration {
                         oauth2
                                 .jwt(Customizer.withDefaults())
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
+                                .bearerTokenResolver(new SkipPathBearerTokenResolver())
                 )
                 .sessionManagement(
                         session ->
