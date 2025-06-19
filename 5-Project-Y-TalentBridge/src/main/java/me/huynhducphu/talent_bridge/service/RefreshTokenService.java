@@ -5,4 +5,6 @@ package me.huynhducphu.talent_bridge.service;
  **/
 public interface RefreshTokenService {
     boolean verifyAndDeleteOldRefreshToken(String email, String token);
+
+    void deleteByToken(String token);
 }

@@ -5,12 +5,14 @@ import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.model.RefreshToken;
 import me.huynhducphu.talent_bridge.repository.RefreshTokenRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Admin 6/16/2025
  **/
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RefreshTokenServiceImpl implements me.huynhducphu.talent_bridge.service.RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
@@ -27,12 +29,9 @@ public class RefreshTokenServiceImpl implements me.huynhducphu.talent_bridge.ser
         return true;
     }
 
-    public void findAndDeleteOldRefreshTokenIfExists(String email, String token) {
-        RefreshToken refreshToken = refreshTokenRepository
-                .findByUserEmailAndToken(email, token)
-                .orElse(null);
-
-        if (refreshToken != null) refreshTokenRepository.delete(refreshToken);
+    @Override
+    public void deleteByToken(String token) {
+        refreshTokenRepository.deleteByToken(token);
     }
 
 
