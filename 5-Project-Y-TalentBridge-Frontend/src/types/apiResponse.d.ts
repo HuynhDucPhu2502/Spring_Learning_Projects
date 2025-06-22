@@ -3,3 +3,11 @@ export interface ApiResponse<T> {
   errorCode: string;
   data: T;
 }
+
+export interface PageResponseDto<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
