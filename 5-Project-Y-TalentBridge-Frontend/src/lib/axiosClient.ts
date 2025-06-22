@@ -2,9 +2,20 @@ import type { ApiResponse } from "@/types/apiResponse";
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
-import { logout, updateTokenManually } from "@/features/slices/authSlice";
+import { updateTokenManually } from "@/features/slices/auth/authSlice";
 import type { AuthResponse } from "@/types/user";
 import type { AppDispatch } from "@/features/store";
+import { logout } from "@/features/slices/auth/authThunk";
+
+// ============================================================
+// Setup dispatch từ store để sử dụng
+// trong đây
+// ============================================================
+let dispatchRef: AppDispatch;
+
+export const setupAxiosInterceptors = (dispatch: AppDispatch) => {
+  dispatchRef = dispatch;
+};
 
 // ============================================================
 // Cấu hình mặc định cho các request
@@ -50,15 +61,6 @@ const processQueue = (error: unknown, token: string | null = null) => {
 };
 
 // ============================================================
-// Biến & setup dispatch
-// ============================================================
-let dispatchRef: AppDispatch;
-
-export const setupAxiosInterceptors = (dispatch: AppDispatch) => {
-  dispatchRef = dispatch;
-};
-
-// ============================================================
 // Interceptor: Xử lý lỗi 401 và errorCode UNAUTHORIZED
 // ============================================================
 
@@ -90,15 +92,10 @@ axiosClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post<ApiResponse<AuthResponse>>(
-          "http://localhost:8080/auth/refresh-token",
-          {},
-          { withCredentials: true }
-        );
+        const res = await refreshTokenAndGetAuthResponse();
 
-        const accessToken = res.data.data.accessToken;
-
-        dispatchRef(updateTokenManually(res.data.data));
+        const accessToken = res.accessToken;
+        dispatchRef(updateTokenManually(res));
         processQueue(null, accessToken);
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -116,5 +113,20 @@ axiosClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// ============================================================
+// Util Functions:
+// ============================================================
+const refreshTokenAndGetAuthResponse = async () => {
+  const res = await axios.post<ApiResponse<AuthResponse>>(
+    "http://localhost:8080/auth/refresh-token",
+    {},
+    { withCredentials: true }
+  );
+
+  return res.data.data;
+};
+
+// ============================================================
 
 export default axiosClient;

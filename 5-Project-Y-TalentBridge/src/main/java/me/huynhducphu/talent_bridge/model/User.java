@@ -2,10 +2,7 @@ package me.huynhducphu.talent_bridge.model;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import me.huynhducphu.talent_bridge.model.constant.Gender;
 
 /**
@@ -41,5 +38,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = true)
+    @ToString.Exclude
+    private Company company;
 }
 

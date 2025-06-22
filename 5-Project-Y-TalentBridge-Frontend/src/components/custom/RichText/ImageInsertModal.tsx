@@ -1,12 +1,23 @@
+"use client";
+
 import { useState } from "react";
 import type Quill from "quill";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Props {
   editor: Quill | null;
   onCancel: () => void;
+  open: boolean;
 }
 
-export default function ImageInsertModal({ editor, onCancel }: Props) {
+export default function ImageInsertModal({ editor, onCancel, open }: Props) {
   const [inputValue, setInputValue] = useState("");
 
   const handleInsert = () => {
@@ -32,28 +43,26 @@ export default function ImageInsertModal({ editor, onCancel }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-4 rounded shadow-md space-y-4">
-        <h2 className="font-semibold text-lg">Nhập URL ảnh</h2>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          className="border p-2 w-96"
-          placeholder="https://example.com/image.jpg"
-        />
-        <div className="flex justify-end space-x-2">
-          <button className="px-4 py-2 bg-gray-300 rounded" onClick={onCancel}>
-            Hủy
-          </button>
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-            onClick={handleInsert}
-          >
-            Chèn ảnh
-          </button>
+    <Dialog open={open} onOpenChange={onCancel}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Nhập URL ảnh</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <Input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="https://example.com/image.jpg"
+          />
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={onCancel}>
+              Hủy
+            </Button>
+            <Button onClick={handleInsert}>Chèn ảnh</Button>
+          </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

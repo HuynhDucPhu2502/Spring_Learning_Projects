@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/features/hooks";
-import { logout } from "@/features/slices/authSlice";
+import { logout } from "@/features/slices/auth/authThunk";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);

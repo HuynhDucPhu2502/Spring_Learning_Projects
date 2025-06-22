@@ -1,4 +1,3 @@
-import type * as React from "react";
 import {
   LayoutDashboard,
   Building2,
@@ -21,6 +20,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Link, useLocation } from "react-router-dom";
 
 // Dữ liệu menu admin
 const adminMenuItems = [
@@ -62,16 +62,15 @@ const adminMenuItems = [
   },
 ];
 
-interface AdminSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  activeItem?: string;
-}
+export const AdminSidebar = () => {
+  const location = useLocation();
 
-export function AdminSidebar({
-  activeItem = "Dashboard",
-  ...props
-}: AdminSidebarProps) {
+  const activeItem = adminMenuItems.find(
+    (item) => item.url === location.pathname
+  )?.title;
+
   return (
-    <Sidebar {...props} className="border-r">
+    <Sidebar className="border-r">
       <SidebarHeader className="border-b px-6 py-4">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
@@ -92,10 +91,10 @@ export function AdminSidebar({
                     isActive={item.title === activeItem}
                     className="w-full justify-start px-3 py-2.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-blue-50 data-[active=true]:text-blue-700 data-[active=true]:border-r-2 data-[active=true]:border-blue-700"
                   >
-                    <a href={item.url} className="flex items-center gap-3">
+                    <Link to={item.url} className="flex items-center gap-3">
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -107,4 +106,4 @@ export function AdminSidebar({
       <SidebarRail />
     </Sidebar>
   );
-}
+};

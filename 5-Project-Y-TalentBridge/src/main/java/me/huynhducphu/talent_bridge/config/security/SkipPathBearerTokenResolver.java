@@ -18,6 +18,8 @@ public class SkipPathBearerTokenResolver implements BearerTokenResolver {
         if (path.contains("/auth/logout")) {
             return null;
         }
+
+
         return delegate.resolve(request);
     }
 }

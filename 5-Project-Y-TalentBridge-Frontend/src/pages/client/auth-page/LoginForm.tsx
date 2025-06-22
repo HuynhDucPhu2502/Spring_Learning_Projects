@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/features/hooks";
-import { login } from "@/features/slices/authSlice";
+import { login } from "@/features/slices/auth/authThunk";
 import type { loginForm } from "@/types/user";
 import { useState } from "react";
 import { Link } from "react-router-dom";

@@ -4,6 +4,8 @@ import ProtectedRoute from "@/pages/client/ProtectedRoute ";
 import RootPage from "@/pages/client";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import AdminPage from "@/pages/admin";
+import CompanyPage from "@/pages/admin/company-page";
+import DashboardPage from "@/pages/admin/dashboard-page";
 
 const router = createBrowserRouter([
   {
@@ -20,9 +22,13 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/admin",
+    path: "admin",
     element: <AdminPage />,
-    children: [{ index: true, element: <div>a</div> }],
+    children: [
+      { index: true, element: <Navigate to={"/admin/dashboard"} /> },
+      { path: "dashboard", element: <DashboardPage /> },
+      { path: "company", element: <CompanyPage /> },
+    ],
   },
 ]);
 

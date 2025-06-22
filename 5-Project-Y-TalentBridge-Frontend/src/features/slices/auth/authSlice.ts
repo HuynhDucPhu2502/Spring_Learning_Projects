@@ -1,12 +1,6 @@
-import {
-  getAccountApi,
-  loginApi,
-  logoutApi,
-  refreshTokenApi,
-} from "@/services/authApi";
-import type { loginForm, User } from "@/types/user";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import type { User } from "@/types/user";
+import { createSlice } from "@reduxjs/toolkit";
+import { getAccount, login, logout, refreshToken } from "./authThunk";
 
 // ===========================================
 // Slice
@@ -107,63 +101,6 @@ const authSlice = createSlice({
       });
   },
 });
-
-// ===========================================
-// ASYNC THUNK
-// ===========================================
-export const login = createAsyncThunk(
-  "auth/login",
-  async (data: loginForm, thunkAPI) => {
-    try {
-      const res = await loginApi(data);
-      return res.data.data;
-    } catch (err: unknown) {
-      const message = handleError(err, "Đăng nhập thất bại");
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
-  try {
-    await logoutApi();
-  } catch (err: unknown) {
-    const message = handleError(err, "Đăng xuất thất bại");
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
-export const getAccount = createAsyncThunk(
-  "auth/account",
-  async (_, thunkAPI) => {
-    try {
-      const res = await getAccountApi();
-      return res.data.data;
-    } catch (err: unknown) {
-      const message = handleError(err, "Lấy thông tin tài khoản thất bại");
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const refreshToken = createAsyncThunk(
-  "auth/refresh-token",
-  async (_, thunkAPI) => {
-    try {
-      const res = await refreshTokenApi();
-      return res.data.data;
-    } catch (err: unknown) {
-      const message = handleError(err, "Làm mới phiên đăng nhập thất bại");
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-const handleError = (err: unknown, message: string): string => {
-  let res = message;
-  if (axios.isAxiosError(err)) res = err.response?.data.message || message;
-  return res;
-};
 
 // ===========================================
 // EXPORT REDUCER

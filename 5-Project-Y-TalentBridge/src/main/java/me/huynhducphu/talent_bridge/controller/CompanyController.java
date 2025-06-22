@@ -7,11 +7,14 @@ import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.CompanyRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
+import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.service.CompanyService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,11 +42,11 @@ public class CompanyController {
     @ApiMessage(value = "Lấy danh sách công ty")
     public ResponseEntity<?> findAllCompanies(
             @Filter Specification<Company> spec,
-            Pageable pageable
+            @PageableDefault(size = 5) Pageable pageable
     ) {
-        Page<Company> page = companyService.findAllCompany(spec, pageable);
+        Page<CompanyResponseDto> page = companyService.findAllCompany(spec, pageable);
 
-        PageResponseDto<Company> res = new PageResponseDto<>(
+        PageResponseDto<CompanyResponseDto> res = new PageResponseDto<>(
                 page.getContent(),
                 pageable.getPageNumber() + 1,
                 pageable.getPageSize(),

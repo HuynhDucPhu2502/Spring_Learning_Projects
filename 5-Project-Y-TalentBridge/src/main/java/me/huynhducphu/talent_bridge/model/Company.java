@@ -2,10 +2,9 @@ package me.huynhducphu.talent_bridge.model;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 /**
  * Admin 6/11/2025
@@ -31,4 +30,13 @@ public class Company extends BaseEntity {
     private String address;
 
     private String logo;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<User> users;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Job> jobs;
+
 }

@@ -3,6 +3,7 @@ import router from "./router";
 import { Provider } from "react-redux";
 import { store } from "@/features/store";
 import { setupAxiosInterceptors } from "./lib/axiosClient";
+import { Toaster } from "sonner";
 
 const App = () => {
   setupAxiosInterceptors(store.dispatch);
@@ -10,6 +11,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <RouterProvider router={router} />
+      <Toaster richColors />
     </Provider>
   );
 };

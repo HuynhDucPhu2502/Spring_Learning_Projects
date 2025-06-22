@@ -14,9 +14,9 @@ import org.springframework.data.jpa.domain.Specification;
 public interface CompanyService {
     CompanyResponseDto saveCompany(CompanyRequestDto companyRequestDto);
 
-    Page<Company> findAllCompany(Specification<Company> spec, Pageable pageable);
+    Page<CompanyResponseDto> findAllCompany(Specification<Company> spec, Pageable pageable);
 
-    Company findCompanyById(Long id);
+    CompanyResponseDto findCompanyById(Long id);
 
     CompanyResponseDto updateCompany(CompanyRequestDto companyRequestDto, Long id);
 
