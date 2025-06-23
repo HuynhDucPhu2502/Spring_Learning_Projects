@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.dto.request;
+package me.huynhducphu.talent_bridge.dto.request.company;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -24,5 +24,5 @@ public class CompanyRequestDto {
 
     @NotBlank(message = "Logo không được để trống")
     private String logo;
-    
+
 }

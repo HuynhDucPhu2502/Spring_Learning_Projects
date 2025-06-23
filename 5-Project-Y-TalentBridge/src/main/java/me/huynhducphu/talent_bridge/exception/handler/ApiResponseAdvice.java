@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.exception;
+package me.huynhducphu.talent_bridge.exception.handler;
 
 import jakarta.servlet.http.HttpServletResponse;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;

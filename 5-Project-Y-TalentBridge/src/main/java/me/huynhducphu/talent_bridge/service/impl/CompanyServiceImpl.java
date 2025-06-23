@@ -2,7 +2,7 @@ package me.huynhducphu.talent_bridge.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.talent_bridge.dto.request.CompanyRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.company.CompanyRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
@@ -38,21 +38,21 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
 
         Company savedCompany = companyRepository.saveAndFlush(company);
 
-        return mapToRequestDto(savedCompany);
+        return mapToResponseDto(savedCompany);
     }
 
     @Override
-    public Page<CompanyResponseDto> findAllCompany(Specification<Company> spec, Pageable pageable) {
+    public Page<CompanyResponseDto> findAllCompanies(Specification<Company> spec, Pageable pageable) {
         return companyRepository
                 .findAll(spec, pageable)
-                .map(this::mapToRequestDto);
+                .map(this::mapToResponseDto);
     }
 
     @Override
     public CompanyResponseDto findCompanyById(Long id) {
         return companyRepository
                 .findById(id)
-                .map(this::mapToRequestDto)
+                .map(this::mapToResponseDto)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
     }
 
@@ -69,7 +69,7 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
 
         Company savedCompany = companyRepository.saveAndFlush(company);
 
-        return mapToRequestDto(savedCompany);
+        return mapToResponseDto(savedCompany);
     }
 
     @Override
@@ -81,10 +81,10 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         userRepository.detachUsersFromCompany(company);
 
         companyRepository.delete(company);
-        return mapToRequestDto(company);
+        return mapToResponseDto(company);
     }
 
-    private CompanyResponseDto mapToRequestDto(Company company) {
+    private CompanyResponseDto mapToResponseDto(Company company) {
         return new CompanyResponseDto(
                 company.getId(),
                 company.getName(),

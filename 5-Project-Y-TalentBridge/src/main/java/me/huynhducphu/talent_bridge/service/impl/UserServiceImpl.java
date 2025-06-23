@@ -51,21 +51,21 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
 
         User savedUser = userRepository.saveAndFlush(user);
 
-        return mapToUserResponseDto(savedUser);
+        return mapToResponseDto(savedUser);
     }
 
     @Override
     public Page<UserResponseDto> findAllUser(Specification<User> spec, Pageable pageable) {
         return userRepository
                 .findAll(spec, pageable)
-                .map(this::mapToUserResponseDto);
+                .map(this::mapToResponseDto);
     }
 
     @Override
     public UserResponseDto findUserById(Long id) {
         return userRepository
                 .findById(id)
-                .map(this::mapToUserResponseDto)
+                .map(this::mapToResponseDto)
                 .orElseThrow(() ->
                         new EntityNotFoundException("Không tìm thấy người dùng")
                 );
@@ -90,7 +90,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
 
         User savedUser = userRepository.save(user);
 
-        return mapToUserResponseDto(savedUser);
+        return mapToResponseDto(savedUser);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                 );
 
         userRepository.delete(user);
-        return mapToUserResponseDto(user);
+        return mapToResponseDto(user);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
     }
 
-    public UserResponseDto mapToUserResponseDto(User user) {
+    public UserResponseDto mapToResponseDto(User user) {
         UserResponseDto.CompanyInformationDto company = null;
         if (user.getCompany() != null)
             company = new UserResponseDto.CompanyInformationDto(

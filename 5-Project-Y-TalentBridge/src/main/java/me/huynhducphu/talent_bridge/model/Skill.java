@@ -1,10 +1,7 @@
 package me.huynhducphu.talent_bridge.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ import java.util.List;
 @Table(name = "skills")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Skill extends BaseEntity {
     @Id
@@ -22,9 +20,10 @@ public class Skill extends BaseEntity {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "skills")
     @ToString.Exclude
-    private List<Company> companies;
+    private List<Job> jobs;
 }

@@ -4,14 +4,13 @@ import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
-import me.huynhducphu.talent_bridge.dto.request.CompanyRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.company.CompanyRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
 import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.service.CompanyService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
@@ -44,7 +43,7 @@ public class CompanyController {
             @Filter Specification<Company> spec,
             @PageableDefault(size = 5) Pageable pageable
     ) {
-        Page<CompanyResponseDto> page = companyService.findAllCompany(spec, pageable);
+        Page<CompanyResponseDto> page = companyService.findAllCompanies(spec, pageable);
 
         PageResponseDto<CompanyResponseDto> res = new PageResponseDto<>(
                 page.getContent(),
