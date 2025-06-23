@@ -87,7 +87,9 @@ public class SkillServiceImpl implements me.huynhducphu.talent_bridge.service.Sk
     private SkillResponseDto mapToResponseDto(Skill skill) {
         return new SkillResponseDto(
                 skill.getId(),
-                skill.getName()
+                skill.getName(),
+                skill.getCreatedAt().toString(),
+                skill.getUpdatedAt().toString()
         );
     }
 
