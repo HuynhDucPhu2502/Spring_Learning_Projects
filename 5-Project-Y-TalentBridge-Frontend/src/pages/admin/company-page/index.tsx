@@ -14,7 +14,7 @@ import type { Company, CreateAndUpdateRequestDto } from "@/types/company";
 import {
   addCompany,
   deleteCompanyById,
-  getCompanyList,
+  getCompaniesList,
   updateCompanyById,
 } from "@/services/companyApi";
 import Pagination from "@/components/custom/Pagination";
@@ -46,10 +46,40 @@ export default function CompanyPage() {
   const [hoveredCompany, setHoveredCompany] = useState<Company | null>(null);
   const [showDetailsSidebar, setShowDetailsSidebar] = useState(false);
 
-  // Editting Form
+  // Form State
   const [editingCompany, setEditingCompany] = useState<Company | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+  // ============================
+  // HANDLE VIEW DETAILS
+  // ============================
+  const handleViewDetails = (company: Company) => {
+    setHoveredCompany(company);
+    setShowDetailsSidebar(true);
+  };
+
+  const handleCloseSidebar = () => {
+    setShowDetailsSidebar(false);
+    setHoveredCompany(null);
+  };
+
+  // ============================
+  // HANDLE OPEN FORM
+  // ============================
+  const openEditForm = (company: Company) => {
+    setEditingCompany(company);
+    setIsFormOpen(true);
+    handleCloseSidebar();
+  };
+
+  const openCreateForm = () => {
+    setEditingCompany(null);
+    setIsFormOpen(true);
+  };
+
+  // ============================
+  // HANDLE FETCHING DATA
+  // ============================
   const fetchCompanies = async (
     page: number,
     size: number,
@@ -65,7 +95,7 @@ export default function CompanyPage() {
 
       const filter = filters.length > 0 ? filters.join(" and ") : null;
 
-      const res = (await getCompanyList({ page, size, filter })).data.data;
+      const res = (await getCompaniesList({ page, size, filter })).data.data;
       setCompanies(res.content);
       setTotalElements(res.totalElements);
     } catch (err) {
@@ -79,6 +109,22 @@ export default function CompanyPage() {
     fetchCompanies(currentPage, itemsPerPage, searchName, searchAddress);
   }, [currentPage, itemsPerPage, searchName, searchAddress]);
 
+  // ============================
+  // HANDLE RESET
+  // ============================
+  const handleReset = async () => {
+    setSearchName("");
+    setSearchAddress("");
+    setCurrentPage(1);
+    setIsFormOpen(false);
+    setEditingCompany(null);
+
+    await fetchCompanies(currentPage, itemsPerPage, searchName, searchAddress);
+  };
+
+  // ============================
+  // HANDLE CREATE, UPDATE, DELETE
+  // ============================
   const handleAddOrUpdateCompany = async (
     data: CreateAndUpdateRequestDto,
     id?: number
@@ -92,8 +138,7 @@ export default function CompanyPage() {
         toast.success("Thêm công ty thành công.");
       }
 
-      setEditingCompany(null);
-      setCurrentPage(1);
+      handleReset();
     } catch (err) {
       toast.error(getErrorMessage(err, "Thao tác thất bại."));
     }
@@ -103,35 +148,11 @@ export default function CompanyPage() {
     try {
       await deleteCompanyById(id);
       toast.success("Xóa công ty thành công.");
-      setCurrentPage(1);
       if (hoveredCompany?.id === id) handleCloseSidebar();
+      await handleReset();
     } catch (err) {
       toast.error(getErrorMessage(err, "Xóa công ty thất bại."));
     }
-  };
-
-  const handleSearch = () => setCurrentPage(1);
-
-  const handleReset = () => {
-    setSearchName("");
-    setSearchAddress("");
-    setCurrentPage(1);
-  };
-
-  const handleCloseSidebar = () => {
-    setShowDetailsSidebar(false);
-    setHoveredCompany(null);
-  };
-
-  const handleEditCompany = (company: Company) => {
-    setEditingCompany(company);
-    setIsFormOpen(true);
-    handleCloseSidebar();
-  };
-
-  const handleViewDetails = (company: Company) => {
-    setHoveredCompany(company);
-    setShowDetailsSidebar(true);
   };
 
   return (
@@ -141,17 +162,13 @@ export default function CompanyPage() {
         setSearchName={setSearchName}
         searchAddress={searchAddress}
         setSearchAddress={setSearchAddress}
-        onSearch={handleSearch}
         onReset={handleReset}
       />
 
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Danh sách Công Ty</h2>
         <Button
-          onClick={() => {
-            setEditingCompany(null);
-            setIsFormOpen(true);
-          }}
+          onClick={openCreateForm}
           className="bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="h-4 w-4 mr-2" />
@@ -190,7 +207,7 @@ export default function CompanyPage() {
                   isActive={hoveredCompany?.id === company.id}
                   isLoading={isLoading}
                   onViewDetails={() => handleViewDetails(company)}
-                  onEdit={() => handleEditCompany(company)}
+                  onEdit={() => openEditForm(company)}
                   onDelete={() => handleDeleteCompany(company.id)}
                 />
               ))}
@@ -235,7 +252,7 @@ export default function CompanyPage() {
         company={hoveredCompany}
         isOpen={showDetailsSidebar}
         onClose={handleCloseSidebar}
-        onEdit={handleEditCompany}
+        onEdit={openEditForm}
         onDelete={handleDeleteCompany}
       />
     </div>

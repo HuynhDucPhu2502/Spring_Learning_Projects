@@ -1,18 +1,16 @@
 import axiosClient from "@/lib/axiosClient";
-import type { ApiResponse, PageResponseDto } from "@/types/apiResponse";
+import type {
+  ApiResponse,
+  PageResponseDto,
+  PaginationParams,
+} from "@/types/apiResponse";
 import type { Company, CreateAndUpdateRequestDto } from "@/types/company";
 
-interface GetCompanyListProps {
-  page: number;
-  size: number;
-  filter: string | null;
-}
-
-export const getCompanyList = ({
+export const getCompaniesList = ({
   page = 0,
   size = 5,
-  filter = null,
-}: GetCompanyListProps) => {
+  filter,
+}: PaginationParams) => {
   const params = new URLSearchParams({
     page: page.toString(),
     size: size.toString(),

@@ -17,7 +17,7 @@ const routeTitles: Record<string, string> = {
   "/admin/dashboard": "Dashboard",
   "/admin/company": "Quản lý công ty",
   "/admin/user": "Quản lý người dùng",
-  "/admin/job": "Quản lý việc làm",
+  "/admin/job-skill": "Quản lý việc làm và kỹ năng",
   "/admin/resume": "Quản lý CV",
   "/admin/permission": "Phân quyền",
   "/admin/sale": "Quản lý bán hàng",
@@ -30,7 +30,6 @@ export function AdminTopBar() {
   const currentTitle = routeTitles[location.pathname] || "Admin";
 
   const handleLogout = () => {
-    // Add logout logic here
     console.log("Logout clicked");
   };
 
@@ -43,7 +42,6 @@ export function AdminTopBar() {
           <h1 className="text-xl font-semibold text-gray-900">
             {currentTitle}
           </h1>
-          <p className="text-sm text-gray-500">Quản trị hệ thống</p>
         </div>
       </div>
 

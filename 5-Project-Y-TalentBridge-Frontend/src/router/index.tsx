@@ -6,6 +6,9 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import AdminPage from "@/pages/admin";
 import CompanyPage from "@/pages/admin/company-page";
 import DashboardPage from "@/pages/admin/dashboard-page";
+import JobSkillPage from "@/pages/admin/job-skill-page";
+import { SkillManagerPage } from "@/pages/admin/job-skill-page/skill-manager-page";
+import { JobManagerPanel } from "@/pages/admin/job-skill-page/job-manager-page";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +31,18 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to={"/admin/dashboard"} /> },
       { path: "dashboard", element: <DashboardPage /> },
       { path: "company", element: <CompanyPage /> },
+      {
+        path: "job-skill",
+        element: <JobSkillPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to={"/admin/job-skill/skill-manager"} />,
+          },
+          { path: "skill-manager", element: <SkillManagerPage /> },
+          { path: "job-manager", element: <JobManagerPanel /> },
+        ],
+      },
     ],
   },
 ]);

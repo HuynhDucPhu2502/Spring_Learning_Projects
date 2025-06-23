@@ -41,8 +41,8 @@ const adminMenuItems = [
     icon: Users,
   },
   {
-    title: "Job",
-    url: "/admin/job",
+    title: "Jobs & Skills",
+    url: "/admin/job-skill",
     icon: Briefcase,
   },
   {

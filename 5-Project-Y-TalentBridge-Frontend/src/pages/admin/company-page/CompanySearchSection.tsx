@@ -1,14 +1,13 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Search, RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 
 type Props = {
   searchName: string;
   setSearchName: (val: string) => void;
   searchAddress: string;
   setSearchAddress: (val: string) => void;
-  onSearch: () => void;
   onReset: () => void;
 };
 
@@ -17,7 +16,6 @@ export function CompanySearchSection({
   setSearchName,
   searchAddress,
   setSearchAddress,
-  onSearch,
   onReset,
 }: Props) {
   return (
@@ -42,10 +40,6 @@ export function CompanySearchSection({
           />
         </div>
         <div className="flex gap-2">
-          <Button onClick={onSearch} className="bg-blue-600 hover:bg-blue-700">
-            <Search className="h-4 w-4 mr-2" />
-            Tìm kiếm
-          </Button>
           <Button variant="outline" onClick={onReset}>
             <RotateCcw className="h-4 w-4 mr-2" />
             Làm lại
