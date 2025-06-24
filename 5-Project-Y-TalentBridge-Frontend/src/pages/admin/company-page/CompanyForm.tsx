@@ -48,6 +48,7 @@ export function CompanyForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData, initialData?.id);
+    handleReset();
     onOpenChange(false);
     onCloseForm?.();
   };
@@ -57,6 +58,28 @@ export function CompanyForm({
     value: string
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleChangeLogo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === "string") {
+          handleChange("logo", reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleReset = () => {
+    setFormData({
+      name: "",
+      description: "",
+      address: "",
+      logo: "",
+    });
   };
 
   return (
@@ -98,14 +121,22 @@ export function CompanyForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="logo">Logo URL</Label>
+            <Label htmlFor="logo">Logo</Label>
             <Input
               id="logo"
-              type="url"
-              value={formData.logo}
-              onChange={(e) => handleChange("logo", e.target.value)}
-              placeholder="https://example.com/logo.png"
+              type="file"
+              accept="image/*"
+              onChange={handleChangeLogo}
             />
+            {formData.logo && (
+              <div className="mt-2">
+                <img
+                  src={formData.logo}
+                  alt="Xem trước logo"
+                  className="h-16 rounded border"
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex justify-end gap-2">

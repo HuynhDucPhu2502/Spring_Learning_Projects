@@ -11,3 +11,9 @@ export interface PageResponseDto<T> {
   totalElements: number;
   totalPages: number;
 }
+
+interface PaginationParams {
+  page: number;
+  size: number;
+  filter: string | null;
+}

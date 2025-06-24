@@ -89,7 +89,7 @@ export function CompanyDetailsSidebar({
                 <div className="flex justify-center">
                   {company.logo ? (
                     <img
-                      src="/company-logo-placeholder.png"
+                      src={company.logo}
                       alt={`${company.name} logo`}
                       className="w-20 h-20 rounded-lg object-cover border"
                     />
