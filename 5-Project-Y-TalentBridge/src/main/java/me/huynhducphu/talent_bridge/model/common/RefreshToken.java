@@ -1,10 +1,11 @@
-package me.huynhducphu.talent_bridge.model;
+package me.huynhducphu.talent_bridge.model.common;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import me.huynhducphu.talent_bridge.model.User;
 
 import java.time.Instant;
 

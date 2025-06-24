@@ -5,8 +5,11 @@ import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.company.CompanyRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
+import me.huynhducphu.talent_bridge.model.CompanyLogo;
+import me.huynhducphu.talent_bridge.repository.CompanyLogoRepository;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
+import me.huynhducphu.talent_bridge.util.ImageDataUrlParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,19 +25,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final CompanyLogoRepository companyLogoRepository;
     private final UserRepository userRepository;
 
     @Override
     public CompanyResponseDto saveCompany(CompanyRequestDto companyRequestDto) {
         Company company = new Company(
-                null,
                 companyRequestDto.getName(),
                 companyRequestDto.getDescription(),
-                companyRequestDto.getAddress(),
-                companyRequestDto.getLogo(),
-                null,
-                null
+                companyRequestDto.getAddress()
         );
+
+        if (companyRequestDto.getLogo() != null) {
+            ImageDataUrlParser.ParsedImage parsedImage = ImageDataUrlParser.parse(companyRequestDto.getLogo());
+
+            CompanyLogo companyLogo = new CompanyLogo();
+            companyLogo.setCompany(company);
+            companyLogo.setLogo(parsedImage.getData());
+            companyLogo.setContentType(parsedImage.getContentType());
+
+            company.setCompanyLogo(companyLogo);
+        }
 
         Company savedCompany = companyRepository.saveAndFlush(company);
 
@@ -65,12 +76,26 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         company.setName(companyRequestDto.getName());
         company.setDescription(companyRequestDto.getDescription());
         company.setAddress(companyRequestDto.getAddress());
-        company.setLogo(companyRequestDto.getLogo());
+
+        if (companyRequestDto.getLogo() != null) {
+            ImageDataUrlParser.ParsedImage parsedImage = ImageDataUrlParser.parse(companyRequestDto.getLogo());
+
+            CompanyLogo companyLogo = company.getCompanyLogo();
+            if (companyLogo == null) {
+                companyLogo = new CompanyLogo();
+                companyLogo.setCompany(company);
+                company.setCompanyLogo(companyLogo);
+            }
+
+            companyLogo.setContentType(parsedImage.getContentType());
+            companyLogo.setLogo(parsedImage.getData());
+        }
 
         Company savedCompany = companyRepository.saveAndFlush(company);
 
         return mapToResponseDto(savedCompany);
     }
+
 
     @Override
     public CompanyResponseDto deleteCompanyById(Long id) {
@@ -85,12 +110,23 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
     }
 
     private CompanyResponseDto mapToResponseDto(Company company) {
+        String logo = null;
+        if (company.getCompanyLogo() != null) {
+            CompanyLogo companyLogo = company.getCompanyLogo();
+            logo = ImageDataUrlParser.toBase64DataUrl(
+                    companyLogo.getContentType(),
+                    companyLogo.getLogo()
+            );
+        }
+
         return new CompanyResponseDto(
                 company.getId(),
                 company.getName(),
                 company.getDescription(),
                 company.getAddress(),
-                company.getLogo()
+                logo,
+                company.getCreatedAt().toString(),
+                company.getUpdatedAt().toString()
         );
     }
 

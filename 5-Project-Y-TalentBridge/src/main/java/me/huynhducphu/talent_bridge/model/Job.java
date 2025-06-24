@@ -2,6 +2,7 @@ package me.huynhducphu.talent_bridge.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.huynhducphu.talent_bridge.model.common.BaseEntity;
 import me.huynhducphu.talent_bridge.model.constant.Level;
 
 import java.time.Instant;

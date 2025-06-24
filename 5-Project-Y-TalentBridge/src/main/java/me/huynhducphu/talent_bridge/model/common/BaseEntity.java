@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.model;
+package me.huynhducphu.talent_bridge.model.common;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

@@ -1,6 +1,6 @@
 package me.huynhducphu.talent_bridge.repository;
 
-import me.huynhducphu.talent_bridge.model.RefreshToken;
+import me.huynhducphu.talent_bridge.model.common.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.Instant;

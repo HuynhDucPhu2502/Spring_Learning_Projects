@@ -2,7 +2,7 @@ package me.huynhducphu.talent_bridge.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.talent_bridge.model.RefreshToken;
+import me.huynhducphu.talent_bridge.model.common.RefreshToken;
 import me.huynhducphu.talent_bridge.repository.RefreshTokenRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

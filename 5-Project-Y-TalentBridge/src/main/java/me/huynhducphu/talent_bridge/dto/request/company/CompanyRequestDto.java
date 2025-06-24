@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class CompanyRequestDto {
 
+
     @NotBlank(message = "Tên công ty không được để trống")
     private String name;
 
