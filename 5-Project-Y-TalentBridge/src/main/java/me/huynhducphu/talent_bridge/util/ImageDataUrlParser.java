@@ -3,6 +3,7 @@ package me.huynhducphu.talent_bridge.util;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.huynhducphu.talent_bridge.exception.custom.InvalidImageDataException;
 
 import java.util.Base64;
 import java.util.regex.Matcher;
@@ -16,11 +17,11 @@ public class ImageDataUrlParser {
 
     public static ParsedImage parse(String base64) {
         if (base64 == null)
-            throw new IllegalArgumentException("Chuỗi base64 không được null");
+            throw new InvalidImageDataException("Chuỗi base64 không được null");
 
         Matcher matcher = BASE64_IMAGE_PATTERN.matcher(base64);
         if (!matcher.matches())
-            throw new IllegalArgumentException("Chuỗi base64 không đúng định dạng data:image/...;base64,...");
+            throw new InvalidImageDataException("Chuỗi base64 không đúng định dạng data:image/...;base64,...");
 
         String format = matcher.group(1);
         String base64Data = matcher.group(2);
@@ -29,7 +30,7 @@ public class ImageDataUrlParser {
         try {
             data = Base64.getDecoder().decode(base64Data);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Phần dữ liệu base64 không hợp lệ", e);
+            throw new InvalidImageDataException("Phần dữ liệu base64 không hợp lệ");
         }
 
         return new ParsedImage("image/" + format, data);

@@ -41,14 +41,14 @@ public class Job extends BaseEntity {
 
     private Instant endDate;
 
-    private Boolean isActive = true;
+    private Boolean active = true;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
     @ToString.Exclude
     private Company company;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "job_skill",
             joinColumns = @JoinColumn(name = "job_id"),

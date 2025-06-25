@@ -2,6 +2,7 @@ package me.huynhducphu.talent_bridge.exception.handler;
 
 import jakarta.persistence.EntityNotFoundException;
 import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
+import me.huynhducphu.talent_bridge.exception.custom.InvalidImageDataException;
 import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -134,6 +135,18 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse<>(
                         "Tài nguyên này đã tồn tại",
                         "ENTITY_ALREADY_EXISTS"
+                ));
+    }
+
+    @ExceptionHandler(InvalidImageDataException.class)
+    public ResponseEntity<ApiResponse<?>> handleInvalidImageDataException(
+            InvalidImageDataException ex
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiResponse<>(
+                        ex.getMessage(),
+                        "INVALID_IMAGE_DATA"
                 ));
     }
 

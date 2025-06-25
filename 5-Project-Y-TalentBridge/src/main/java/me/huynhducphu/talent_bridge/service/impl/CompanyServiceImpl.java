@@ -37,7 +37,8 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         );
 
         if (companyRequestDto.getLogo() != null) {
-            ImageDataUrlParser.ParsedImage parsedImage = ImageDataUrlParser.parse(companyRequestDto.getLogo());
+            ImageDataUrlParser.ParsedImage parsedImage =
+                    ImageDataUrlParser.parse(companyRequestDto.getLogo());
 
             CompanyLogo companyLogo = new CompanyLogo();
             companyLogo.setCompany(company);
@@ -78,7 +79,8 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         company.setAddress(companyRequestDto.getAddress());
 
         if (companyRequestDto.getLogo() != null) {
-            ImageDataUrlParser.ParsedImage parsedImage = ImageDataUrlParser.parse(companyRequestDto.getLogo());
+            ImageDataUrlParser.ParsedImage parsedImage =
+                    ImageDataUrlParser.parse(companyRequestDto.getLogo());
 
             CompanyLogo companyLogo = company.getCompanyLogo();
             if (companyLogo == null) {
