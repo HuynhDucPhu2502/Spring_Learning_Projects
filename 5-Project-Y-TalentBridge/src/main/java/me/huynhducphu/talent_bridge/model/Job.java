@@ -48,11 +48,23 @@ public class Job extends BaseEntity {
     @ToString.Exclude
     private Company company;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "job_skill",
             joinColumns = @JoinColumn(name = "job_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
     private List<Skill> skills;
+
+    public Job(String name, String location, Double salary, Integer quantity, Level level, String description, Instant startDate, Instant endDate, Boolean active) {
+        this.name = name;
+        this.location = location;
+        this.salary = salary;
+        this.quantity = quantity;
+        this.level = level;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.active = active;
+    }
 }
