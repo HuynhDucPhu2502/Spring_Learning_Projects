@@ -17,7 +17,7 @@ public class CompanyResponseDto {
     private String name;
     private String description;
     private String address;
-    private String logo;
+    private String logoUrl;
     private String createdAt;
     private String updatedAt;
 

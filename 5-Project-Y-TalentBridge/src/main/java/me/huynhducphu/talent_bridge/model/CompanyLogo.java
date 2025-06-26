@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Admin 6/24/2025
- **/
 @Entity
 @Table(name = "company_logos")
 @Data
@@ -23,9 +20,5 @@ public class CompanyLogo {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private byte[] logo;
-
-    private String contentType;
-
+    private String logoUrl;
 }

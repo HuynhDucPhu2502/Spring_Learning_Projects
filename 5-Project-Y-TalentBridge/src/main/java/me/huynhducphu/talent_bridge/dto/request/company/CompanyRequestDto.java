@@ -22,8 +22,5 @@ public class CompanyRequestDto {
 
     @NotBlank(message = "Địa chỉ không được để trống")
     private String address;
-
-    @NotBlank(message = "Logo không được để trống")
-    private String logo;
-
+    
 }

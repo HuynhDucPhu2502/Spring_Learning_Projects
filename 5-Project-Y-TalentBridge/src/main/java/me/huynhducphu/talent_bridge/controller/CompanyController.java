@@ -15,12 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Admin 6/12/2025
- **/
 @RestController
 @RequestMapping("/companies")
 @RequiredArgsConstructor
@@ -30,12 +29,24 @@ public class CompanyController {
 
     @PostMapping
     @ApiMessage(value = "Tạo công ty")
-    public ResponseEntity<?> saveCompany(@Valid @RequestBody CompanyRequestDto companyRequestDto) {
+    public ResponseEntity<?> saveCompany(
+            @Valid @RequestPart("company") CompanyRequestDto companyRequestDto,
+            @RequestPart(value = "logoFile", required = false) MultipartFile logoFile
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(companyService.saveCompany(companyRequestDto));
+                .body(companyService.saveCompany(companyRequestDto, logoFile));
     }
 
+    @PutMapping(value = "/{id}")
+    @ApiMessage(value = "Cập nhật công ty theo mã")
+    public ResponseEntity<?> updateCompany(
+            @Valid @RequestPart("company") CompanyRequestDto companyRequestDto,
+            @RequestPart(value = "logoFile", required = false) MultipartFile logoFile,
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(companyService.updateCompany(companyRequestDto, id, logoFile));
+    }
 
     @GetMapping
     @ApiMessage(value = "Lấy danh sách công ty")
@@ -62,15 +73,6 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.findCompanyById(id));
     }
 
-    @PutMapping("/{id}")
-    @ApiMessage(value = "Cập nhật công ty theo mã")
-    public ResponseEntity<?> updateCompany(
-            @Valid @RequestBody CompanyRequestDto companyRequestDto,
-            @PathVariable Long id
-    ) {
-        return ResponseEntity.ok(companyService.updateCompany(companyRequestDto, id));
-    }
-
     @DeleteMapping("/{id}")
     @ApiMessage(value = "Xóa công ty theo mã")
     public ResponseEntity<?> deleteCompanyById(@PathVariable Long id) {
@@ -81,6 +83,4 @@ public class CompanyController {
                 )
         );
     }
-
-
 }
