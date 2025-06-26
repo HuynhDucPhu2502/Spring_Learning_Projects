@@ -3,7 +3,7 @@ export interface Company {
   name: string;
   description: string;
   address: string;
-  logo?: string;
+  logoUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -12,5 +12,4 @@ export interface CreateAndUpdateRequestDto {
   name: string;
   description: string;
   address: string;
-  logo?: string;
 }

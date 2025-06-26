@@ -4,7 +4,7 @@ import type {
   PageResponseDto,
   PaginationParams,
 } from "@/types/apiResponse";
-import type { Company, CreateAndUpdateRequestDto } from "@/types/company";
+import type { Company } from "@/types/company";
 
 export const getCompaniesList = ({
   page = 0,
@@ -29,17 +29,18 @@ export const deleteCompanyById = (id: number) => {
   return axiosClient.delete(`http://localhost:8080/companies/${id}`);
 };
 
-export const addCompany = (data: CreateAndUpdateRequestDto) => {
-  if (!data) return null;
-
-  return axiosClient.post(`http://localhost:8080/companies`, data);
+export const addCompany = (formData: FormData) => {
+  return axiosClient.post("/companies", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
-export const updateCompanyById = (
-  data: CreateAndUpdateRequestDto,
-  id: number
-) => {
-  if (!data) return null;
-
-  return axiosClient.put(`http://localhost:8080/companies/${id}`, data);
+export const updateCompanyById = (formData: FormData, id: number) => {
+  return axiosClient.put(`/companies/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
