@@ -7,16 +7,13 @@ import me.huynhducphu.talent_bridge.model.common.BaseEntity;
 
 import java.util.List;
 
-/**
- * Admin 6/11/2025
- **/
 @Entity
 @Table(name = "companies")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@JsonPropertyOrder({"id", "name", "description", "address", "logo"})
+@JsonPropertyOrder({"id", "name", "description", "address", "logoUrl"})
 public class Company extends BaseEntity {
 
     @Id
