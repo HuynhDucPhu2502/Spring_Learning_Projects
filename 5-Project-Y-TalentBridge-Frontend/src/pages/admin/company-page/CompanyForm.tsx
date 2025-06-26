@@ -13,7 +13,7 @@ import RichTextEditor from "@/components/custom/RichText/index-editor";
 import type { Company, CreateAndUpdateRequestDto } from "@/types/company";
 
 interface CompanyFormProps {
-  onSubmit: (data: CreateAndUpdateRequestDto, id?: number) => void;
+  onSubmit: (formData: FormData, id?: number) => void;
   initialData: Company | null;
   onCloseForm: () => void;
   open: boolean;
@@ -31,23 +31,36 @@ export function CompanyForm({
     name: "",
     description: "",
     address: "",
-    logo: "",
   });
+  const [logoPreview, setLogoPreview] = useState<string>("");
+  const [logoFile, setLogoFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (initialData) setFormData(initialData);
-    else
+    if (initialData) {
       setFormData({
-        name: "",
-        description: "",
-        address: "",
-        logo: "",
+        name: initialData.name,
+        description: initialData.description,
+        address: initialData.address,
       });
+      setLogoPreview(initialData.logoUrl || "");
+    } else {
+      setFormData({ name: "", description: "", address: "" });
+      setLogoPreview("");
+    }
+    setLogoFile(null);
   }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData, initialData?.id);
+    const data = new FormData();
+    data.append(
+      "company",
+      new Blob([JSON.stringify(formData)], { type: "application/json" })
+    );
+    if (logoFile) {
+      data.append("logoFile", logoFile);
+    }
+    onSubmit(data, initialData?.id);
     handleReset();
     onOpenChange(false);
     onCloseForm?.();
@@ -63,10 +76,11 @@ export function CompanyForm({
   const handleChangeLogo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setLogoFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         if (typeof reader.result === "string") {
-          handleChange("logo", reader.result);
+          setLogoPreview(reader.result);
         }
       };
       reader.readAsDataURL(file);
@@ -74,12 +88,9 @@ export function CompanyForm({
   };
 
   const handleReset = () => {
-    setFormData({
-      name: "",
-      description: "",
-      address: "",
-      logo: "",
-    });
+    setFormData({ name: "", description: "", address: "" });
+    setLogoPreview("");
+    setLogoFile(null);
   };
 
   return (
@@ -128,10 +139,10 @@ export function CompanyForm({
               accept="image/*"
               onChange={handleChangeLogo}
             />
-            {formData.logo && (
+            {logoPreview && (
               <div className="mt-2">
                 <img
-                  src={formData.logo}
+                  src={logoPreview}
                   alt="Xem trước logo"
                   className="h-16 rounded border"
                 />
