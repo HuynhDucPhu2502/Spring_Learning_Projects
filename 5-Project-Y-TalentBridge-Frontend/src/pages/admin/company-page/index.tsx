@@ -1,16 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Building2, Plus } from "lucide-react";
+
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CompanyForm } from "./CompanyForm";
-import type { Company, CreateAndUpdateRequestDto } from "@/types/company";
+import type { Company } from "@/types/company";
 import {
   addCompany,
   deleteCompanyById,
@@ -22,7 +15,7 @@ import { CompanyDetailsSidebar } from "./CompanyDetailsSidebar";
 import { CompanySearchSection } from "./CompanySearchSection";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
-import { CompanyRow } from "./CompanyRow";
+import { CompanyTable } from "./CompanyTable";
 
 export default function CompanyPage() {
   // Data
@@ -125,19 +118,17 @@ export default function CompanyPage() {
   // ============================
   // HANDLE CREATE, UPDATE, DELETE
   // ============================
-  const handleAddOrUpdateCompany = async (
-    data: CreateAndUpdateRequestDto,
-    id?: number
-  ) => {
+  const handleAddOrUpdateCompany = async (formData: FormData, id?: number) => {
     try {
-      if (id && data) {
-        await updateCompanyById(data, id);
+      setIsLoading(true);
+      if (id) {
+        await updateCompanyById(formData, id);
         toast.success("Cập nhật công ty thành công.");
       } else {
-        await addCompany(data);
+        await addCompany(formData);
         toast.success("Thêm công ty thành công.");
       }
-
+      setIsLoading(false);
       handleReset();
     } catch (err) {
       toast.error(getErrorMessage(err, "Thao tác thất bại."));
@@ -146,9 +137,11 @@ export default function CompanyPage() {
 
   const handleDeleteCompany = async (id: number) => {
     try {
+      setIsLoading(true);
+      if (hoveredCompany?.id === id) handleCloseSidebar();
       await deleteCompanyById(id);
       toast.success("Xóa công ty thành công.");
-      if (hoveredCompany?.id === id) handleCloseSidebar();
+      setIsLoading(false);
       await handleReset();
     } catch (err) {
       toast.error(getErrorMessage(err, "Xóa công ty thất bại."));
@@ -176,60 +169,14 @@ export default function CompanyPage() {
         </Button>
       </div>
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-16">Mã</TableHead>
-              <TableHead>Tên công ty</TableHead>
-              <TableHead>Địa chỉ</TableHead>
-              <TableHead>Ngày tạo</TableHead>
-              <TableHead>Lần cập nhật gần</TableHead>
-              <TableHead className="w-24">Hành động</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading && (
-              <TableRow>
-                <TableCell colSpan={6}>
-                  <div className="flex justify-center items-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
-
-            {!isLoading &&
-              companies.map((company) => (
-                <CompanyRow
-                  key={company.id}
-                  company={company}
-                  isActive={hoveredCompany?.id === company.id}
-                  isLoading={isLoading}
-                  onViewDetails={() => handleViewDetails(company)}
-                  onEdit={() => openEditForm(company)}
-                  onDelete={() => handleDeleteCompany(company.id)}
-                />
-              ))}
-
-            {!isLoading && companies.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={6}>
-                  <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <Building2 className="h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-medium">
-                      Không tìm thấy công ty nào
-                    </h3>
-                    <p className="text-muted-foreground mb-4">
-                      Thử thay đổi tiêu chí tìm kiếm hoặc thêm công ty mới
-                    </p>
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <CompanyTable
+        companies={companies}
+        isLoading={isLoading}
+        hoveredCompany={hoveredCompany}
+        onViewDetails={handleViewDetails}
+        onEdit={openEditForm}
+        onDelete={handleDeleteCompany}
+      />
 
       <Pagination
         currentPage={currentPage}

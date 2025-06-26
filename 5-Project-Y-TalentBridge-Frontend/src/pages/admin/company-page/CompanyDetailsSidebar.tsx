@@ -42,6 +42,8 @@ export function CompanyDetailsSidebar({
 
   if (!isVisible) return null;
 
+  console.log("company", company);
+
   return (
     <>
       {/* Backdrop */}
@@ -87,9 +89,9 @@ export function CompanyDetailsSidebar({
               {/* Company Logo & Name */}
               <div className="text-center space-y-4">
                 <div className="flex justify-center">
-                  {company.logo ? (
+                  {company.logoUrl ? (
                     <img
-                      src={company.logo}
+                      src={company.logoUrl}
                       alt={`${company.name} logo`}
                       className="w-20 h-20 rounded-lg object-cover border"
                     />
