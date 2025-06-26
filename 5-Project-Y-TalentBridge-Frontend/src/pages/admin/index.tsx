@@ -1,10 +1,10 @@
-import { AdminSidebar } from "@/pages/admin/components/Sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useAppDispatch, useAppSelector } from "@/features/hooks";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { AdminTopBar } from "./components/Topbar";
 import { getAccount } from "@/features/slices/auth/authThunk";
+import { AdminTopBar } from "./Topbar";
+import { AdminSidebar } from "./Sidebar";
 
 const AdminPage = () => {
   const dispatch = useAppDispatch();

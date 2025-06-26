@@ -1,9 +1,9 @@
-import Footer from "@/pages/client/components/Footer";
-import Header from "@/pages/client/components/Header";
 import { useAppDispatch, useAppSelector } from "@/features/hooks";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { getAccount } from "@/features/slices/auth/authThunk";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const RootPage = () => {
   const dispatch = useAppDispatch();
