@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import type { Skill } from "@/types/skill";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
+import { EmptyState } from "@/components/custom/EmptyState";
 
 interface SkillTableProps {
   skills: Skill[];
@@ -48,15 +49,13 @@ export function SkillTable({
           ) : skills.length === 0 ? (
             <TableRow>
               <TableCell colSpan={5}>
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <Wrench className="h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium">
-                    Không tìm thấy kỹ năng nào
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    Thử thay đổi tiêu chí tìm kiếm
-                  </p>
-                </div>
+                <EmptyState
+                  title="Không tìm thấy kỹ năng nào"
+                  description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm công ty mới"
+                  icon={
+                    <Wrench className="h-12 w-12 text-muted-foreground mb-4" />
+                  }
+                />
               </TableCell>
             </TableRow>
           ) : (
