@@ -11,7 +11,7 @@ import type {
 } from "@/types/skill";
 
 export const saveSkill = (data: createSkillRequestDto) => {
-  return axiosClient.post<ApiResponse<PageResponseDto<Skill>>>(
+  return axiosClient.post<ApiResponse<Skill>>(
     "http://localhost:8080/skills",
     data
   );

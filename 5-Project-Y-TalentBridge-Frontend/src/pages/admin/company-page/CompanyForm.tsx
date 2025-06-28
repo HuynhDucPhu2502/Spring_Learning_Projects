@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import RichTextEditor from "@/components/custom/RichText/index-editor";
 import type { Company, CreateAndUpdateRequestDto } from "@/types/company";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface CompanyFormProps {
   onSubmit: (formData: FormData, id?: number) => void;
@@ -55,7 +56,7 @@ export function CompanyForm({
     const data = new FormData();
     data.append(
       "company",
-      new Blob([JSON.stringify(formData)], { type: "application/json" })
+      new Blob([JSON.stringify(formData)], { type: "application/json" }),
     );
     if (logoFile) {
       data.append("logoFile", logoFile);
@@ -68,7 +69,7 @@ export function CompanyForm({
 
   const handleChange = (
     field: keyof CreateAndUpdateRequestDto,
-    value: string
+    value: string,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -95,15 +96,23 @@ export function CompanyForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>
-            {initialData ? "Chỉnh sửa công ty" : "Thêm công ty mới"}
+          <DialogTitle className="text-center">
+            Biểu mẫu thông tin công ty
           </DialogTitle>
+          <DialogDescription className="text-center">
+            {initialData ? "Chỉnh sửa công ty" : "Thêm công ty mới"}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Tên công ty *</Label>
+            <Label htmlFor="name">
+              Tên công ty{" "}
+              <span className="text-red-500">
+                <span className="text-red-500">*</span>
+              </span>
+            </Label>
             <Input
               id="name"
               value={formData.name}
@@ -113,7 +122,9 @@ export function CompanyForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Mô tả *</Label>
+            <Label htmlFor="description">
+              Mô tả <span className="text-red-500">*</span>
+            </Label>
             <RichTextEditor
               value={formData.description}
               onChange={(value) => handleChange("description", value)}
@@ -122,7 +133,9 @@ export function CompanyForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="address">Địa chỉ *</Label>
+            <Label htmlFor="address">
+              Địa chỉ <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="address"
               value={formData.address}

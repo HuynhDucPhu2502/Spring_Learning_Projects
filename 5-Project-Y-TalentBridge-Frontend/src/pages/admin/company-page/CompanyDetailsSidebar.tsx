@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { Company } from "@/types/company";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
+import { formatISO } from "@/utils/convertHelper";
 
 interface CompanyDetailsSidebarProps {
   company: Company | null;
@@ -42,13 +43,11 @@ export function CompanyDetailsSidebar({
 
   if (!isVisible) return null;
 
-  console.log("company", company);
-
   return (
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/30 z-[100] transition-opacity duration-300 ${
+        className={`fixed inset-0 z-[100] bg-black/30 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0"
         }`}
         style={{
@@ -65,7 +64,7 @@ export function CompanyDetailsSidebar({
 
       {/* Sidebar */}
       <div
-        className={`fixed right-0 top-0 h-full w-96 bg-white shadow-2xl z-[101] transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 z-[101] h-full w-96 transform bg-white shadow-2xl transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
         style={{
@@ -75,9 +74,9 @@ export function CompanyDetailsSidebar({
         }}
       >
         {company && (
-          <div className="flex flex-col h-full">
+          <div className="flex h-full flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b bg-white">
+            <div className="flex items-center justify-between border-b bg-white p-6">
               <h2 className="text-lg font-semibold">Chi tiết công ty</h2>
               <Button variant="ghost" size="icon" onClick={onClose}>
                 <X className="h-4 w-4" />
@@ -85,18 +84,18 @@ export function CompanyDetailsSidebar({
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white">
+            <div className="flex-1 space-y-6 overflow-y-auto bg-white p-6">
               {/* Company Logo & Name */}
-              <div className="text-center space-y-4">
+              <div className="space-y-4 text-center">
                 <div className="flex justify-center">
                   {company.logoUrl ? (
                     <img
                       src={company.logoUrl}
                       alt={`${company.name} logo`}
-                      className="w-20 h-20 rounded-lg object-cover border"
+                      className="h-20 w-20 rounded-lg border object-contain"
                     />
                   ) : (
-                    <div className="w-20 h-20 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-blue-100">
                       <Building2 className="h-10 w-10 text-blue-600" />
                     </div>
                   )}
@@ -116,22 +115,22 @@ export function CompanyDetailsSidebar({
               {/* Company Info */}
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                  <label className="text-sm font-medium tracking-wide text-gray-500 uppercase">
                     Địa chỉ
                   </label>
                   <div className="mt-2 flex items-start gap-2">
-                    <MapPin className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                    <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-400" />
                     <p className="text-gray-900">{company.address}</p>
                   </div>
                 </div>
 
                 {company.description && (
                   <div>
-                    <label className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    <label className="text-sm font-medium tracking-wide text-gray-500 uppercase">
                       Mô tả
                     </label>
                     <div
-                      className="mt-2 text-gray-900 prose prose-sm max-w-none"
+                      className="prose prose-sm mt-2 max-w-none text-gray-900"
                       dangerouslySetInnerHTML={{ __html: company.description }}
                     />
                   </div>
@@ -145,25 +144,25 @@ export function CompanyDetailsSidebar({
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4 text-gray-400" />
                   <span className="text-gray-500">Ngày tạo:</span>
-                  <span className="text-gray-900 font-medium">
-                    {company.createdAt}
+                  <span className="font-medium text-gray-900">
+                    {formatISO(company.createdAt)}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4 text-gray-400" />
                   <span className="text-gray-500">Cập nhật:</span>
-                  <span className="text-gray-900 font-medium">
-                    {company.updatedAt}
+                  <span className="font-medium text-gray-900">
+                    {formatISO(company.updatedAt)}
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="border-t p-6 bg-white">
+            <div className="border-t bg-white p-6">
               <div className="flex gap-3">
                 <Button className="flex-1" onClick={() => onEdit?.(company)}>
-                  <Edit className="h-4 w-4 mr-2" />
+                  <Edit className="mr-2 h-4 w-4" />
                   Chỉnh sửa
                 </Button>
 
@@ -173,7 +172,7 @@ export function CompanyDetailsSidebar({
                   description="Hành động này sẽ xóa công ty khỏi hệ thống và không thể hoàn tác."
                 >
                   <Button variant="destructive" className="flex-1">
-                    <Trash2 className="h-4 w-4 mr-2" />
+                    <Trash2 className="mr-2 h-4 w-4" />
                     Xóa
                   </Button>
                 </DeleteConfirmDialog>

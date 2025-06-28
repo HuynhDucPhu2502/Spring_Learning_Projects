@@ -1,6 +1,5 @@
 package me.huynhducphu.talent_bridge.repository;
 
-import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.model.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -12,5 +11,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface JobRepository extends
         JpaRepository<Job, Long>,
-        JpaSpecificationExecutor<Company> {
+        JpaSpecificationExecutor<Job> {
 }

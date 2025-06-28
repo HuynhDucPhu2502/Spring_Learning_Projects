@@ -11,6 +11,8 @@ import {
 import type { Skill } from "@/types/skill";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { EmptyState } from "@/components/custom/EmptyState";
+import LoadingSpinner from "@/components/custom/LoadingSpinner";
+import { formatISO } from "@/utils/convertHelper";
 
 interface SkillTableProps {
   skills: Skill[];
@@ -26,15 +28,25 @@ export function SkillTable({
   onDelete,
 }: SkillTableProps) {
   return (
-    <div className="rounded-md border">
+    <div className="overflow-hidden rounded-lg border border-blue-600">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-blue-600 text-white">
           <TableRow>
-            <TableHead className="w-16">ID</TableHead>
-            <TableHead>Tên kỹ năng</TableHead>
-            <TableHead>Ngày tạo</TableHead>
-            <TableHead>Cập nhật</TableHead>
-            <TableHead className="w-24">Hành động</TableHead>
+            <TableHead className="text-center font-bold text-white">
+              ID
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Tên kỹ năng
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Ngày tạo
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Cập nhật
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Hành động
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -42,7 +54,7 @@ export function SkillTable({
             <TableRow>
               <TableCell colSpan={5}>
                 <div className="flex justify-center py-6">
-                  <div className="animate-spin h-6 w-6 border-b-2 border-blue-600 rounded-full" />
+                  <LoadingSpinner />
                 </div>
               </TableCell>
             </TableRow>
@@ -51,9 +63,9 @@ export function SkillTable({
               <TableCell colSpan={5}>
                 <EmptyState
                   title="Không tìm thấy kỹ năng nào"
-                  description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm công ty mới"
+                  description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm kỹ năng mới"
                   icon={
-                    <Wrench className="h-12 w-12 text-muted-foreground mb-4" />
+                    <Wrench className="text-muted-foreground mb-4 h-12 w-12" />
                   }
                 />
               </TableCell>
@@ -61,12 +73,16 @@ export function SkillTable({
           ) : (
             skills.map((skill) => (
               <TableRow key={skill.id}>
-                <TableCell>{skill.id}</TableCell>
-                <TableCell>{skill.name}</TableCell>
-                <TableCell>{skill.createdAt}</TableCell>
-                <TableCell>{skill.updatedAt}</TableCell>
+                <TableCell className="text-center">{skill.id}</TableCell>
+                <TableCell className="text-center">{skill.name}</TableCell>
+                <TableCell className="text-center">
+                  {formatISO(skill.createdAt)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {formatISO(skill.updatedAt)}
+                </TableCell>
                 <TableCell>
-                  <div className="flex gap-2">
+                  <div className="flex items-center justify-center gap-2">
                     <Button
                       size="icon"
                       variant="ghost"

@@ -6,9 +6,10 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import AdminPage from "@/pages/admin";
 import CompanyPage from "@/pages/admin/company-page";
 import DashboardPage from "@/pages/admin/dashboard-page";
-import JobSkillPage from "@/pages/admin/job-skill-page";
-import { SkillManagerPage } from "@/pages/admin/job-skill-page/skill-manager-page";
-import { JobManagerPanel } from "@/pages/admin/job-skill-page/job-manager-page";
+import { SkillManagerPage } from "@/pages/admin/recruitment-page/skill-manager-page";
+import { JobManagerPanel } from "@/pages/admin/recruitment-page/job-manager-page";
+import JobUpsertPage from "@/pages/admin/recruitment-page/job-manager-page/job-upsert-page";
+import RecruitmentPage from "@/pages/admin/recruitment-page";
 
 const router = createBrowserRouter([
   {
@@ -32,15 +33,19 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
       { path: "company", element: <CompanyPage /> },
       {
-        path: "job-skill",
-        element: <JobSkillPage />,
+        path: "recruitment",
+        element: <RecruitmentPage />,
         children: [
           {
             index: true,
-            element: <Navigate to={"/admin/job-skill/skill-manager"} />,
+            element: <Navigate to={"/admin/recruitment/job-manager"} />,
           },
           { path: "skill-manager", element: <SkillManagerPage /> },
           { path: "job-manager", element: <JobManagerPanel /> },
+          {
+            path: "/admin/recruitment/job-manager/upsert",
+            element: <JobUpsertPage />,
+          },
         ],
       },
     ],

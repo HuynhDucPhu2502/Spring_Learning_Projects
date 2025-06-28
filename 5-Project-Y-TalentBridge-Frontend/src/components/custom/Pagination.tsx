@@ -15,6 +15,7 @@ interface PaginationProps {
   totalElements: number;
   itemsPerPage: number;
   setItemsPerPage: (itemsPerPage: number) => void;
+  showItemsPerPageSelect?: boolean;
 }
 
 const Pagination = ({
@@ -24,6 +25,7 @@ const Pagination = ({
   setItemsPerPage,
   totalPages,
   totalElements,
+  showItemsPerPageSelect,
 }: PaginationProps) => {
   return (
     <div className="flex items-center justify-between">
@@ -33,22 +35,24 @@ const Pagination = ({
         {totalElements} dòng
       </div>
       <div className="flex items-center gap-4">
-        <Select
-          value={itemsPerPage.toString()}
-          onValueChange={(value) => {
-            setItemsPerPage(Number(value));
-            setCurrentPage(1);
-          }}
-        >
-          <SelectTrigger className="w-20">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="5">5</SelectItem>
-            <SelectItem value="10">10</SelectItem>
-            <SelectItem value="20">20</SelectItem>
-          </SelectContent>
-        </Select>
+        {showItemsPerPageSelect && (
+          <Select
+            value={itemsPerPage.toString()}
+            onValueChange={(value) => {
+              setItemsPerPage(Number(value));
+              setCurrentPage(1);
+            }}
+          >
+            <SelectTrigger className="w-20">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5">5</SelectItem>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
         <div className="flex items-center gap-2">
           <Button
             variant="outline"

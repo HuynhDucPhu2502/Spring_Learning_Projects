@@ -13,6 +13,7 @@ import type {
   createSkillRequestDto,
   updateSkillRequestDto,
 } from "@/types/skill";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface SkillFormProps {
   open: boolean;
@@ -50,13 +51,18 @@ export function SkillForm({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>
-            {initialData ? "Chỉnh sửa kỹ năng" : "Thêm kỹ năng mới"}
+          <DialogTitle className="text-center">
+            Biểu mẫu thông tin kỹ năng
           </DialogTitle>
+          <DialogDescription className="text-center">
+            {initialData ? "Chỉnh sửa kỹ năng" : "Thêm kỹ năng mới"}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Tên kỹ năng *</Label>
+            <Label htmlFor="name">
+              Tên kỹ năng <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="name"
               required

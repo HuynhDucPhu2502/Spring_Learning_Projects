@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import type { Company } from "@/types/company";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { EmptyState } from "@/components/custom/EmptyState";
+import { formatISO } from "@/utils/convertHelper";
 
 interface CompanyTableProps {
   companies: Company[];
@@ -30,30 +31,58 @@ export function CompanyTable({
   onDelete,
 }: CompanyTableProps) {
   return (
-    <div className="rounded-md border">
+    <div className="overflow-hidden rounded-lg border border-blue-600">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-blue-600 text-white">
           <TableRow>
-            <TableHead className="w-16">Mã</TableHead>
-            <TableHead>Tên công ty</TableHead>
-            <TableHead>Địa chỉ</TableHead>
-            <TableHead>Ngày tạo</TableHead>
-            <TableHead>Lần cập nhật gần</TableHead>
-            <TableHead className="w-24">Hành động</TableHead>
+            <TableHead className="text-center font-bold text-white">
+              ID
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Logo
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Tên công ty
+            </TableHead>
+            <TableHead className="w-[200px] text-center font-bold text-white">
+              Địa chỉ
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Ngày tạo
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Lần cập nhật gần
+            </TableHead>
+            <TableHead className="font-bold text-white">Hành động</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {isLoading && (
             <TableRow>
               <TableCell colSpan={6}>
-                <div className="flex justify-center items-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <div className="flex items-center justify-center py-8">
+                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
                 </div>
               </TableCell>
             </TableRow>
           )}
 
+          {!isLoading && companies.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={7}>
+                <EmptyState
+                  title="Không tìm thấy công ty nào"
+                  description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm công ty mới"
+                  icon={
+                    <Building2 className="text-muted-foreground h-12 w-12" />
+                  }
+                />
+              </TableCell>
+            </TableRow>
+          )}
+
           {!isLoading &&
+            companies.length > 0 &&
             companies.map((company) => {
               const isActive = hoveredCompany?.id === company.id;
               return (
@@ -64,17 +93,37 @@ export function CompanyTable({
                   }`}
                   onClick={() => onViewDetails(company)}
                 >
-                  <TableCell className="font-medium">{company.id}</TableCell>
-                  <TableCell className="font-medium">{company.name}</TableCell>
-                  <TableCell>{company.address}</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {company.createdAt}
+                  <TableCell className="text-center font-medium">
+                    {company.id}
                   </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {company.updatedAt}
+                  <TableCell className="flex items-center justify-center font-medium">
+                    {company.logoUrl ? (
+                      <img
+                        src={company.logoUrl}
+                        alt={`${company.name} logo`}
+                        className="h-20 w-20 rounded-lg border object-contain"
+                      />
+                    ) : (
+                      <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-blue-100">
+                        <Building2 className="h-10 w-10 text-blue-600" />
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell className="w-[200px] text-center break-all whitespace-normal">
+                    {company.name}
+                  </TableCell>
+
+                  <TableCell className="w-[200px] text-center break-all whitespace-normal">
+                    {company.address}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-center text-sm">
+                    {formatISO(company.createdAt)}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-center text-sm">
+                    {formatISO(company.updatedAt)}
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center gap-2">
                       <Button
                         variant="ghost"
                         size="icon"
@@ -97,20 +146,6 @@ export function CompanyTable({
                 </TableRow>
               );
             })}
-
-          {!isLoading && companies.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={6}>
-                <EmptyState
-                  title="Không tìm thấy công ty nào"
-                  description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm công ty mới"
-                  icon={
-                    <Building2 className="h-12 w-12 text-muted-foreground" />
-                  }
-                />
-              </TableCell>
-            </TableRow>
-          )}
         </TableBody>
       </Table>
     </div>

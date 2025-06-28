@@ -34,7 +34,7 @@ public class JobResponseDto {
     public static class CompanyDto {
         private Long id;
         private String name;
-        private String logo;
+        private String logoUrl;
         private String address;
     }
 

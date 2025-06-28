@@ -14,7 +14,7 @@ const RootPage = () => {
   }, [isLogin, dispatch]);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <Header />
       <div className="flex-grow">
         <Outlet />

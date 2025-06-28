@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -34,11 +34,8 @@ export function SkillManagerPage() {
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
-  const totalPages = useMemo(
-    () => Math.ceil(totalElements / itemsPerPage),
-    [totalElements, itemsPerPage]
-  );
 
   // Form State
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -69,8 +66,10 @@ export function SkillManagerPage() {
     try {
       const filter = searchName ? `name ~ '*${searchName}*'` : null;
       const res = (await getSkillsList({ page, size, filter })).data.data;
+
       setSkills(res.content);
       setTotalElements(res.totalElements);
+      setTotalPages(res.totalPages);
     } catch (err) {
       toast.error(getErrorMessage(err, "Không thể lấy danh sách kỹ năng."));
     } finally {
@@ -163,6 +162,7 @@ export function SkillManagerPage() {
         totalElements={totalElements}
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
+        showItemsPerPageSelect={true}
       />
 
       <SkillForm

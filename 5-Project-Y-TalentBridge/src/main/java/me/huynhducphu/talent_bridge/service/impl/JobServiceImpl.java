@@ -11,6 +11,9 @@ import me.huynhducphu.talent_bridge.model.Skill;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
 import me.huynhducphu.talent_bridge.repository.JobRepository;
 import me.huynhducphu.talent_bridge.repository.SkillRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +30,12 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
     private final JobRepository jobRepository;
     private final SkillRepository skillRepository;
     private final CompanyRepository companyRepository;
+
+    @Override
+    public Page<JobResponseDto> findAllJobs(Specification<Job> spec, Pageable pageable) {
+        return jobRepository.findAll(spec, pageable)
+                .map(this::mapToResponseDto);
+    }
 
     @Override
     public JobResponseDto saveJob(JobRequestDto jobRequestDto) {
@@ -72,6 +81,20 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
         Job savedJob = jobRepository.saveAndFlush(job);
 
         return mapToResponseDto(savedJob);
+    }
+
+    @Override
+    public JobResponseDto deleteJobById(Long id) {
+        Job job = jobRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công việc"));
+
+        if (job.getSkills() != null) job.getSkills().clear();
+
+        Job updatedJob = jobRepository.saveAndFlush(job);
+        jobRepository.delete(updatedJob);
+
+        return mapToResponseDto(job);
     }
 
 

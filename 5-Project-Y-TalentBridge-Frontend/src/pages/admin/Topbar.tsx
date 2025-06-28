@@ -1,84 +1,110 @@
 import { useLocation } from "react-router-dom";
-import { User, Settings, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Clock } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAppSelector } from "@/features/hooks";
+import UserMenu from "@/components/custom/UserMenu";
 
-// Mapping routes to breadcrumb titles
-const routeTitles: Record<string, string> = {
-  "/admin/dashboard": "Dashboard",
-  "/admin/company": "Quản lý công ty",
-  "/admin/user": "Quản lý người dùng",
-  "/admin/job-skill": "Quản lý việc làm và kỹ năng",
-  "/admin/resume": "Quản lý CV",
-  "/admin/permission": "Phân quyền",
-  "/admin/sale": "Quản lý bán hàng",
+const routeTitles: Record<
+  string,
+  { title: string; subtitle?: string; icon?: string }
+> = {
+  "/admin/dashboard": {
+    title: "Dashboard",
+    subtitle: "Tổng quan hệ thống",
+    icon: "📊",
+  },
+  "/admin/company": {
+    title: "Quản lý công ty",
+    subtitle: "Danh sách và thông tin công ty",
+    icon: "🏢",
+  },
+  "/admin/user": {
+    title: "Quản lý người dùng",
+    subtitle: "Tài khoản và phân quyền",
+    icon: "👥",
+  },
+  "/admin/recruitment/job-manager": {
+    title: "Quản lý việc làm",
+    subtitle: "Đăng tải và quản lý job",
+    icon: "💼",
+  },
+  "/admin/recruitment/job-manager/upsert": {
+    title: "Thêm việc làm",
+    subtitle: "Tạo job posting mới",
+    icon: "➕",
+  },
+  "/admin/recruitment/skill-manager": {
+    title: "Quản lý kỹ năng",
+    subtitle: "Danh sách kỹ năng",
+    icon: "🛠️",
+  },
+  "/admin/resume": {
+    title: "Quản lý CV",
+    subtitle: "Hồ sơ ứng viên",
+    icon: "📄",
+  },
+  "/admin/permission": {
+    title: "Phân quyền",
+    subtitle: "Quản lý quyền truy cập",
+    icon: "🔐",
+  },
+  "/admin/sale": {
+    title: "Quản lý bán hàng",
+    subtitle: "Doanh thu và thống kê",
+    icon: "💰",
+  },
 };
 
 export function AdminTopBar() {
-  const { isLogin, user } = useAppSelector((state) => state.auth);
+  const { isLogin } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
-  const currentTitle = routeTitles[location.pathname] || "Admin";
-
-  const handleLogout = () => {
-    console.log("Logout clicked");
+  const currentRoute = routeTitles[location.pathname] || {
+    title: "Admin",
+    subtitle: "Quản trị hệ thống",
   };
 
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-white px-6">
+    <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-gray-200 bg-white/95 backdrop-blur-md px-6 shadow-sm">
       {/* Left side */}
       <div className="flex items-center gap-4">
-        <SidebarTrigger className="lg:hidden" />
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900">
-            {currentTitle}
-          </h1>
+        <SidebarTrigger className="lg:hidden hover:bg-blue-50 hover:text-blue-600 transition-colors" />
+        <div className="flex items-center gap-3">
+          {currentRoute.icon && (
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200">
+              <span className="text-lg">{currentRoute.icon}</span>
+            </div>
+          )}
+          <div>
+            <h1 className="text-xl font-bold text-gray-900 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text">
+              {currentRoute.title}
+            </h1>
+            {currentRoute.subtitle && (
+              <p className="text-sm text-gray-500 font-medium">
+                {currentRoute.subtitle}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Center */}
+      <div className="flex justify-center w-1/3">
+        <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg border">
+          <Clock className="h-4 w-4 text-gray-500" />
+          <span className="text-sm font-medium text-gray-700">
+            {new Date().toLocaleTimeString("vi-VN", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
         </div>
       </div>
 
       {/* Right side */}
       {isLogin && (
-        <div className="flex items-center gap-2">
-          {/* User Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-2 px-3">
-                <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                  <User className="h-4 w-4" />
-                </div>
-                <div className="hidden md:block text-left">
-                  <p className="text-sm font-medium">{user.name}</p>
-                  <p className="text-xs text-gray-500">{user.email}</p>
-                </div>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Hồ sơ cá nhân</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Cài đặt</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="text-red-600">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Đăng xuất</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className="flex items-center gap-3">
+          <UserMenu />
         </div>
       )}
     </header>

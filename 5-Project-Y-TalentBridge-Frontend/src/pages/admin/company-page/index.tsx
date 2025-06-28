@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,10 +30,7 @@ export default function CompanyPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalElements, setTotalElements] = useState(0);
-  const totalPages = useMemo(
-    () => Math.ceil(totalElements / itemsPerPage),
-    [totalElements, itemsPerPage]
-  );
+  const [totalPages, setTotalPages] = useState(1);
 
   // Show Details Form
   const [hoveredCompany, setHoveredCompany] = useState<Company | null>(null);
@@ -77,7 +74,7 @@ export default function CompanyPage() {
     page: number,
     size: number,
     searchName: string,
-    searchAddress: string
+    searchAddress: string,
   ) => {
     setIsLoading(true);
     try {
@@ -91,6 +88,7 @@ export default function CompanyPage() {
       const res = (await getCompaniesList({ page, size, filter })).data.data;
       setCompanies(res.content);
       setTotalElements(res.totalElements);
+      setTotalPages(res.totalPages);
     } catch (err) {
       toast.error(getErrorMessage(err, "Không thể lấy danh sách công ty."));
     } finally {
@@ -164,7 +162,7 @@ export default function CompanyPage() {
           onClick={openCreateForm}
           className="bg-blue-600 hover:bg-blue-700"
         >
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="mr-2 h-4 w-4" />
           Thêm mới
         </Button>
       </div>
@@ -185,6 +183,7 @@ export default function CompanyPage() {
         totalElements={totalElements}
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
+        showItemsPerPageSelect={true}
       />
 
       <CompanyForm
