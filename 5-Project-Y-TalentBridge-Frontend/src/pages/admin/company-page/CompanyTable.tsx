@@ -12,6 +12,7 @@ import type { Company } from "@/types/company";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { EmptyState } from "@/components/custom/EmptyState";
 import { formatISO } from "@/utils/convertHelper";
+import LoadingSpinner from "@/components/custom/LoadingSpinner";
 
 interface CompanyTableProps {
   companies: Company[];
@@ -61,7 +62,7 @@ export function CompanyTable({
             <TableRow>
               <TableCell colSpan={6}>
                 <div className="flex items-center justify-center py-8">
-                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
+                  <LoadingSpinner />
                 </div>
               </TableCell>
             </TableRow>

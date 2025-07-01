@@ -1,0 +1,58 @@
+import type { Company } from "@/types/company";
+import { Building2, MapPin, CalendarDays } from "lucide-react";
+import RichTextPreview from "@/components/custom/RichText/index-preview";
+import { formatISO } from "@/utils/convertHelper";
+
+type CompanySectionProps = {
+  company: Company;
+  jobsCount: number;
+};
+
+const CompanySection = ({ company, jobsCount }: CompanySectionProps) => {
+  return (
+    <>
+      <div
+        className={`space-y-6 overflow-y-auto pr-2 ${jobsCount > 0 ? "md:col-span-2" : "md:col-span-3"}`}
+      >
+        <div className="flex h-[200px] items-center gap-4">
+          {company.logoUrl ? (
+            <img
+              src={company.logoUrl}
+              alt={company.name}
+              className="h-20 w-20 rounded-full border-4 border-gray-200 object-contain"
+            />
+          ) : (
+            <div className="flex h-20 w-20 items-center justify-center rounded-full border text-orange-600">
+              <Building2 className="h-8 w-8" />
+            </div>
+          )}
+          <div>
+            <h1 className="text-2xl font-bold text-black">{company.name}</h1>
+            <p className="flex items-center text-sm text-gray-600">
+              <MapPin className="mr-1 h-4 w-4" />
+              {company.address}
+            </p>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border bg-white p-4 shadow">
+          <h3 className="mb-2 text-lg font-semibold text-gray-800">Mô tả</h3>
+          <RichTextPreview content={company.description} />
+        </div>
+
+        <div className="space-y-2 rounded-2xl border bg-white p-4 text-sm text-gray-600 shadow">
+          <p className="flex items-center">
+            <CalendarDays className="mr-1 h-4 w-4" />
+            Ngày tạo: {formatISO(company.createdAt)}
+          </p>
+          <p className="flex items-center">
+            <CalendarDays className="mr-1 h-4 w-4" />
+            Cập nhật: {formatISO(company.updatedAt)}
+          </p>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CompanySection;

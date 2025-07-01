@@ -18,7 +18,7 @@ const AdminPage = () => {
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
         <AdminSidebar />
-        <div className="flex-1 flex flex-col">
+        <div className="flex flex-1 flex-col">
           <AdminTopBar />
           <div className="flex-1 p-4">
             <Outlet />

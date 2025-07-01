@@ -28,7 +28,8 @@ import type { CompanySummary, JobUpsertDto, SkillSummary } from "@/types/job";
 import CompanySelection from "./JobSelection";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
-import { saveJob } from "@/services/jobApi";
+import { getJobById, saveJob, updateJobById } from "@/services/jobApi";
+import { formatISOToYMD } from "@/utils/convertHelper";
 
 const levels = [
   { value: "INTERN", label: "Intern" },
@@ -42,7 +43,7 @@ export default function JobUpsertPage() {
   // Checking is edit or create
   // ============================
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const id = searchParams.get("id");
   const isEdit = !!id;
 
@@ -72,9 +73,28 @@ export default function JobUpsertPage() {
 
   useEffect(() => {
     if (id) {
-      // setSelectedCompanyId(1);
+      const fetchData = async () => {
+        setIsLoading(true);
+        try {
+          const res = await getJobById(parseInt(id));
+          const job = res.data.data;
+          job.startDate = formatISOToYMD(job.startDate);
+          job.endDate = formatISOToYMD(job.endDate);
+
+          setFormData(job);
+          setSelectedCompany(job.company);
+          setSelectedSkills(job.skills);
+        } catch (err) {
+          toast.error(getErrorMessage(err, "Không tìm thấy công việc này"));
+          setSearchParams({});
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
     }
-  }, [id]);
+  }, [id, setSearchParams]);
 
   // ============================
   // Skill selection handler
@@ -119,7 +139,7 @@ export default function JobUpsertPage() {
   // ============================
   const handleInputChange = (
     field: keyof JobUpsertDto,
-    value: string | number | boolean
+    value: string | number | boolean,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -144,8 +164,9 @@ export default function JobUpsertPage() {
         endDate: toISODate(newCopy.endDate),
       };
 
-      await saveJob(newCopy);
-      toast.success("Thêm công việc mới thành công");
+      if (isEdit) await updateJobById(parseInt(id), newCopy);
+      else await saveJob(newCopy);
+
       handleBack();
     } catch (err) {
       toast.error(getErrorMessage(err, "Thêm công việc mới thất bại"));
@@ -173,7 +194,9 @@ export default function JobUpsertPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Tạo mới / Cập nhật</BreadcrumbPage>
+            <BreadcrumbPage>
+              {isEdit ? "Cập nhật" : "Tạo mới"} việc làm
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -201,7 +224,7 @@ export default function JobUpsertPage() {
         <CardContent>
           <form className="space-y-6">
             {/* Row 1 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">
                   Tên Job <span className="text-red-500">*</span>
@@ -231,7 +254,7 @@ export default function JobUpsertPage() {
             </div>
 
             {/* Row 2 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div className="space-y-2">
                 <Label htmlFor="salary">
                   Mức lương <span className="text-red-500">*</span>
@@ -246,8 +269,9 @@ export default function JobUpsertPage() {
                       handleInputChange("salary", Number(e.target.value))
                     }
                     required
+                    className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                  <span className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2">
                     VND
                   </span>
                 </div>
@@ -292,7 +316,7 @@ export default function JobUpsertPage() {
             </div>
 
             {/* Row 3 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               <div className="space-y-2">
                 <Label htmlFor="startDate">
                   Ngày bắt đầu <span className="text-red-500">*</span>
@@ -352,7 +376,7 @@ export default function JobUpsertPage() {
             </div>
 
             {/* Skills and Company Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Skills */}
               <SkillSelection
                 selectedSkills={selectedSkills}

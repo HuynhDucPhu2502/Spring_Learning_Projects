@@ -104,28 +104,32 @@ const SkillSelection = ({
       <Label>
         Kỹ năng yêu cầu <span className="text-red-500">*</span>
       </Label>
-      <div className="min-h-[100px] rounded-md border p-3">
-        <div className="mb-3 flex flex-wrap gap-2">
-          {selectedSkills &&
-            selectedSkills.map((skill) => (
-              <Badge key={skill.id} className="flex items-center gap-1">
-                {skill.name}
-                <X
-                  className="h-3 w-3 cursor-pointer hover:text-red-500"
-                  onClick={() => onRemoveSkill(skill)}
-                />
-              </Badge>
-            ))}
 
-          {selectedSkills.length === 0 && (
-            <div className="mb-3 flex w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6">
-              <div className="text-center">
-                <Wrench className="mx-auto mb-2 h-8 w-8 text-gray-400" />
-                <p className="text-sm text-gray-500">Chưa chọn công ty</p>
-              </div>
+      <div className="rounded-md border bg-gray-50/50 p-3">
+        {selectedSkills && selectedSkills.length > 0 && (
+          <div className="mb-3 min-h-[100px]">
+            <div className="flex flex-wrap gap-2">
+              {selectedSkills.map((skill) => (
+                <Badge key={skill.id} className="flex items-center gap-1">
+                  {skill.name}
+                  <X
+                    className="h-3 w-3 cursor-pointer hover:text-red-500"
+                    onClick={() => onRemoveSkill(skill)}
+                  />
+                </Badge>
+              ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {selectedSkills.length === 0 && (
+          <div className="mb-3 flex min-h-[100px] w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300">
+            <div>
+              <Wrench className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+              <p className="text-sm text-gray-500">Chưa chọn kỹ năng</p>
+            </div>
+          </div>
+        )}
 
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogTrigger asChild>

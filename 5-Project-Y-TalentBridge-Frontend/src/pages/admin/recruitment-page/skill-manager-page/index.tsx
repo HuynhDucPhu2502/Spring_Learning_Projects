@@ -60,7 +60,7 @@ export function SkillManagerPage() {
   const fetchSkills = async (
     page: number,
     size: number,
-    searchName: string
+    searchName: string,
   ) => {
     setIsLoading(true);
     try {
@@ -97,15 +97,12 @@ export function SkillManagerPage() {
   // HANDLE CREATE, UPDATE, DELETE
   // ============================
   const handleAddOrUpdateSkill = async (
-    data: createSkillRequestDto | updateSkillRequestDto
+    data: createSkillRequestDto | updateSkillRequestDto,
   ) => {
     try {
       if (!data) return;
 
-      console.log(data);
-
       if ("id" in data) {
-        console.log("test");
         await updateSkill(data);
         toast.success("Cập nhật kỹ năng thành công.");
       } else {
@@ -143,7 +140,7 @@ export function SkillManagerPage() {
           className="bg-blue-600 hover:bg-blue-700"
           onClick={openCreateForm}
         >
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="mr-2 h-4 w-4" />
           Thêm kỹ năng
         </Button>
       </div>

@@ -10,6 +10,10 @@ export const saveJob = (data: JobUpsertDto) => {
   return axiosClient.post("http://localhost:8080/jobs", data);
 };
 
+export const updateJobById = (id: number, data: JobUpsertDto) => {
+  return axiosClient.put(`http://localhost:8080/jobs/${id}`, data);
+};
+
 export const getJobsList = ({
   page = 0,
   size = 5,
@@ -24,6 +28,16 @@ export const getJobsList = ({
 
   return axiosClient.get<ApiResponse<PageResponseDto<Job>>>(
     `http://localhost:8080/jobs?${params.toString()}`,
+  );
+};
+
+export const getJobById = (id: number) => {
+  return axiosClient.get<ApiResponse<Job>>(`http://localhost:8080/jobs/${id}`);
+};
+
+export const get3RecentJobByCompanyId = (id: number) => {
+  return axiosClient.get<ApiResponse<Job[]>>(
+    `http://localhost:8080/jobs/company/${id}`,
   );
 };
 

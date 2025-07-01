@@ -2,14 +2,15 @@ import DOMPurify from "dompurify";
 
 interface Props {
   content: string;
+  title?: string;
 }
 
-const RichTextPreview = ({ content }: Props) => {
+const RichTextPreview = ({ title, content }: Props) => {
   return (
     <>
-      <h3 className="text-lg font-medium">Preview</h3>
+      {title && <h1 className="text-2xl font-semibold">{title}</h1>}
       <div
-        className="prose max-w-none border border-gray-300 p-4 rounded bg-white"
+        className="prose max-w-none rounded bg-white"
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
       />
     </>

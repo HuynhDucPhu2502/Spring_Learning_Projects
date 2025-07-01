@@ -22,7 +22,7 @@ export function CompanySearchSection({
     <div className="bg-card rounded-lg border p-4">
       <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-2">
-          <Label htmlFor="search-name">Name:</Label>
+          <Label htmlFor="search-name">Tên công ty:</Label>
           <Input
             id="search-name"
             placeholder="nhập tên tìm"
@@ -31,7 +31,7 @@ export function CompanySearchSection({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="search-address">Address:</Label>
+          <Label htmlFor="search-address">Địa chỉ công ty:</Label>
           <Input
             id="search-address"
             placeholder="nhập địa chỉ"

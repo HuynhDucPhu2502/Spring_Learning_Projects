@@ -99,13 +99,22 @@ const CompanySelection = ({
       <Label>
         Công ty <span className="text-red-500">*</span>
       </Label>
-      <div className="min-h-[100px] rounded-md border bg-gray-50/50 p-3">
-        {selectedCompany ? (
-          <div className="mb-3 flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+
+      <div className="rounded-md border bg-gray-50/50 p-3">
+        {selectedCompany && (
+          <div className="mb-3 flex min-h-[100px] items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100">
-                <Building2 className="h-4 w-4 text-blue-600" />
-              </div>
+              {selectedCompany.logoUrl ? (
+                <img
+                  src={selectedCompany.logoUrl}
+                  alt={`${selectedCompany.name} logo`}
+                  className="h-16 w-16 rounded-lg border object-contain"
+                />
+              ) : (
+                <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-blue-100">
+                  <Building2 className="h-10 w-10 text-blue-600" />
+                </div>
+              )}
               <div>
                 <span className="font-semibold text-gray-900">
                   {selectedCompany.name}
@@ -124,11 +133,13 @@ const CompanySelection = ({
               <X className="h-4 w-4" />
             </Button>
           </div>
-        ) : (
-          <div className="mb-3 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6">
-            <div className="text-center">
+        )}
+
+        {!selectedCompany && (
+          <div className="mb-3 flex min-h-[100px] w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300">
+            <div>
               <Building2 className="mx-auto mb-2 h-8 w-8 text-gray-400" />
-              <p className="text-sm text-gray-500">Chưa chọn công ty</p>
+              <p className="text-sm text-gray-500">Chưa chọn kỹ năng</p>
             </div>
           </div>
         )}

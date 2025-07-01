@@ -6,6 +6,7 @@ export interface Company {
   logoUrl?: string;
   createdAt: string;
   updatedAt: string;
+  jobsCount?: number;
 }
 
 export interface CreateAndUpdateRequestDto {

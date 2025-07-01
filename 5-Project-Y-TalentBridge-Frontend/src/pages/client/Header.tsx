@@ -1,134 +1,119 @@
-"use client";
-
 import { Home, Code, Building2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "@/features/hooks";
-import { logout } from "@/features/slices/auth/authThunk";
+import { useAppSelector } from "@/features/hooks";
+import UserMenu from "@/components/custom/UserMenu";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useAppDispatch();
-
-  const { isLogin, user } = useAppSelector((state) => state.auth);
+  const { isLogin } = useAppSelector((state) => state.auth);
 
   const navItems = [
     { href: "/", label: "Trang chủ", Icon: Home },
+    { href: "/companies", label: "Công ty", Icon: Building2 },
     { href: "/jobs", label: "Việc làm IT", Icon: Code },
-    { href: "/companies", label: "Tổng công ty", Icon: Building2 },
   ];
 
   const handleNavClick = () => {
     setIsOpen(false);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    setIsOpen(false);
-  };
-
   return (
-    <header className="w-full bg-gradient-to-r from-orange-400 via-orange-500 to-orange-400 shadow-md">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 backdrop-blur-sm">
+    <header className="relative w-full overflow-hidden bg-gradient-to-r from-orange-500 via-orange-600 to-yellow-500 shadow">
+      <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
-        <div className="bg-white p-2 rounded-lg">
-          <Link to="/" className="flex items-center">
-            <img src="web-logo.png" alt="TalentBridge" className="h-12" />
-          </Link>
+        <div className="relative">
+          <div className="rounded-2xl border border-white/20 bg-white p-3 shadow">
+            <Link to="/" className="flex items-center gap-3">
+              <img
+                src="/web-logo.png"
+                alt="TalentBridge"
+                className="h-18 w-18 rounded-lg object-contain"
+              />
+              <div className="hidden sm:block">
+                <h1 className="text-lg font-black text-gray-800">
+                  TalentBridge
+                </h1>
+                <p className="text-xs font-medium text-gray-600">
+                  Kết nối tài năng
+                </p>
+              </div>
+            </Link>
+          </div>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Nav */}
         <nav className="hidden lg:block">
-          <ul className="flex items-center space-x-8">
+          <ul className="flex items-center space-x-2">
             {navItems.map(({ href, label, Icon }) => (
               <li key={label}>
                 <Link
                   to={href}
-                  className="flex items-center px-3 py-2 rounded-md text-white font-medium hover:bg-white/25 transition"
+                  className="flex items-center gap-2 rounded-xl px-4 py-2 font-medium text-white hover:bg-white/20"
                 >
-                  <Icon className="mr-2 h-5 w-5" />
-                  {label}
+                  <Icon className="h-4 w-4" />
+                  <span>{label}</span>
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
 
-        {/* Desktop Auth */}
-        {isLogin ? (
-          <div className="hidden lg:flex items-center space-x-4 text-white">
-            <span>Xin chào, {user.name}</span>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 rounded-full border-2 border-white hover:bg-white hover:text-orange-600 transition"
+        {/* Auth Buttons */}
+        <div className="flex items-center gap-4">
+          {isLogin ? (
+            <div className="rounded-xl border border-white/30 bg-white/10 p-2">
+              <UserMenu />
+            </div>
+          ) : (
+            <div className="hidden items-center gap-3 lg:flex">
+              <Link
+                to="/auth?mode=login"
+                className="rounded-full border border-white/50 bg-white px-5 py-2 font-bold text-orange-700 hover:border-white"
+              >
+                Đăng nhập
+              </Link>
+            </div>
+          )}
+
+          {/* Mobile Nav */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-lg border border-white/20 p-2 text-white lg:hidden"
+              >
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="w-[300px] bg-white sm:w-[400px]"
             >
-              Đăng xuất
-            </button>
-          </div>
-        ) : (
-          <Link
-            to="/auth?mode=login"
-            className="hidden lg:inline-block px-4 py-2 rounded-full border-2 border-white text-white font-medium hover:bg-white hover:text-orange-600 transition"
-          >
-            Đăng nhập
-          </Link>
-        )}
-
-        {/* Mobile Menu */}
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden text-white hover:bg-white/25"
-            >
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Mở menu</span>
-            </Button>
-          </SheetTrigger>
-
-          <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-            <div className="flex flex-col space-y-4 mt-8">
-              {navItems.map(({ href, label, Icon }) => (
-                <Link
-                  key={label}
-                  to={href}
-                  onClick={handleNavClick}
-                  className="flex items-center px-4 py-3 rounded-md text-gray-700 font-medium hover:bg-gray-100 transition"
-                >
-                  <Icon className="mr-3 h-5 w-5" />
-                  {label}
-                </Link>
-              ))}
-
-              <div className="pt-4 border-t">
-                {isLogin ? (
-                  <div className="flex flex-col space-y-2">
-                    <span className="text-sm text-gray-500 px-4">
-                      Xin chào, {user.name}
-                    </span>
-                    <Button
-                      onClick={handleLogout}
-                      className="w-full bg-gradient-to-r from-orange-400 to-orange-500 text-white hover:from-orange-500 hover:to-orange-600"
-                    >
-                      Đăng xuất
-                    </Button>
-                  </div>
-                ) : (
+              <div className="mt-8 flex flex-col space-y-3">
+                {navItems.map(({ href, label, Icon }) => (
                   <Link
-                    to="/auth?mode=login"
+                    key={label}
+                    to={href}
                     onClick={handleNavClick}
-                    className="flex items-center justify-center px-4 py-3 rounded-full bg-gradient-to-r from-orange-400 to-orange-500 text-white font-medium hover:from-orange-500 hover:to-orange-600 transition"
+                    className="flex items-center gap-3 rounded-xl border border-gray-200 px-4 py-3 text-gray-700 hover:bg-orange-50"
                   >
-                    Đăng nhập
+                    <Icon className="h-5 w-5 text-orange-600" />
+                    <span>{label}</span>
                   </Link>
+                ))}
+                {isLogin && (
+                  <div className="mt-4 border-t border-gray-200 pt-4">
+                    <UserMenu />
+                  </div>
                 )}
               </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

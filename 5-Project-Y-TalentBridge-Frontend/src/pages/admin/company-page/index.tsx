@@ -26,7 +26,9 @@ export default function CompanyPage() {
   const [searchName, setSearchName] = useState("");
   const [searchAddress, setSearchAddress] = useState("");
 
-  // Pagination
+  // ============================
+  // PAGINATION
+  // ============================
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalElements, setTotalElements] = useState(0);
@@ -77,6 +79,7 @@ export default function CompanyPage() {
     searchAddress: string,
   ) => {
     setIsLoading(true);
+
     try {
       const filters: string[] = [];
 
@@ -95,6 +98,11 @@ export default function CompanyPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCompanies(1, itemsPerPage, searchName, searchAddress);
+    setCurrentPage(1);
+  }, [searchName, searchAddress, itemsPerPage]);
 
   useEffect(() => {
     fetchCompanies(currentPage, itemsPerPage, searchName, searchAddress);
@@ -139,10 +147,12 @@ export default function CompanyPage() {
       if (hoveredCompany?.id === id) handleCloseSidebar();
       await deleteCompanyById(id);
       toast.success("Xóa công ty thành công.");
-      setIsLoading(false);
+
       await handleReset();
     } catch (err) {
       toast.error(getErrorMessage(err, "Xóa công ty thất bại."));
+    } finally {
+      setIsLoading(false);
     }
   };
 

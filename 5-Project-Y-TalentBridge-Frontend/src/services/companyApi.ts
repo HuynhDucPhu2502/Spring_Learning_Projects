@@ -19,7 +19,30 @@ export const getCompaniesList = ({
   if (filter) params.append("filter", filter);
 
   return axiosClient.get<ApiResponse<PageResponseDto<Company>>>(
-    `http://localhost:8080/companies?${params.toString()}`
+    `http://localhost:8080/companies?${params.toString()}`,
+  );
+};
+
+export const getCompaniesListWithJobsCount = ({
+  page = 0,
+  size = 5,
+  filter,
+}: PaginationParams) => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    size: size.toString(),
+  });
+
+  if (filter) params.append("filter", filter);
+
+  return axiosClient.get<ApiResponse<PageResponseDto<Company>>>(
+    `http://localhost:8080/companies/with-jobs-count?${params.toString()}`,
+  );
+};
+
+export const getCompanyById = (id: number) => {
+  return axiosClient.get<ApiResponse<Company>>(
+    `http://localhost:8080/companies/${id}`,
   );
 };
 

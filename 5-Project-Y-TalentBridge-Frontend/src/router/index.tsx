@@ -1,15 +1,25 @@
+// React router
+import { createBrowserRouter, Navigate } from "react-router-dom";
+
+// CLIENT PAGE
+import RootPage from "@/pages/client";
 import AuthPage from "@/pages/client/auth-page";
+import CompanyDetails from "@/pages/client/company-page/details";
+import CompaniesClientPage from "@/pages/client/company-page";
 import HomePage from "@/pages/client/home-page";
 import ProtectedRoute from "@/pages/client/ProtectedRoute ";
-import RootPage from "@/pages/client";
-import { createBrowserRouter, Navigate } from "react-router-dom";
+
+// ADMIN PAGE
 import AdminPage from "@/pages/admin";
 import CompanyPage from "@/pages/admin/company-page";
 import DashboardPage from "@/pages/admin/dashboard-page";
-import { SkillManagerPage } from "@/pages/admin/recruitment-page/skill-manager-page";
+import RecruitmentPage from "@/pages/admin/recruitment-page";
 import { JobManagerPanel } from "@/pages/admin/recruitment-page/job-manager-page";
 import JobUpsertPage from "@/pages/admin/recruitment-page/job-manager-page/job-upsert-page";
-import RecruitmentPage from "@/pages/admin/recruitment-page";
+import { SkillManagerPage } from "@/pages/admin/recruitment-page/skill-manager-page";
+
+// Components
+import ErrorPage from "@/components/custom/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +29,8 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to={"/home"} /> },
       { path: "home", element: <HomePage /> },
       { path: "auth", element: <AuthPage /> },
+      { path: "companies", element: <CompaniesClientPage /> },
+      { path: "companies/:id", element: <CompanyDetails /> },
       {
         element: <ProtectedRoute />,
         children: [{ path: "dashboard", element: <div>a</div> }],
@@ -28,6 +40,7 @@ const router = createBrowserRouter([
   {
     path: "admin",
     element: <AdminPage />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Navigate to={"/admin/dashboard"} /> },
       { path: "dashboard", element: <DashboardPage /> },
@@ -48,6 +61,8 @@ const router = createBrowserRouter([
           },
         ],
       },
+
+      { path: "*", element: <ErrorPage /> },
     ],
   },
 ]);

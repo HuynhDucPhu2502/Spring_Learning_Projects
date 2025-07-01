@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { X, Building2, MapPin, Calendar, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import type { Company } from "@/types/company";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { formatISO } from "@/utils/convertHelper";
+import RichTextPreview from "@/components/custom/RichText/index-preview";
 
 interface CompanyDetailsSidebarProps {
   company: Company | null;
@@ -47,7 +46,7 @@ export function CompanyDetailsSidebar({
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-[100] bg-black/30 transition-opacity duration-300 ${
+        className={`z-[100] bg-black/30 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0"
         }`}
         style={{
@@ -129,10 +128,7 @@ export function CompanyDetailsSidebar({
                     <label className="text-sm font-medium tracking-wide text-gray-500 uppercase">
                       Mô tả
                     </label>
-                    <div
-                      className="prose prose-sm mt-2 max-w-none text-gray-900"
-                      dangerouslySetInnerHTML={{ __html: company.description }}
-                    />
+                    <RichTextPreview content={company.description} />
                   </div>
                 )}
               </div>

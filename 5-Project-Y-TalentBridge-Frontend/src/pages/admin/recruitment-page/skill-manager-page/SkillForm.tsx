@@ -43,6 +43,7 @@ export function SkillForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData, initialData?.id);
+    setFormData({ name: "" });
     onOpenChange(false);
     onCloseForm?.();
   };
