@@ -6,6 +6,8 @@ import lombok.*;
 import me.huynhducphu.talent_bridge.model.common.BaseEntity;
 import me.huynhducphu.talent_bridge.model.constant.Gender;
 
+import java.util.List;
+
 /**
  * Admin 6/7/2025
  **/
@@ -40,8 +42,12 @@ public class User extends BaseEntity {
     private Gender gender;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = true)
+    @JoinColumn(name = "company_id")
     @ToString.Exclude
     private Company company;
+
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private List<Resume> resumes;
 }
 
