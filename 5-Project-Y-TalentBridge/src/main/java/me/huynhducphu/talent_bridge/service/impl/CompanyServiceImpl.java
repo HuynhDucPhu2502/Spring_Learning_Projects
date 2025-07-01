@@ -3,11 +3,13 @@ package me.huynhducphu.talent_bridge.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.company.CompanyRequestDto;
+import me.huynhducphu.talent_bridge.dto.response.company.CompanyExtendedResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.model.CompanyLogo;
 import me.huynhducphu.talent_bridge.repository.CompanyLogoRepository;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
+import me.huynhducphu.talent_bridge.repository.JobRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
 import me.huynhducphu.talent_bridge.service.S3Service;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,7 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
     private final CompanyRepository companyRepository;
     private final CompanyLogoRepository companyLogoRepository;
     private final UserRepository userRepository;
+    private final JobRepository jobRepository;
     private final S3Service s3Service;
 
     @Override
@@ -81,6 +84,13 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
                 .map(this::mapToResponseDto);
     }
 
+
+    @Override
+    public Page<CompanyExtendedResponseDto> findAllCompaniesWithJobsCount(Specification<Company> spec, Pageable pageable) {
+        return companyRepository.findAll(spec, pageable)
+                .map(this::mapToExtendedResponseDto);
+    }
+
     @Override
     public CompanyResponseDto findCompanyById(Long id) {
         return companyRepository.findById(id)
@@ -120,6 +130,27 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
                 logoUrl,
                 company.getCreatedAt().toString(),
                 company.getUpdatedAt().toString()
+        );
+    }
+
+    private CompanyExtendedResponseDto mapToExtendedResponseDto(Company company) {
+        String logoUrl = null;
+
+        if (company.getCompanyLogo() != null)
+            logoUrl = company.getCompanyLogo().getLogoUrl();
+
+        Long jobsCount = jobRepository.countByCompanyId(company.getId());
+
+
+        return new CompanyExtendedResponseDto(
+                company.getId(),
+                company.getName(),
+                company.getDescription(),
+                company.getAddress(),
+                logoUrl,
+                company.getCreatedAt().toString(),
+                company.getUpdatedAt().toString(),
+                jobsCount
         );
     }
 }

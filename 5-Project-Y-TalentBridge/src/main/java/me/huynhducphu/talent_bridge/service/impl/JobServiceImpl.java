@@ -17,7 +17,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Admin 6/25/2025
@@ -35,6 +36,14 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
     public Page<JobResponseDto> findAllJobs(Specification<Job> spec, Pageable pageable) {
         return jobRepository.findAll(spec, pageable)
                 .map(this::mapToResponseDto);
+    }
+
+    @Override
+    public JobResponseDto findJobById(Long id) {
+        return jobRepository
+                .findById(id)
+                .map(this::mapToResponseDto)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công việc"));
     }
 
     @Override
@@ -84,6 +93,61 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
     }
 
     @Override
+    public JobResponseDto updateJobById(Long id, JobRequestDto jobRequestDto) {
+
+        Job job = jobRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công việc"));
+
+        job.setName(jobRequestDto.getName());
+        job.setLocation(jobRequestDto.getLocation());
+        job.setSalary(jobRequestDto.getSalary());
+        job.setQuantity(jobRequestDto.getQuantity());
+        job.setLevel(jobRequestDto.getLevel());
+        job.setDescription(jobRequestDto.getDescription());
+        job.setStartDate(jobRequestDto.getStartDate());
+        job.setEndDate(jobRequestDto.getEndDate());
+        job.setActive(jobRequestDto.getActive());
+
+        if (jobRequestDto.getCompany() != null
+                && !Objects.equals(jobRequestDto.getCompany().getId(), job.getCompany().getId())) {
+            Company company = companyRepository
+                    .findById(jobRequestDto.getCompany().getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Công ty không tồn tại"));
+
+            job.setCompany(company);
+        }
+
+        if (jobRequestDto.getSkills() != null) {
+            Set<Long> requestedSkillIds = jobRequestDto.getSkills().stream()
+                    .map(JobRequestDto.SkillId::getId)
+                    .collect(Collectors.toSet());
+
+            Set<Skill> currentSkills = new HashSet<>(job.getSkills());
+
+            currentSkills.removeIf(skill -> !requestedSkillIds.contains(skill.getId()));
+
+            Set<Long> currentSkillIds = currentSkills.stream()
+                    .map(Skill::getId)
+                    .collect(Collectors.toSet());
+
+            Set<Long> newSkillIdsToAdd = new HashSet<>(requestedSkillIds);
+            newSkillIdsToAdd.removeAll(currentSkillIds);
+
+            if (!newSkillIdsToAdd.isEmpty()) {
+                List<Skill> skillsToAdd = skillRepository.findAllById(newSkillIdsToAdd);
+                currentSkills.addAll(skillsToAdd);
+            }
+
+            job.setSkills(new ArrayList<>(currentSkills));
+        }
+
+        Job updatedJob = jobRepository.saveAndFlush(job);
+
+        return mapToResponseDto(updatedJob);
+    }
+
+    @Override
     public JobResponseDto deleteJobById(Long id) {
         Job job = jobRepository
                 .findById(id)
@@ -95,6 +159,20 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
         jobRepository.delete(updatedJob);
 
         return mapToResponseDto(job);
+    }
+
+    @Override
+    public List<JobResponseDto> findJobByCompanyId(Long id) {
+        return jobRepository
+                .findByCompanyId(id)
+                .stream()
+                .map(job -> {
+                    JobResponseDto dto = mapToResponseDto(job);
+                    dto.setDescription(null);
+                    dto.setCompany(null);
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
 

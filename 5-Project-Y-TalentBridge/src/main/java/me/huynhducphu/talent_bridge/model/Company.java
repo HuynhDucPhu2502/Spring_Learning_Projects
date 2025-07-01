@@ -35,7 +35,7 @@ public class Company extends BaseEntity {
     @ToString.Exclude
     private List<User> users;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Job> jobs;
 

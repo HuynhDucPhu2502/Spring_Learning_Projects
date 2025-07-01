@@ -7,6 +7,7 @@ import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.company.CompanyRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
+import me.huynhducphu.talent_bridge.dto.response.company.CompanyExtendedResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.service.CompanyService;
@@ -63,6 +64,25 @@ public class CompanyController {
                 page.getTotalPages()
         );
 
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/with-jobs-count")
+    @ApiMessage(value = "Lấy danh sách công ty")
+    public ResponseEntity<?> findAllCompaniesWithJobsCount(
+            @Filter Specification<Company> spec,
+            @PageableDefault(size = 9) Pageable pageable
+    ) {
+        Page<CompanyExtendedResponseDto> page = companyService.findAllCompaniesWithJobsCount(spec, pageable);
+
+        PageResponseDto<CompanyExtendedResponseDto> res = new PageResponseDto<>(
+                page.getContent(),
+                pageable.getPageNumber() + 1,
+                pageable.getPageSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+        
         return ResponseEntity.ok(res);
     }
 

@@ -32,6 +32,21 @@ public class JobController {
         return ResponseEntity.ok(jobService.saveJob(jobRequestDto));
     }
 
+    @GetMapping("/{id}")
+    @ApiMessage(value = "Lấy công việc theo id")
+    public ResponseEntity<?> findJobById(@PathVariable Long id) {
+        return ResponseEntity.ok(jobService.findJobById(id));
+    }
+
+    @PutMapping("/{id}")
+    @ApiMessage(value = "Cập nhật công việc theo id")
+    public ResponseEntity<?> updateJobById(
+            @PathVariable Long id,
+            @Valid @RequestBody JobRequestDto jobRequestDto
+    ) {
+        return ResponseEntity.ok(jobService.updateJobById(id, jobRequestDto));
+    }
+
     @GetMapping
     @ApiMessage(value = "Lấy danh sách công việc")
     public ResponseEntity<?> findAllJobs(
@@ -50,6 +65,13 @@ public class JobController {
 
         return ResponseEntity.ok(res);
     }
+
+    @GetMapping("/company/{id}")
+    @ApiMessage(value = "Lấy công việc theo công ty")
+    public ResponseEntity<?> findJobByCompanyId(@PathVariable Long id) {
+        return ResponseEntity.ok(jobService.findJobByCompanyId(id));
+    }
+
 
     @DeleteMapping("/{id}")
     @ApiMessage(value = "Xóa công việc")

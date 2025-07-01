@@ -7,13 +7,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.List;
+
 /**
  * Admin 6/25/2025
  **/
 public interface JobService {
     Page<JobResponseDto> findAllJobs(Specification<Job> spec, Pageable pageable);
 
+    JobResponseDto findJobById(Long id);
+
     JobResponseDto saveJob(JobRequestDto jobRequestDto);
 
+    JobResponseDto updateJobById(Long id, JobRequestDto jobRequestDto);
+
     JobResponseDto deleteJobById(Long id);
+
+    List<JobResponseDto> findJobByCompanyId(Long id);
 }

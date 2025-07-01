@@ -149,5 +149,4 @@ public class GlobalExceptionHandler {
                         "INVALID_IMAGE_DATA"
                 ));
     }
-
 }
