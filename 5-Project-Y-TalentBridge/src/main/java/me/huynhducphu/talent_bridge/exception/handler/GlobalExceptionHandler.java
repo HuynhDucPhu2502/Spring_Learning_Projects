@@ -91,9 +91,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ApiResponse<?>> handleNoResourceFoundException(
-            NoResourceFoundException ex
-    ) {
+    public ResponseEntity<ApiResponse<?>> handleNoResourceFoundException() {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ApiResponse<>(
@@ -118,10 +116,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleBadJwtException(
             BadJwtException ex
     ) {
+        String message = "Token không hợp lệ (không đúng định dạng, hết hạn)";
+        if (ex.getMessage() != null)
+            message = ex.getMessage();
+
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiResponse<>(
-                        "Token không hợp lệ (không đúng định dạng, hết hạn)",
+                        message,
                         "UNAUTHORIZED"
                 ));
     }
@@ -130,10 +132,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleResourceAlreadyExistsException(
             ResourceAlreadyExistsException ex
     ) {
+        String message = "Tài nguyên này đã tồn tại";
+        if (ex.getMessage() != null)
+            message = ex.getMessage();
+
+
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiResponse<>(
-                        "Tài nguyên này đã tồn tại",
+                        message,
                         "ENTITY_ALREADY_EXISTS"
                 ));
     }

@@ -11,4 +11,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface ResumeRepository extends
         JpaRepository<Resume, Long>,
         JpaSpecificationExecutor<Resume> {
+
+    boolean existsByUserIdAndJobId(Long userId, Long jobId);
+
 }

@@ -7,9 +7,14 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 
 import java.io.IOException;
+import java.net.URL;
+import java.time.Duration;
 
 /**
  * Admin 6/25/2025
@@ -19,11 +24,13 @@ import java.io.IOException;
 public class S3ServiceImpl implements me.huynhducphu.talent_bridge.service.S3Service {
 
     private final S3Client s3Client;
+    private final S3Presigner s3Presigner;
+
     private final String awsBucketName;
     private final String awsRegion;
 
     @Override
-    public String uploadFile(MultipartFile file, String folder, String fileName) {
+    public String uploadFile(MultipartFile file, String folder, String fileName, boolean getUrl) {
         try {
             if (file == null || file.isEmpty())
                 throw new S3UploadException("Tệp logo không được rỗng hoặc null");
@@ -38,15 +45,32 @@ public class S3ServiceImpl implements me.huynhducphu.talent_bridge.service.S3Ser
 
             s3Client.putObject(putRequest, RequestBody.fromBytes(file.getBytes()));
 
-            return String.format("https://%s.s3.%s.amazonaws.com/%s",
-                    awsBucketName, awsRegion, key);
-
+            if (getUrl)
+                return String.format("https://%s.s3.%s.amazonaws.com/%s", awsBucketName, awsRegion, key);
+            else return key;
         } catch (IOException e) {
             throw new S3UploadException("Lỗi khi đọc dữ liệu từ tệp logo");
         } catch (Exception e) {
             throw new S3UploadException("Lỗi khi upload file lên S3");
         }
     }
+
+    @Override
+    public String generatePresignedUrl(String key, Duration expireDuration) {
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(awsBucketName)
+                .key(key)
+                .build();
+
+        GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+                .getObjectRequest(getObjectRequest)
+                .signatureDuration(expireDuration)
+                .build();
+
+        URL presignedUrl = s3Presigner.presignGetObject(presignRequest).url();
+        return presignedUrl.toString();
+    }
+
 
     @Override
     public void deleteFileByUrl(String fileUrl) {

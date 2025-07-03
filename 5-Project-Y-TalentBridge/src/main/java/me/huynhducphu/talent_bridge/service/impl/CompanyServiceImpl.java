@@ -41,7 +41,7 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
 
         if (logoFile != null && !logoFile.isEmpty()) {
 
-            String url = s3Service.uploadFile(logoFile, "company-logos", company.getId().toString());
+            String url = s3Service.uploadFile(logoFile, "company-logos", company.getId().toString(), true);
 
             CompanyLogo logo = new CompanyLogo();
             logo.setCompany(company);
@@ -64,7 +64,7 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         company.setAddress(dto.getAddress());
 
         if (logoFile != null && !logoFile.isEmpty()) {
-            String url = s3Service.uploadFile(logoFile, "company-logos", company.getId().toString());
+            String url = s3Service.uploadFile(logoFile, "company-logos", company.getId().toString(), true);
 
             CompanyLogo logo = company.getCompanyLogo();
             if (logo == null) {

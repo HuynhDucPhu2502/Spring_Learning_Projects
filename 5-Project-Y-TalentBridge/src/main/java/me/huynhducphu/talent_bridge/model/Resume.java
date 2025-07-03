@@ -38,9 +38,8 @@ public class Resume extends BaseEntity {
     @ToString.Exclude
     private Job job;
 
-    public Resume(String email, String url, ResumeStatus status) {
+    public Resume(String email, ResumeStatus status) {
         this.email = email;
-        this.fileKey = url;
         this.status = status;
     }
 }
