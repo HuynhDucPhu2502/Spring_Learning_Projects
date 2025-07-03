@@ -2,12 +2,15 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Job } from "@/types/job";
 import { formatISO } from "@/utils/convertHelper";
+import { useNavigate } from "react-router-dom";
 
 type JobsSection = {
   jobs: Job[];
 };
 
 const JobsSection = ({ jobs }: JobsSection) => {
+  const navigate = useNavigate();
+
   return (
     <>
       {jobs.length > 0 && (
@@ -21,7 +24,8 @@ const JobsSection = ({ jobs }: JobsSection) => {
               {jobs.map((job) => (
                 <div
                   key={job.id}
-                  className="space-y-3 rounded-xl border bg-white p-6 shadow-sm"
+                  className="cursor-pointer space-y-3 rounded-xl border bg-white p-6 shadow-sm"
+                  onClick={() => navigate(`/jobs/${job.id}`)}
                 >
                   <h3 className="text-lg font-bold text-orange-700">
                     {job.name}

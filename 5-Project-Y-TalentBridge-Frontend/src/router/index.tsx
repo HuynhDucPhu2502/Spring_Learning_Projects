@@ -4,24 +4,28 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 // CLIENT PAGE
 import RootPage from "@/pages/client";
 import AuthPage from "@/pages/client/auth-page";
-import CompanyDetails from "@/pages/client/company-page/details";
-import CompaniesClientPage from "@/pages/client/company-page";
 import HomePage from "@/pages/client/home-page";
-import ProtectedRoute from "@/pages/client/ProtectedRoute ";
+import CompanyClientPage from "@/pages/client/company-page";
+import CompanyDetailsClientPage from "@/pages/client/company-page/details";
+import JobClientPage from "@/pages/client/job-page";
+import JobDetailsClientPage from "@/pages/client/job-page/details";
 
 // ADMIN PAGE
 import AdminPage from "@/pages/admin";
 import CompanyPage from "@/pages/admin/company-page";
 import DashboardPage from "@/pages/admin/dashboard-page";
 import RecruitmentPage from "@/pages/admin/recruitment-page";
-import { JobManagerPanel } from "@/pages/admin/recruitment-page/job-manager-page";
+import JobManagerPage from "@/pages/admin/recruitment-page/job-manager-page";
 import JobUpsertPage from "@/pages/admin/recruitment-page/job-manager-page/job-upsert-page";
-import { SkillManagerPage } from "@/pages/admin/recruitment-page/skill-manager-page";
+import SkillManagerPage from "@/pages/admin/recruitment-page/skill-manager-page";
 
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
 
 const router = createBrowserRouter([
+  // =========================
+  // CLIENT ROUTE GROUP
+  // =========================
   {
     path: "",
     element: <RootPage />,
@@ -29,14 +33,16 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to={"/home"} /> },
       { path: "home", element: <HomePage /> },
       { path: "auth", element: <AuthPage /> },
-      { path: "companies", element: <CompaniesClientPage /> },
-      { path: "companies/:id", element: <CompanyDetails /> },
-      {
-        element: <ProtectedRoute />,
-        children: [{ path: "dashboard", element: <div>a</div> }],
-      },
+      { path: "companies", element: <CompanyClientPage /> },
+      { path: "companies/:id", element: <CompanyDetailsClientPage /> },
+      { path: "jobs", element: <JobClientPage /> },
+      { path: "jobs/:id", element: <JobDetailsClientPage /> },
     ],
   },
+
+  // =========================
+  // ADMIN ROUTE GROUP
+  // =========================
   {
     path: "admin",
     element: <AdminPage />,
@@ -54,7 +60,7 @@ const router = createBrowserRouter([
             element: <Navigate to={"/admin/recruitment/job-manager"} />,
           },
           { path: "skill-manager", element: <SkillManagerPage /> },
-          { path: "job-manager", element: <JobManagerPanel /> },
+          { path: "job-manager", element: <JobManagerPage /> },
           {
             path: "/admin/recruitment/job-manager/upsert",
             element: <JobUpsertPage />,

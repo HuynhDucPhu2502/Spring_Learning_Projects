@@ -33,3 +33,8 @@ export function getFirstLineFromHtml(html: string): string {
 
   return firstLine;
 }
+
+export const formatSalary = (salary: number) => {
+  if (salary === 0) return "Thương lượng";
+  return `${salary.toLocaleString()} VND`;
+};

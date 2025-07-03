@@ -16,7 +16,7 @@ import Pagination from "@/components/custom/Pagination";
 import { JobDetailsSidebar } from "./JobDetailsSidebar";
 import { JobTable } from "./JobTable";
 
-export function JobManagerPanel() {
+const JobManagerPage = () => {
   const navigate = useNavigate();
 
   // ============================
@@ -216,4 +216,6 @@ export function JobManagerPanel() {
       )}
     </div>
   );
-}
+};
+
+export default JobManagerPage;

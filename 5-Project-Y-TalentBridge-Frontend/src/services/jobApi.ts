@@ -35,7 +35,7 @@ export const getJobById = (id: number) => {
   return axiosClient.get<ApiResponse<Job>>(`http://localhost:8080/jobs/${id}`);
 };
 
-export const get3RecentJobByCompanyId = (id: number) => {
+export const getJobByCompanyId = (id: number) => {
   return axiosClient.get<ApiResponse<Job[]>>(
     `http://localhost:8080/jobs/company/${id}`,
   );

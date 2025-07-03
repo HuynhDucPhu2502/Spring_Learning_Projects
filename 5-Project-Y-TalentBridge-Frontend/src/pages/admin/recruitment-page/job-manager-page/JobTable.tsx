@@ -13,6 +13,7 @@ import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialo
 import { EmptyState } from "@/components/custom/EmptyState";
 import { formatISO } from "@/utils/convertHelper";
 import type { Job } from "@/types/job";
+import { levelColors } from "@/utils/jobFieldHelper";
 
 interface JobTableProps {
   jobs: Job[];
@@ -42,17 +43,6 @@ export function JobTable({
         {status}
       </Badge>
     );
-  };
-
-  const getLevelBadge = (level: Job["level"]) => {
-    const colors = {
-      INTERN: "bg-gray-100 text-gray-800",
-      FRESHER: "bg-green-100 text-green-800",
-      MIDDLE: "bg-yellow-100 text-yellow-800",
-      SENIOR: "bg-orange-100 text-orange-800",
-    };
-
-    return <Badge className={colors[level]}>{level}</Badge>;
   };
 
   return (
@@ -126,7 +116,7 @@ export function JobTable({
                   {job.company.name}
                 </TableCell>
                 <TableCell className="text-center text-sm">
-                  {getLevelBadge(job.level)}
+                  <Badge className={levelColors[job.level]}>{job.level}</Badge>
                 </TableCell>
                 <TableCell className="text-center text-sm">
                   {getStatusBadge(job.active)}
@@ -140,7 +130,7 @@ export function JobTable({
                 <TableCell>
                   <div
                     className="flex items-center justify-center gap-2"
-                    onClick={(e) => e.stopPropagation()} // ngăn event bubble
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <Button
                       variant="ghost"

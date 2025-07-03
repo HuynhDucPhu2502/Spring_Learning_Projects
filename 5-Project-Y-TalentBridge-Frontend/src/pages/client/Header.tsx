@@ -2,7 +2,7 @@ import { Home, Code, Building2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAppSelector } from "@/features/hooks";
 import UserMenu from "@/components/custom/UserMenu";
 
@@ -11,7 +11,7 @@ const Header = () => {
   const { isLogin } = useAppSelector((state) => state.auth);
 
   const navItems = [
-    { href: "/", label: "Trang chủ", Icon: Home },
+    { href: "/home", label: "Trang chủ", Icon: Home },
     { href: "/companies", label: "Công ty", Icon: Building2 },
     { href: "/jobs", label: "Việc làm IT", Icon: Code },
   ];
@@ -49,13 +49,16 @@ const Header = () => {
           <ul className="flex items-center space-x-2">
             {navItems.map(({ href, label, Icon }) => (
               <li key={label}>
-                <Link
+                <NavLink
                   to={href}
-                  className="flex items-center gap-2 rounded-xl px-4 py-2 font-medium text-white hover:bg-white/20"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 rounded-xl px-4 py-2 font-medium text-orange-500 duration-300 ease-in-out hover:-translate-y-0.5 ${isActive ? "bg-amber-400 text-white" : "bg-white"}`
+                  }
+                  onClick={handleNavClick}
                 >
                   <Icon className="h-4 w-4" />
                   <span>{label}</span>
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>

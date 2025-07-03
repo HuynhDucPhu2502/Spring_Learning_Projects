@@ -23,7 +23,7 @@ import { SkillForm } from "./SkillForm";
 import { SkillSearchSection } from "./SkillSearchSection";
 import { SkillTable } from "./SkillTable";
 
-export function SkillManagerPage() {
+const SkillManagerPage = () => {
   // Data
   const [skills, setSkills] = useState<Skill[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -171,4 +171,6 @@ export function SkillManagerPage() {
       />
     </div>
   );
-}
+};
+
+export default SkillManagerPage;

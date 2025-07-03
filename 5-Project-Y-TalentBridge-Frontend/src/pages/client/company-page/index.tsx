@@ -7,7 +7,7 @@ import Pagination from "@/components/custom/Pagination";
 import CompanyGrid from "./CompanyGrid";
 import { CompanySearchSection } from "./CompanySearchSection";
 
-export default function CompaniesClientPage() {
+export default function CompanyClientPage() {
   // Data
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -110,19 +110,24 @@ export default function CompaniesClientPage() {
             setSearchAddress={setSearchAddress}
             onReset={handleReset}
           />
+          <div className="mt-4 text-center text-sm text-gray-500">
+            Tìm thấy {companies.length} công ty
+          </div>
         </div>
 
         <CompanyGrid isLoading={isLoading} companies={companies} />
 
-        <Pagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-          totalElements={totalElements}
-          itemsPerPage={itemsPerPage}
-          setItemsPerPage={setItemsPerPage}
-          showItemsPerPageSelect={false}
-        />
+        <div className="my-12">
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+            totalElements={totalElements}
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+            showItemsPerPageSelect={false}
+          />
+        </div>
       </div>
     </div>
   );

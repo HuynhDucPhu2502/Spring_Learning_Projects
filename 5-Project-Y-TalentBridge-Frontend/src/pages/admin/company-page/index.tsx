@@ -26,9 +26,7 @@ export default function CompanyPage() {
   const [searchName, setSearchName] = useState("");
   const [searchAddress, setSearchAddress] = useState("");
 
-  // ============================
-  // PAGINATION
-  // ============================
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalElements, setTotalElements] = useState(0);
