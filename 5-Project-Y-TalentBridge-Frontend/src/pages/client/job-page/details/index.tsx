@@ -58,31 +58,29 @@ const JobDetailsClientPage = ({ initialJob }: JobDetailsProp) => {
   if (!job) return null;
 
   return (
-    <div className="w-full px-6 py-12">
-      <div className="mx-auto max-w-7xl">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink
-                onClick={() => navigate("/jobs")}
-                className="cursor-pointer"
-              >
-                Danh sách việc làm
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{job.name}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+    <div className="mx-auto my-12 w-3/5">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              onClick={() => navigate("/jobs")}
+              className="cursor-pointer"
+            >
+              Danh sách việc làm
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{job.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
-        <div className="grid grid-cols-1 gap-8">
-          <JobSection job={job} />
-        </div>
-
-        <ApplySection jobId={job.id} jobTitle={job.name} />
+      <div className="grid grid-cols-1 gap-8">
+        <JobSection job={job} />
       </div>
+
+      <ApplySection jobId={job.id} jobTitle={job.name} />
     </div>
   );
 };

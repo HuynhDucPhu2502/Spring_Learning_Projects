@@ -134,7 +134,7 @@ export default function JobClientPage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="mx-auto w-4/5">
         {/* Search Section */}
         <div className="my-12">
           <JobSearchSection
@@ -159,15 +159,17 @@ export default function JobClientPage() {
 
         <JobGrid isLoading={isLoading} jobs={jobs} />
 
-        <Pagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-          totalElements={totalElements}
-          itemsPerPage={itemsPerPage}
-          setItemsPerPage={setItemsPerPage}
-          showItemsPerPageSelect={true}
-        />
+        <div className="my-12">
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+            totalElements={totalElements}
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+            showItemsPerPageSelect={false}
+          />
+        </div>
       </div>
     </div>
   );

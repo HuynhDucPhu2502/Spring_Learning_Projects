@@ -16,11 +16,13 @@ const CompanySection = ({ company, jobsCount }: CompanySectionProps) => {
       >
         <div className="flex h-[200px] items-center gap-4">
           {company.logoUrl ? (
-            <img
-              src={company.logoUrl}
-              alt={company.name}
-              className="h-20 w-20 rounded-full border-4 border-gray-200 object-contain"
-            />
+            <div className="rounded-full border-4 border-gray-300 p-4">
+              <img
+                src={company.logoUrl}
+                alt={company.name}
+                className="h-20 w-20 object-contain"
+              />
+            </div>
           ) : (
             <div className="flex h-20 w-20 items-center justify-center rounded-full border text-orange-600">
               <Building2 className="h-8 w-8" />

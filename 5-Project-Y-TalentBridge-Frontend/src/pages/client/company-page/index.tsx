@@ -101,7 +101,7 @@ export default function CompanyClientPage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="mx-auto w-4/5">
         <div className="my-12">
           <CompanySearchSection
             searchName={searchName}

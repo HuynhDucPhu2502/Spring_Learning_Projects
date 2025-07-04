@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import type Quill from "quill";
 import { Button } from "@/components/ui/button";

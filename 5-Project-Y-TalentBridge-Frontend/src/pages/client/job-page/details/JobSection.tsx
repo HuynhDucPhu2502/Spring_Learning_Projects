@@ -21,7 +21,7 @@ type JobSectionProps = {
 
 const JobSection = ({ job }: JobSectionProps) => {
   return (
-    <div className="space-y-6 overflow-y-auto pr-2">
+    <div className="space-y-6">
       {/* Job Header */}
       <div className="space-y-4">
         <div className="flex h-[200px] items-center gap-4">

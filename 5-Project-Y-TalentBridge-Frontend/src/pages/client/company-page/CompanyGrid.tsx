@@ -40,11 +40,11 @@ const CompanyGrid = ({ isLoading, companies }: CompanyGridProps) => {
         >
           <CardContent className="p-6">
             <div className="mb-4 flex items-start justify-between">
-              <div className="flex flex-1 items-center gap-3">
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100">
+              <div className="flex min-w-0 flex-1 items-center gap-3">
+                <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden bg-gray-100">
                   {company.logoUrl ? (
                     <img
-                      src={company.logoUrl}
+                      src={company.logoUrl || "/placeholder.svg"}
                       alt={`${company.name} logo`}
                       className="h-full w-full object-contain"
                     />
@@ -52,12 +52,20 @@ const CompanyGrid = ({ isLoading, companies }: CompanyGridProps) => {
                     <Building2 className="h-6 w-6 text-gray-600" />
                   )}
                 </div>
-                <h3 className="line-clamp-2 text-lg font-semibold text-gray-900">
-                  {company.name}
-                </h3>
+
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-md line-clamp-2 font-semibold text-gray-900">
+                    {company.name}
+                  </h3>
+                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                    <MapPin className="h-4 w-4 flex-shrink-0" />
+                    <span className="truncate">{company.address}</span>
+                  </div>
+                </div>
               </div>
-              <div className="ml-2 flex flex-shrink-0 items-center gap-1">
-                <Star className="h-4 w-4 fill-orange-400 text-orange-400" />
+
+              <div className="ml-3 flex flex-shrink-0 items-center justify-center gap-1">
+                <Star className="h-3.5 w-3.5 fill-orange-400 text-orange-400" />
                 <span className="text-sm font-medium text-gray-900">4.8</span>
               </div>
             </div>
@@ -67,20 +75,14 @@ const CompanyGrid = ({ isLoading, companies }: CompanyGridProps) => {
               {getFirstLineFromHtml(company.description) || company.name}
             </p>
 
-            {/* Footer with location, jobs, reviews */}
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-1 text-gray-600">
-                <MapPin className="h-4 w-4" />
-                <span className="truncate">{company.address}</span>
-              </div>
-              <div className="flex flex-shrink-0 items-center gap-4">
-                <span className="font-medium text-orange-600">
-                  {company.jobsCount || 0} việc làm
-                </span>
-                <div className="flex items-center gap-1 text-blue-600">
-                  <span className="font-medium">123 đánh giá</span>
-                  <ChevronRight className="h-4 w-4" />
-                </div>
+            {/* Footer */}
+            <div className="flex items-center justify-end gap-4">
+              <span className="font-medium text-orange-600">
+                {company.jobsCount || 0} việc làm
+              </span>
+              <div className="flex items-center gap-1 text-blue-600">
+                <span className="font-medium">123 đánh giá</span>
+                <ChevronRight className="h-4 w-4" />
               </div>
             </div>
           </CardContent>
