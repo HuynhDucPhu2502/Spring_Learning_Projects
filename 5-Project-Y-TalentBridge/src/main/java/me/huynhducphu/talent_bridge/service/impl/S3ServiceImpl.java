@@ -2,6 +2,7 @@ package me.huynhducphu.talent_bridge.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.exception.custom.S3UploadException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -56,6 +57,10 @@ public class S3ServiceImpl implements me.huynhducphu.talent_bridge.service.S3Ser
     }
 
     @Override
+    @Cacheable(
+            cacheNames = "presign",
+            key = "#key + ':' + #expireDuration.seconds"
+    )
     public String generatePresignedUrl(String key, Duration expireDuration) {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(awsBucketName)

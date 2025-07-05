@@ -2,7 +2,7 @@ package me.huynhducphu.talent_bridge.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.talent_bridge.config.AuthConfiguration;
+import me.huynhducphu.talent_bridge.config.auth.AuthConfiguration;
 import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.model.common.RefreshToken;
 import me.huynhducphu.talent_bridge.model.User;

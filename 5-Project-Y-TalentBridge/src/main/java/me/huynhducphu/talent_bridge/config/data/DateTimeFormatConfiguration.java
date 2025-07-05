@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.config;
+package me.huynhducphu.talent_bridge.config.data;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;

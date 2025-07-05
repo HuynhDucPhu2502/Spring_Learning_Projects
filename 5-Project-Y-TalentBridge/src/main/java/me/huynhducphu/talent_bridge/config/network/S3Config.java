@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.config;
+package me.huynhducphu.talent_bridge.config.network;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

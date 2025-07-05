@@ -90,7 +90,7 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
 
         return new GetResumeFileResponseDto(
-                s3Service.generatePresignedUrl(resume.getFileKey(), Duration.ofMinutes(5)),
+                s3Service.generatePresignedUrl(resume.getFileKey(), Duration.ofMinutes(15)),
                 Instant.now().plus(Duration.ofMinutes(5))
         );
 

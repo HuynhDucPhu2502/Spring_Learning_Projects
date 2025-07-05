@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.config;
+package me.huynhducphu.talent_bridge.config.auth;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
