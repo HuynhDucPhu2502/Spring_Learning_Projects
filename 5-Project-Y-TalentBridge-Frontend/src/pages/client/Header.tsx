@@ -1,3 +1,5 @@
+// src/components/layout/Header.tsx
+
 import { Home, Code, Building2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -6,7 +8,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useAppSelector } from "@/features/hooks";
 import UserMenu from "@/components/custom/UserMenu";
 
-const Header = () => {
+const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isLogin } = useAppSelector((state) => state.auth);
 
@@ -16,33 +18,22 @@ const Header = () => {
     { href: "/jobs", label: "Việc làm IT", Icon: Code },
   ];
 
-  const handleNavClick = () => {
-    setIsOpen(false);
-  };
+  const handleNavClick = () => setIsOpen(false);
 
   return (
-    <header className="relative w-full overflow-hidden bg-gradient-to-r from-orange-500 via-orange-600 to-yellow-500 shadow">
-      <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+    <header className="relative w-full bg-gradient-to-r from-orange-500 via-orange-600 to-yellow-500 shadow">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1">
         {/* Logo */}
-        <div className="relative">
-          <div className="rounded-2xl border border-white/20 bg-white p-3 shadow">
-            <Link to="/" className="flex items-center gap-3">
-              <img
-                src="/web-logo.png"
-                alt="TalentBridge"
-                className="h-18 w-18 rounded-lg object-contain"
-              />
-              <div className="hidden sm:block">
-                <h1 className="text-lg font-black text-gray-800">
-                  TalentBridge
-                </h1>
-                <p className="text-xs font-medium text-gray-600">
-                  Kết nối tài năng
-                </p>
-              </div>
-            </Link>
-          </div>
-        </div>
+        <Link
+          to="/"
+          className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white px-4 shadow"
+        >
+          <img
+            src="/web-logo.png"
+            alt="TalentBridge"
+            className="size-12 rounded-lg object-contain"
+          />
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden lg:block">
@@ -51,10 +42,14 @@ const Header = () => {
               <li key={label}>
                 <NavLink
                   to={href}
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 rounded-xl px-4 py-2 font-medium text-orange-500 duration-300 ease-in-out hover:-translate-y-0.5 ${isActive ? "bg-amber-400 text-white" : "bg-white"}`
-                  }
                   onClick={handleNavClick}
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 rounded-xl px-4 py-2 font-medium duration-300 ease-in-out hover:-translate-y-0.5 ${
+                      isActive
+                        ? "bg-amber-400 text-white"
+                        : "bg-white text-orange-500"
+                    }`
+                  }
                 >
                   <Icon className="h-4 w-4" />
                   <span>{label}</span>
@@ -64,24 +59,20 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Auth Buttons */}
+        {/* Auth + Mobile Nav */}
         <div className="flex items-center gap-4">
           {isLogin ? (
-            <div className="rounded-xl border border-white/30 bg-white/10 p-2">
-              <UserMenu />
-            </div>
+            <UserMenu />
           ) : (
-            <div className="hidden items-center gap-3 lg:flex">
-              <Link
-                to="/auth?mode=login"
-                className="rounded-full border border-white/50 bg-white px-5 py-2 font-bold text-orange-700 hover:border-white"
-              >
-                Đăng nhập
-              </Link>
-            </div>
+            <Link
+              to="/auth?mode=login"
+              className="hidden rounded-full border border-white/50 bg-white px-5 py-2 font-bold text-orange-700 hover:border-white lg:flex"
+            >
+              Đăng nhập
+            </Link>
           )}
 
-          {/* Mobile Nav */}
+          {/* Mobile Sheet */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button
@@ -92,6 +83,7 @@ const Header = () => {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
+
             <SheetContent
               side="right"
               className="w-[300px] bg-white sm:w-[400px]"
@@ -108,11 +100,6 @@ const Header = () => {
                     <span>{label}</span>
                   </Link>
                 ))}
-                {isLogin && (
-                  <div className="mt-4 border-t border-gray-200 pt-4">
-                    <UserMenu />
-                  </div>
-                )}
               </div>
             </SheetContent>
           </Sheet>

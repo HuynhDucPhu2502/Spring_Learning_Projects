@@ -57,6 +57,30 @@ public class S3ServiceImpl implements me.huynhducphu.talent_bridge.service.S3Ser
     }
 
     @Override
+    public String uploadFile(MultipartFile file, String key, boolean getUrl) {
+        try {
+            if (file == null || file.isEmpty())
+                throw new S3UploadException("Tệp logo không được rỗng hoặc null");
+
+            PutObjectRequest putRequest = PutObjectRequest.builder()
+                    .bucket(awsBucketName)
+                    .key(key)
+                    .contentType(file.getContentType())
+                    .build();
+
+            s3Client.putObject(putRequest, RequestBody.fromBytes(file.getBytes()));
+
+            if (getUrl)
+                return String.format("https://%s.s3.%s.amazonaws.com/%s", awsBucketName, awsRegion, key);
+            else return key;
+        } catch (IOException e) {
+            throw new S3UploadException("Lỗi khi đọc dữ liệu từ tệp logo");
+        } catch (Exception e) {
+            throw new S3UploadException("Lỗi khi upload file lên S3");
+        }
+    }
+
+    @Override
     @Cacheable(
             cacheNames = "presign",
             key = "#key + ':' + #expireDuration.seconds"

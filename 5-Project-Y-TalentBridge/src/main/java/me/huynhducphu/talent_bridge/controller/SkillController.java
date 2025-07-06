@@ -7,7 +7,7 @@ import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.skill.CreateSkillRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.skill.UpdateSkillResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
-import me.huynhducphu.talent_bridge.dto.response.skill.SkillResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.skill.DefaultSkillResponseDto;
 import me.huynhducphu.talent_bridge.model.Skill;
 import me.huynhducphu.talent_bridge.service.SkillService;
 import org.springframework.data.domain.Page;
@@ -40,9 +40,9 @@ public class SkillController {
             @Filter Specification<Skill> spec,
             @PageableDefault(size = 5) Pageable pageable) {
 
-        Page<SkillResponseDto> page = skillService.findAllSkills(spec, pageable);
+        Page<DefaultSkillResponseDto> page = skillService.findAllSkills(spec, pageable);
 
-        PageResponseDto<SkillResponseDto> res = new PageResponseDto<>(
+        PageResponseDto<DefaultSkillResponseDto> res = new PageResponseDto<>(
                 page.getContent(),
                 pageable.getPageNumber() + 1,
                 pageable.getPageSize(),

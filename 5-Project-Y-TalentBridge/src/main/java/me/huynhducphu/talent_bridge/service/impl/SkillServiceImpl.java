@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.skill.CreateSkillRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.skill.UpdateSkillResponseDto;
-import me.huynhducphu.talent_bridge.dto.response.skill.SkillResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.skill.DefaultSkillResponseDto;
 import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
 import me.huynhducphu.talent_bridge.model.Skill;
 import me.huynhducphu.talent_bridge.repository.SkillRepository;
@@ -25,7 +25,7 @@ public class SkillServiceImpl implements me.huynhducphu.talent_bridge.service.Sk
     private final SkillRepository skillRepository;
 
     @Override
-    public SkillResponseDto saveSkill(CreateSkillRequestDto createSkillRequestDto) {
+    public DefaultSkillResponseDto saveSkill(CreateSkillRequestDto createSkillRequestDto) {
 
         if (skillRepository.existsByName(createSkillRequestDto.getName()))
             throw new ResourceAlreadyExistsException("Kỹ năng này đã tồn tại");
@@ -38,7 +38,7 @@ public class SkillServiceImpl implements me.huynhducphu.talent_bridge.service.Sk
     }
 
     @Override
-    public Page<SkillResponseDto> findAllSkills(
+    public Page<DefaultSkillResponseDto> findAllSkills(
             Specification<Skill> spec,
             Pageable pageable) {
         return skillRepository
@@ -47,7 +47,7 @@ public class SkillServiceImpl implements me.huynhducphu.talent_bridge.service.Sk
     }
 
     @Override
-    public SkillResponseDto findSkillById(Long id) {
+    public DefaultSkillResponseDto findSkillById(Long id) {
         return skillRepository
                 .findById(id)
                 .map(this::mapToResponseDto)
@@ -56,7 +56,7 @@ public class SkillServiceImpl implements me.huynhducphu.talent_bridge.service.Sk
 
 
     @Override
-    public SkillResponseDto updateSkillById(UpdateSkillResponseDto updateSkillResponseDto) {
+    public DefaultSkillResponseDto updateSkillById(UpdateSkillResponseDto updateSkillResponseDto) {
 
         Skill skill = skillRepository
                 .findById(updateSkillResponseDto.getId())
@@ -72,7 +72,7 @@ public class SkillServiceImpl implements me.huynhducphu.talent_bridge.service.Sk
     }
 
     @Override
-    public SkillResponseDto deleteSkillById(Long id) {
+    public DefaultSkillResponseDto deleteSkillById(Long id) {
         Skill skill = skillRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy kỹ năng"));
@@ -84,8 +84,8 @@ public class SkillServiceImpl implements me.huynhducphu.talent_bridge.service.Sk
     }
 
 
-    private SkillResponseDto mapToResponseDto(Skill skill) {
-        return new SkillResponseDto(
+    private DefaultSkillResponseDto mapToResponseDto(Skill skill) {
+        return new DefaultSkillResponseDto(
                 skill.getId(),
                 skill.getName(),
                 skill.getCreatedAt().toString(),

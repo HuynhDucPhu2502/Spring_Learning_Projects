@@ -1,8 +1,5 @@
-"use client";
+import React, { useState, useMemo, useEffect } from "react";
 
-import type React from "react";
-
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Send, Upload, X, FileText } from "lucide-react";
 import {
@@ -33,6 +30,22 @@ export function ApplySection({ jobId, jobTitle }: ApplySectionProps) {
 
   const { isLogin, user } = useAppSelector((state) => state.auth);
 
+  // =============================
+  // HANDLE PROCESS FILE
+  // =============================
+
+  const fileUrl = useMemo(() => {
+    return selectedFile ? URL.createObjectURL(selectedFile) : "";
+  }, [selectedFile]);
+
+  useEffect(() => {
+    return () => {
+      if (fileUrl) {
+        URL.revokeObjectURL(fileUrl);
+      }
+    };
+  }, [fileUrl]);
+
   const handleApplyClick = () => {
     if (!isLogin) {
       toast.error("Bạn cần đăng nhập để ứng tuyển vị trí này");
@@ -56,6 +69,10 @@ export function ApplySection({ jobId, jobTitle }: ApplySectionProps) {
       setSelectedFile(file);
     }
   };
+
+  // =============================
+  // HANDLE MODAL ACTION
+  // =============================
 
   const handleSubmit = async () => {
     if (!selectedFile) {
@@ -123,8 +140,8 @@ export function ApplySection({ jobId, jobTitle }: ApplySectionProps) {
 
       {/* Apply Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="flex h-[95vh] max-h-[95vh] w-[98vw] max-w-[98vw] flex-col p-6">
-          <DialogHeader className="flex-shrink-0">
+        <DialogContent className="flex h-[95vh] max-h-[95vh] !w-2/3 !max-w-none flex-col">
+          <DialogHeader>
             <DialogTitle className="text-xl">Ứng tuyển vị trí</DialogTitle>
             <DialogDescription className="text-sm text-gray-600">
               {jobTitle}
@@ -191,7 +208,7 @@ export function ApplySection({ jobId, jobTitle }: ApplySectionProps) {
 
                 {/* PDF Viewer */}
                 <div className="min-h-0 flex-1 overflow-hidden rounded-lg border">
-                  <PDFViewer pdfUrl={URL.createObjectURL(selectedFile)} />
+                  <PDFViewer fileUrl={fileUrl} />
                 </div>
               </div>
             )}
