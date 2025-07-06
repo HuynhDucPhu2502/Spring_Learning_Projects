@@ -35,9 +35,8 @@ export interface JobUpsertDto {
 }
 
 // =============================
-// SECOND INTERFACE
+// SECONDARY INTERFACE
 // =============================
-
 export interface CompanySummary {
   id: number;
   name: string;

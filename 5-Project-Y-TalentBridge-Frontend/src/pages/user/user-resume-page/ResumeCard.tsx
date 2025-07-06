@@ -1,0 +1,128 @@
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import type { ResumeForDisplayResponseDto } from "@/types/resume";
+import PDFViewer from "@/components/custom/PDFViewer";
+import { FileX, MapPin, Sparkles } from "lucide-react";
+import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
+import JobInfoDialog from "./JobInfoDialog";
+import { UpdateResumeDialog } from "./UpdateResumeDialog";
+import { useState } from "react";
+
+type Props = {
+  resume: ResumeForDisplayResponseDto;
+  onDelete: (jobId: number) => void;
+  onUpdateResumeFile: (resumeId: number, file: File) => Promise<void>;
+};
+
+export default function ResumeCard({
+  resume,
+  onDelete,
+  onUpdateResumeFile,
+}: Props) {
+  const [version] = useState(Date.now());
+
+  const submitUpdatedResumeFile = async (file: File) => {
+    await onUpdateResumeFile(resume.id, file);
+  };
+
+  return (
+    <>
+      <Card className="flex flex-col transition-shadow duration-200 hover:shadow-md">
+        <CardHeader>
+          <div className="flex items-center gap-4">
+            {resume.company.logoUrl && (
+              <img
+                src={resume.company.logoUrl}
+                alt={resume.company.name}
+                className="h-14 w-14 rounded-md border bg-white object-contain shadow-sm"
+              />
+            )}
+            <div>
+              <CardTitle className="text-lg leading-tight font-semibold">
+                {resume.job.name}
+              </CardTitle>
+              <p className="text-muted-foreground text-sm">
+                {resume.company.name}
+              </p>
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent className="space-y-4">
+          <div className="flex items-start gap-2">
+            <MapPin className="mt-0.5 h-4 w-4 text-gray-500" />
+            <div>
+              <p className="text-sm font-medium text-gray-700">
+                Địa điểm làm việc
+              </p>
+              <p className="text-sm text-gray-600">{resume.job.location}</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-2">
+            <Sparkles className="mt-0.5 h-4 w-4 text-gray-500" />
+            <div className="flex flex-col">
+              <p className="text-sm font-medium text-gray-700">
+                Kỹ năng yêu cầu
+              </p>
+              <div className="mt-1 flex flex-wrap gap-2">
+                {resume.job.skills.map((skill) => (
+                  <span
+                    key={`${resume.id}-${skill}`}
+                    className="rounded bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {resume.pdfUrl && (
+            <div>
+              <p className="mb-2 text-sm font-medium text-gray-700">
+                CV đã nộp
+              </p>
+              <div
+                className="overflow-auto rounded-md border"
+                style={{ height: "500px" }}
+              >
+                <PDFViewer
+                  fileUrl={resume.pdfUrl + "?TalentJobVersion=" + version}
+                  versioning={true}
+                />
+              </div>
+            </div>
+          )}
+        </CardContent>
+
+        <CardFooter className="mt-auto flex justify-end gap-2">
+          <JobInfoDialog
+            job={resume.job}
+            companyName={resume.company.name}
+            location={resume.job.location}
+          />
+
+          <UpdateResumeDialog onSubmitFile={submitUpdatedResumeFile} />
+
+          <DeleteConfirmDialog
+            onConfirm={() => onDelete(resume.job.id)}
+            title="Rút hồ sơ"
+            description="Bạn có chắc chắn muốn rút hồ sơ không? Thao tác này không thể thu hồi"
+          >
+            <Button variant="destructive" size="sm">
+              <FileX className="mr-2 h-4 w-4" />
+              Rút hồ sơ
+            </Button>
+          </DeleteConfirmDialog>
+        </CardFooter>
+      </Card>
+    </>
+  );
+}

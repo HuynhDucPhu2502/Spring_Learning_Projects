@@ -21,6 +21,9 @@ import SkillManagerPage from "@/pages/admin/recruitment-page/skill-manager-page"
 
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
+import UserPage from "@/pages/user";
+import UserInfoPage from "@/pages/user/user-info-page";
+import UserResumePage from "@/pages/user/user-resume-page";
 
 const router = createBrowserRouter([
   // =========================
@@ -37,6 +40,18 @@ const router = createBrowserRouter([
       { path: "companies/:id", element: <CompanyDetailsClientPage /> },
       { path: "jobs", element: <JobClientPage /> },
       { path: "jobs/:id", element: <JobDetailsClientPage /> },
+      {
+        path: "user",
+        element: <UserPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to={"info"} />,
+          },
+          { path: "info", element: <UserInfoPage /> },
+          { path: "resume", element: <UserResumePage /> },
+        ],
+      },
     ],
   },
 
