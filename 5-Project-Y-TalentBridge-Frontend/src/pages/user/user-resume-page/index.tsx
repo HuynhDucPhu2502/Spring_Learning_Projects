@@ -12,6 +12,8 @@ import { useAppSelector } from "@/features/hooks";
 import Pagination from "@/components/custom/Pagination";
 import ResumeCard from "./ResumeCard";
 import type { ResumeForDisplayResponseDto } from "@/types/resume";
+import LoadingSpinner from "@/components/custom/LoadingSpinner";
+import { EmptyState } from "@/components/custom/EmptyState";
 
 export default function UserResumePage() {
   const { user } = useAppSelector((state) => state.auth);
@@ -100,27 +102,18 @@ export default function UserResumePage() {
       </h1>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {Array.from({ length: 2 }).map((_, i) => (
-            <div
-              key={i}
-              className="animate-pulse space-y-4 rounded bg-white p-6 shadow"
-            >
-              <div className="h-4 w-1/2 rounded bg-gray-300" />
-              <div className="h-3 w-full rounded bg-gray-200" />
-              <div className="h-3 w-3/4 rounded bg-gray-200" />
-              <div className="h-3 w-2/4 rounded bg-gray-200" />
-            </div>
-          ))}
+        <div className="mx-auto w-fit">
+          <LoadingSpinner className="h-24 w-24" />
+          <p className="my-2">Đang tải....</p>
         </div>
       ) : resumes.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-8">
-            <FileText className="mb-4 h-12 w-12 text-gray-400" />
-            <h3 className="mb-2 text-lg font-semibold text-gray-900">
-              Chưa có hồ sơ nào
-            </h3>
-            <p className="text-gray-500">Bạn chưa nộp hồ sơ ứng tuyển nào.</p>
+            <EmptyState
+              title="Chưa có hồ sơ nào"
+              description="Bạn chưa nộp hồ sơ ứng tuyển nào"
+              icon={<FileText className="mb-4 h-12 w-12 text-gray-400" />}
+            />
           </CardContent>
         </Card>
       ) : (

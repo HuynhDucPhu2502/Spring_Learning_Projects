@@ -18,6 +18,8 @@ export interface ResumeForDisplayResponseDto {
   user: UserForResume;
   job: JobForResume;
   company: CompanyForResume;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // =============================

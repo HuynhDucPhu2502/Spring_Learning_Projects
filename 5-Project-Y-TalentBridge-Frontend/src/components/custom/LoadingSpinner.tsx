@@ -1,8 +1,14 @@
 import React from "react";
 
-const LoadingSpinner = () => {
+type LoadingSpinnerProps = {
+  className?: string;
+};
+
+const LoadingSpinner = ({ className = "w-6 h-6" }: LoadingSpinnerProps) => {
   return (
-    <div className="animate-spin h-6 w-6 border-b-2 border-blue-600 rounded-full" />
+    <div
+      className={`${className} animate-spin rounded-full border-b-2 border-blue-600`}
+    />
   );
 };
 

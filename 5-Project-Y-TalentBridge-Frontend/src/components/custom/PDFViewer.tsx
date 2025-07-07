@@ -22,7 +22,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({
   versioning = false,
 }) => {
   const actualFileUrl =
-    versioning && fileUrl ? fileUrl.split("?TalentJobVersion=")[0] : fileUrl;
+    versioning && fileUrl ? fileUrl.split("?PDFViewerVersion=")[0] : fileUrl;
 
   // Plugins
   const toolbarPluginInstance = toolbarPlugin();

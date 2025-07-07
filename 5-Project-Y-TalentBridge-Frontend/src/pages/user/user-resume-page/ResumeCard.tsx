@@ -13,6 +13,7 @@ import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialo
 import JobInfoDialog from "./JobInfoDialog";
 import { UpdateResumeDialog } from "./UpdateResumeDialog";
 import { useState } from "react";
+import { formatISO } from "@/utils/convertHelper";
 
 type Props = {
   resume: ResumeForDisplayResponseDto;
@@ -25,10 +26,11 @@ export default function ResumeCard({
   onDelete,
   onUpdateResumeFile,
 }: Props) {
-  const [version] = useState(Date.now());
+  const [version, setVersion] = useState(Date.now());
 
   const submitUpdatedResumeFile = async (file: File) => {
     await onUpdateResumeFile(resume.id, file);
+    setVersion(Date.now());
   };
 
   return (
@@ -55,6 +57,7 @@ export default function ResumeCard({
         </CardHeader>
 
         <CardContent className="space-y-4">
+          {/* Location */}
           <div className="flex items-start gap-2">
             <MapPin className="mt-0.5 h-4 w-4 text-gray-500" />
             <div>
@@ -65,6 +68,7 @@ export default function ResumeCard({
             </div>
           </div>
 
+          {/* Skills */}
           <div className="flex items-start gap-2">
             <Sparkles className="mt-0.5 h-4 w-4 text-gray-500" />
             <div className="flex flex-col">
@@ -84,6 +88,11 @@ export default function ResumeCard({
             </div>
           </div>
 
+          <div className="flex items-center justify-between border-t pt-2 text-xs text-gray-500">
+            <span>Nộp: {formatISO(resume.createdAt)}</span>
+            <span>Cập nhật: {formatISO(resume.updatedAt)}</span>
+          </div>
+
           {resume.pdfUrl && (
             <div>
               <p className="mb-2 text-sm font-medium text-gray-700">
@@ -94,7 +103,7 @@ export default function ResumeCard({
                 style={{ height: "500px" }}
               >
                 <PDFViewer
-                  fileUrl={resume.pdfUrl + "?TalentJobVersion=" + version}
+                  fileUrl={resume.pdfUrl + "?PDFViewerVersion=" + version}
                   versioning={true}
                 />
               </div>

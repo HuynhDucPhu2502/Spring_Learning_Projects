@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Send, Upload, X, FileText } from "lucide-react";
@@ -17,6 +17,8 @@ import PDFViewer from "@/components/custom/PDFViewer";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import type { CreateResumeRequestDto } from "@/types/resume";
 import { saveResume } from "@/services/resumeApi";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { checkFileSizeAndFileType } from "@/utils/fileMetadata";
 
 interface ApplySectionProps {
   jobId: number;
@@ -29,6 +31,16 @@ export function ApplySection({ jobId, jobTitle }: ApplySectionProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { isLogin, user } = useAppSelector((state) => state.auth);
+
+  // =============================
+  // INPUT REF
+  // =============================
+  const pdfInputRef = useRef<HTMLInputElement>(null);
+
+  const openInput = () => {
+    if (pdfInputRef.current) pdfInputRef.current.click();
+    else toast.error("Hệ thống đã gặp vấn đề");
+  };
 
   // =============================
   // HANDLE PROCESS FILE
@@ -58,20 +70,17 @@ export function ApplySection({ jobId, jobTitle }: ApplySectionProps) {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.type !== "application/pdf") {
-        toast.error("Chỉ chấp nhận file PDF");
+      if (!checkFileSizeAndFileType(file, 5 * 1024 * 1024, "application/pdf")) {
+        toast.error("File không hợp lệ");
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("File không được vượt quá 5MB");
-        return;
-      }
+
       setSelectedFile(file);
     }
   };
 
   // =============================
-  // HANDLE MODAL ACTION
+  // HANDLE ACTION
   // =============================
 
   const handleSubmit = async () => {
@@ -150,32 +159,42 @@ export function ApplySection({ jobId, jobTitle }: ApplySectionProps) {
 
           <div className="flex min-h-0 flex-1 flex-col">
             {!selectedFile ? (
-              <div className="flex flex-1 flex-col justify-center">
+              <div
+                className="flex flex-1 flex-col justify-center"
+                onClick={openInput}
+              >
+                {/* Label */}
                 <Label htmlFor="cv-upload" className="mb-4 text-sm font-medium">
-                  CV của bạn (PDF) <span className="text-red-500">*</span>
+                  Hồ sơ xin việc của bạn (PDF){" "}
+                  <span className="text-red-500">*</span>
                 </Label>
+
+                {/* Input Field */}
                 <div className="flex flex-1 flex-col justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center transition-colors hover:border-orange-400">
                   <Upload className="mx-auto mb-4 h-16 w-16 text-gray-400" />
                   <div className="mb-4 text-lg text-gray-600">
-                    Kéo thả file CV hoặc click để chọn
+                    Kéo thả file PDF vào đây hoặc{" "}
+                    <span className="text-orange-500">nhấp để chọn file</span>
                   </div>
                   <Input
                     id="cv-upload"
                     type="file"
                     accept=".pdf"
                     onChange={handleFileChange}
+                    ref={pdfInputRef}
                     className="hidden"
                   />
                   <Button
                     type="button"
                     variant="outline"
                     size="lg"
-                    onClick={() =>
-                      document.getElementById("cv-upload")?.click()
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openInput();
+                    }}
                     className="mx-auto"
                   >
-                    Chọn file PDF
+                    Tải lên từ thiết bị
                   </Button>
                   <div className="mt-4 text-sm text-gray-500">Tối đa 5MB</div>
                 </div>
@@ -207,9 +226,9 @@ export function ApplySection({ jobId, jobTitle }: ApplySectionProps) {
                 </div>
 
                 {/* PDF Viewer */}
-                <div className="min-h-0 flex-1 overflow-hidden rounded-lg border">
+                <ScrollArea className="m:h-[300px] md:h-[350px] lg:h-[450px]">
                   <PDFViewer fileUrl={fileUrl} />
-                </div>
+                </ScrollArea>
               </div>
             )}
 
