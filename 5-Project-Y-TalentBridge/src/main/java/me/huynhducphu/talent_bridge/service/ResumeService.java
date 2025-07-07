@@ -29,4 +29,9 @@ public interface ResumeService {
     DefaultResumeResponseDto updateResumeFile(Long id, MultipartFile pdfFile);
 
     GetResumeFileResponseDto getResumeFileUrl(Long id);
+
+    Page<ResumeForDisplayResponseDto> findAllResumes(
+            Specification<Resume> spec,
+            Pageable pageable
+    );
 }

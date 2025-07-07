@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.resume.ResumeRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.resume.DefaultResumeResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.ResumeForDisplayResponseDto;
 import me.huynhducphu.talent_bridge.model.Resume;
 import me.huynhducphu.talent_bridge.service.ResumeService;
@@ -80,6 +81,25 @@ public class ResumeController {
     @ApiMessage(value = "Lấy file resume")
     public ResponseEntity<?> getResumeFileUrl(@PathVariable Long id) {
         return ResponseEntity.ok(resumeService.getResumeFileUrl(id));
+    }
+
+    @GetMapping
+    @ApiMessage(value = "Lấy danh sách resume")
+    public ResponseEntity<?> findAllResumes(
+            @Filter Specification<Resume> spec,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        Page<ResumeForDisplayResponseDto> page = resumeService.findAllResumes(spec, pageable);
+
+        PageResponseDto<ResumeForDisplayResponseDto> res = new PageResponseDto<>(
+                page.getContent(),
+                pageable.getPageNumber() + 1,
+                pageable.getPageSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+
+        return ResponseEntity.ok(res);
     }
 
 

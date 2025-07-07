@@ -15,4 +15,6 @@ public interface S3Service {
     String generatePresignedUrl(String key, Duration expireDuration);
 
     void deleteFileByUrl(String fileUrl);
+
+    void deleteFileByKey(String key);
 }

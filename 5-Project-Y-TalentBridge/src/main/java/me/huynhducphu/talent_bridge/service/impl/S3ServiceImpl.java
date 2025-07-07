@@ -122,6 +122,25 @@ public class S3ServiceImpl implements me.huynhducphu.talent_bridge.service.S3Ser
         }
     }
 
+    @Override
+    public void deleteFileByKey(String key) {
+        try {
+            if (key == null || key.isBlank()) {
+                return;
+            }
+
+            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(awsBucketName)
+                    .key(key)
+                    .build();
+
+            s3Client.deleteObject(deleteRequest);
+
+        } catch (Exception e) {
+            throw new S3UploadException("Lỗi khi xóa file khỏi S3");
+        }
+    }
+
     private String extractObjectKeyFromUrl(String url) {
         String base = String.format("https://%s.s3.%s.amazonaws.com/", awsBucketName, awsRegion);
         if (!url.startsWith(base)) {

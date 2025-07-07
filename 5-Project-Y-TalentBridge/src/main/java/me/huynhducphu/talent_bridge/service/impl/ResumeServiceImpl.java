@@ -45,7 +45,8 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
 
         Resume resume = new Resume(
                 resumeRequestDto.getEmail(),
-                resumeRequestDto.getStatus()
+                resumeRequestDto.getStatus(),
+                1L
         );
 
         User user = userRepository
@@ -72,7 +73,7 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
         if (pdfFile != null && !pdfFile.isEmpty()) {
             String safeEmail = savedResume.getEmail().replaceAll("[^a-zA-Z0-9]", "_");
             String folderName = "resume/" + safeEmail;
-            String generatedFileName = "resume-" + savedResume.getId() + ".pdf";
+            String generatedFileName = "resume-" + savedResume.getId() + "-" + resume.getVersion() + ".pdf";
 
 
             String key = s3Service.uploadFile(pdfFile, folderName, generatedFileName, false);
@@ -94,40 +95,7 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
             Pageable pageable) {
         return resumeRepository
                 .findByUserId(userId, spec, pageable)
-                .map(resume -> {
-                    ResumeForDisplayResponseDto resumeForDisplayResponseDto = new ResumeForDisplayResponseDto();
-
-                    resumeForDisplayResponseDto.setId(resume.getId());
-                    resumeForDisplayResponseDto.setPdfUrl(s3Service.generatePresignedUrl(resume.getFileKey(), Duration.ofMinutes(15)));
-
-                    ResumeForDisplayResponseDto.User user = new ResumeForDisplayResponseDto.User(
-                            resume.getUser().getId(),
-                            resume.getUser().getEmail()
-                    );
-                    resumeForDisplayResponseDto.setUser(user);
-
-                    ResumeForDisplayResponseDto.Job job = new ResumeForDisplayResponseDto.Job(
-                            resume.getJob().getId(),
-                            resume.getJob().getName(),
-                            resume.getJob().getLocation(),
-                            resume.getJob().getSkills().stream().map(Skill::getName).toList(),
-                            resume.getJob().getLevel(),
-                            resume.getJob().getDescription()
-                    );
-                    resumeForDisplayResponseDto.setJob(job);
-
-                    ResumeForDisplayResponseDto.Company company = new ResumeForDisplayResponseDto.Company(
-                            resume.getJob().getCompany().getId(),
-                            resume.getJob().getCompany().getName(),
-                            resume.getJob().getCompany().getCompanyLogo().getLogoUrl()
-                    );
-                    resumeForDisplayResponseDto.setCompany(company);
-
-                    resumeForDisplayResponseDto.setCreatedAt(resume.getCreatedAt().toString());
-                    resumeForDisplayResponseDto.setUpdatedAt(resume.getUpdatedAt().toString());
-
-                    return resumeForDisplayResponseDto;
-                });
+                .map(this::mapToResumeForDisplayResponseDto);
     }
 
 
@@ -142,6 +110,8 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
         resume.setUser(null);
         resume.setJob(null);
 
+        s3Service.deleteFileByKey(resume.getFileKey());
+
         Resume savedResume = resumeRepository.saveAndFlush(resume);
         resumeRepository.delete(savedResume);
 
@@ -154,13 +124,19 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
 
-        if (pdfFile != null && !pdfFile.isEmpty())
-            s3Service.uploadFile(pdfFile, resume.getFileKey(), false);
-        else throw new EntityNotFoundException("Không tìm thấy tệp pdf");
+        if (pdfFile != null && !pdfFile.isEmpty()) {
+            resume.setVersion(resume.getVersion() + 1);
+            String newKey = generateKey(resume.getEmail(), resume.getId(), resume.getVersion());
+
+            s3Service.deleteFileByKey(resume.getFileKey());
+            s3Service.uploadFile(pdfFile, newKey, false);
+            resume.setFileKey(newKey);
+        } else throw new EntityNotFoundException("Không tìm thấy tệp pdf");
+
+        resumeRepository.save(resume);
 
         return mapToResponseDto(resume);
     }
-
 
     @Override
     public GetResumeFileResponseDto getResumeFileUrl(Long id) {
@@ -173,6 +149,24 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
         );
     }
 
+    @Override
+    public Page<ResumeForDisplayResponseDto> findAllResumes(
+            Specification<Resume> spec,
+            Pageable pageable
+    ) {
+        return resumeRepository
+                .findAll(spec, pageable)
+                .map(this::mapToResumeForDisplayResponseDto);
+    }
+
+    private String generateKey(String email, Long id, Long version) {
+        String safeEmail = email.replaceAll("[^a-zA-Z0-9]", "_");
+        String folderName = "resume/" + safeEmail;
+        String generatedFileName = "resume-" + id + "-" + version + ".pdf";
+
+        return folderName + "/" + generatedFileName;
+    }
+
     private DefaultResumeResponseDto mapToResponseDto(Resume resume) {
         return new DefaultResumeResponseDto(
                 resume.getId(),
@@ -182,6 +176,41 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
                 resume.getCreatedAt().toString(),
                 resume.getUpdatedAt().toString()
         );
+    }
+
+    private ResumeForDisplayResponseDto mapToResumeForDisplayResponseDto(Resume resume) {
+        ResumeForDisplayResponseDto resumeForDisplayResponseDto = new ResumeForDisplayResponseDto();
+
+        resumeForDisplayResponseDto.setId(resume.getId());
+        resumeForDisplayResponseDto.setPdfUrl(s3Service.generatePresignedUrl(resume.getFileKey(), Duration.ofMinutes(15)));
+
+        ResumeForDisplayResponseDto.User user = new ResumeForDisplayResponseDto.User(
+                resume.getUser().getId(),
+                resume.getUser().getEmail()
+        );
+        resumeForDisplayResponseDto.setUser(user);
+
+        ResumeForDisplayResponseDto.Job job = new ResumeForDisplayResponseDto.Job(
+                resume.getJob().getId(),
+                resume.getJob().getName(),
+                resume.getJob().getLocation(),
+                resume.getJob().getSkills().stream().map(Skill::getName).toList(),
+                resume.getJob().getLevel(),
+                resume.getJob().getDescription()
+        );
+        resumeForDisplayResponseDto.setJob(job);
+
+        ResumeForDisplayResponseDto.Company company = new ResumeForDisplayResponseDto.Company(
+                resume.getJob().getCompany().getId(),
+                resume.getJob().getCompany().getName(),
+                resume.getJob().getCompany().getCompanyLogo().getLogoUrl()
+        );
+        resumeForDisplayResponseDto.setCompany(company);
+
+        resumeForDisplayResponseDto.setCreatedAt(resume.getCreatedAt().toString());
+        resumeForDisplayResponseDto.setUpdatedAt(resume.getUpdatedAt().toString());
+
+        return resumeForDisplayResponseDto;
     }
 
 
