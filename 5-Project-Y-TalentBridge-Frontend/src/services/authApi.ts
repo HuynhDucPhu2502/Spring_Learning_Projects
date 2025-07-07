@@ -11,7 +11,7 @@ export const logoutApi = () => {
   return axios.post(
     "http://localhost:8080/auth/logout",
     {},
-    { withCredentials: true }
+    { withCredentials: true },
   );
 };
 
@@ -21,8 +21,8 @@ export const getAccountApi = () => {
 
 export const refreshTokenApi = () => {
   return axios.post<ApiResponse<AuthResponse>>(
-    "http://localhost:8080/auth/refresh-token",
+    "/auth/refresh-token",
     {},
-    { withCredentials: true }
+    { withCredentials: true },
   );
 };

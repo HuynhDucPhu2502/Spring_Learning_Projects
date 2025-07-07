@@ -19,7 +19,7 @@ export const getCompaniesList = ({
   if (filter) params.append("filter", filter);
 
   return axiosClient.get<ApiResponse<PageResponseDto<Company>>>(
-    `http://localhost:8080/companies?${params.toString()}`,
+    `/companies?${params.toString()}`,
   );
 };
 
@@ -36,20 +36,18 @@ export const getCompaniesListWithJobsCount = ({
   if (filter) params.append("filter", filter);
 
   return axiosClient.get<ApiResponse<PageResponseDto<Company>>>(
-    `http://localhost:8080/companies/with-jobs-count?${params.toString()}`,
+    `/companies/with-jobs-count?${params.toString()}`,
   );
 };
 
 export const getCompanyById = (id: number) => {
-  return axiosClient.get<ApiResponse<Company>>(
-    `http://localhost:8080/companies/${id}`,
-  );
+  return axiosClient.get<ApiResponse<Company>>(`/companies/${id}`);
 };
 
 export const deleteCompanyById = (id: number) => {
   if (!id) return null;
 
-  return axiosClient.delete(`http://localhost:8080/companies/${id}`);
+  return axiosClient.delete(`/companies/${id}`);
 };
 
 export const addCompany = (formData: FormData) => {

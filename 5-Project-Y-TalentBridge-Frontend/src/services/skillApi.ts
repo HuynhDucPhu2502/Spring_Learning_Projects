@@ -11,10 +11,7 @@ import type {
 } from "@/types/skill";
 
 export const saveSkill = (data: createSkillRequestDto) => {
-  return axiosClient.post<ApiResponse<Skill>>(
-    "http://localhost:8080/skills",
-    data
-  );
+  return axiosClient.post<ApiResponse<Skill>>("/skills", data);
 };
 
 export const getSkillsList = ({
@@ -30,19 +27,16 @@ export const getSkillsList = ({
   if (filter) params.append("filter", filter);
 
   return axiosClient.get<ApiResponse<PageResponseDto<Skill>>>(
-    `http://localhost:8080/skills?${params.toString()}`
+    `/skills?${params.toString()}`,
   );
 };
 
 export const updateSkill = (data: updateSkillRequestDto) => {
-  return axiosClient.put<ApiResponse<PageResponseDto<Skill>>>(
-    "http://localhost:8080/skills",
-    data
-  );
+  return axiosClient.put<ApiResponse<PageResponseDto<Skill>>>("/skills", data);
 };
 
 export const deleteSkillById = (id: number) => {
   return axiosClient.delete<ApiResponse<PageResponseDto<Skill>>>(
-    `http://localhost:8080/skills/${id}`
+    `/skills/${id}`,
   );
 };

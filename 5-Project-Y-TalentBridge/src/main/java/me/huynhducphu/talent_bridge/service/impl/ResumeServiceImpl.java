@@ -3,6 +3,7 @@ package me.huynhducphu.talent_bridge.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.resume.ResumeRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.resume.UpdateResumeStatusRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.CreateResumeResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.DefaultResumeResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.GetResumeFileResponseDto;
@@ -12,6 +13,7 @@ import me.huynhducphu.talent_bridge.model.Job;
 import me.huynhducphu.talent_bridge.model.Resume;
 import me.huynhducphu.talent_bridge.model.Skill;
 import me.huynhducphu.talent_bridge.model.User;
+import me.huynhducphu.talent_bridge.model.constant.ResumeStatus;
 import me.huynhducphu.talent_bridge.repository.JobRepository;
 import me.huynhducphu.talent_bridge.repository.ResumeRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
@@ -159,6 +161,18 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
                 .map(this::mapToResumeForDisplayResponseDto);
     }
 
+    @Override
+    public DefaultResumeResponseDto updateResumeStatus(
+            UpdateResumeStatusRequestDto updateResumeStatusRequestDto) {
+        Resume resume = resumeRepository
+                .findById(updateResumeStatusRequestDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
+        resume.setStatus(updateResumeStatusRequestDto.getStatus());
+        resumeRepository.save(resume);
+        return mapToResponseDto(resume);
+    }
+
+
     private String generateKey(String email, Long id, Long version) {
         String safeEmail = email.replaceAll("[^a-zA-Z0-9]", "_");
         String folderName = "resume/" + safeEmail;
@@ -182,7 +196,9 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
         ResumeForDisplayResponseDto resumeForDisplayResponseDto = new ResumeForDisplayResponseDto();
 
         resumeForDisplayResponseDto.setId(resume.getId());
+
         resumeForDisplayResponseDto.setPdfUrl(s3Service.generatePresignedUrl(resume.getFileKey(), Duration.ofMinutes(15)));
+        resumeForDisplayResponseDto.setStatus(resume.getStatus().toString());
 
         ResumeForDisplayResponseDto.User user = new ResumeForDisplayResponseDto.User(
                 resume.getUser().getId(),
@@ -209,6 +225,7 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
 
         resumeForDisplayResponseDto.setCreatedAt(resume.getCreatedAt().toString());
         resumeForDisplayResponseDto.setUpdatedAt(resume.getUpdatedAt().toString());
+
 
         return resumeForDisplayResponseDto;
     }

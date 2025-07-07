@@ -11,6 +11,7 @@ import { BookText } from "lucide-react";
 import type { ResumeForDisplayResponseDto } from "@/types/resume";
 import RichTextPreview from "@/components/custom/RichText/index-preview";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
   job: ResumeForDisplayResponseDto["job"];
@@ -41,12 +42,9 @@ export default function JobInfoDialog({ job, companyName, location }: Props) {
             </span>
             <div className="mt-2 flex flex-wrap gap-2">
               {job.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 shadow"
-                >
+                <Badge key={skill} className="bg-orange-100 text-orange-700">
                   {skill}
-                </span>
+                </Badge>
               ))}
             </div>
           </div>

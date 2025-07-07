@@ -27,6 +27,7 @@ const axiosClient = axios.create({
 
 // ============================================================
 // Interceptor: Tự động gắn Access Token vào mỗi request
+// CHO TRƯỜNG HỢP ACCESS TOKEN ĐƯỢC LƯU Ở LOCAL STORAGE
 // ============================================================
 axiosClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const accessToken = localStorage.getItem("access_token");
@@ -108,7 +109,7 @@ axiosClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 // ============================================================
@@ -118,7 +119,7 @@ const refreshTokenAndGetAuthResponse = async () => {
   const res = await axios.post<ApiResponse<AuthResponse>>(
     "http://localhost:8080/auth/refresh-token",
     {},
-    { withCredentials: true }
+    { withCredentials: true },
   );
 
   return res.data.data;

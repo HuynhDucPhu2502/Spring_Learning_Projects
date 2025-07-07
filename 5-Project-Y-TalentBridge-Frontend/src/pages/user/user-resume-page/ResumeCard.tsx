@@ -13,6 +13,7 @@ import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialo
 import JobInfoDialog from "./JobInfoDialog";
 import { UpdateResumeDialog } from "./UpdateResumeDialog";
 import { formatISO } from "@/utils/convertHelper";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
   resume: ResumeForDisplayResponseDto;
@@ -73,12 +74,12 @@ export default function ResumeCard({
               </p>
               <div className="mt-1 flex flex-wrap gap-2">
                 {resume.job.skills.map((skill) => (
-                  <span
+                  <Badge
                     key={`${resume.id}-${skill}`}
-                    className="rounded bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700"
+                    className="bg-orange-100 text-orange-700"
                   >
                     {skill}
-                  </span>
+                  </Badge>
                 ))}
               </div>
             </div>

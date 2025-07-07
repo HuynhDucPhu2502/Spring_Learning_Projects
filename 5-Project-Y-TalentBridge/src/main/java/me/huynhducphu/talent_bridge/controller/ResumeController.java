@@ -5,10 +5,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.resume.ResumeRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.resume.UpdateResumeStatusRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.DefaultResumeResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.ResumeForDisplayResponseDto;
 import me.huynhducphu.talent_bridge.model.Resume;
+import me.huynhducphu.talent_bridge.model.constant.ResumeStatus;
 import me.huynhducphu.talent_bridge.service.ResumeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -100,6 +102,13 @@ public class ResumeController {
         );
 
         return ResponseEntity.ok(res);
+    }
+
+    @PutMapping("/status")
+    @ApiMessage("Cập nhật trạng thái resume")
+    public ResponseEntity<?> updateResumeStatus(
+            @RequestBody UpdateResumeStatusRequestDto updateResumeStatusRequestDto) {
+        return ResponseEntity.ok(resumeService.updateResumeStatus(updateResumeStatusRequestDto));
     }
 
 

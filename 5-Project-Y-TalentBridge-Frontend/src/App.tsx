@@ -6,7 +6,7 @@ import { setupAxiosInterceptors } from "./lib/axiosClient";
 import { Toaster } from "sonner";
 import { Worker } from "@react-pdf-viewer/core";
 import * as pdfjs from "pdfjs-dist";
-import { ScrollArea } from "./components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const App = () => {
   setupAxiosInterceptors(store.dispatch);

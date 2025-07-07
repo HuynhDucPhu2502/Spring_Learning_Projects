@@ -16,6 +16,7 @@ import java.util.List;
 public class ResumeForDisplayResponseDto {
 
     private Long id;
+    private String status;
     private String pdfUrl;
 
     private User user;
@@ -24,6 +25,7 @@ public class ResumeForDisplayResponseDto {
 
     private String createdAt;
     private String updatedAt;
+
 
     @Data
     @AllArgsConstructor

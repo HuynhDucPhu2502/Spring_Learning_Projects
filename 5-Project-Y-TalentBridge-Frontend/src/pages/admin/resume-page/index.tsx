@@ -1,11 +1,15 @@
-import type { ResumeForDisplayResponseDto } from "@/types/resume";
+import type {
+  ResumeForDisplayResponseDto,
+  UpdateResumeStatusRequestDto,
+} from "@/types/resume";
 import { useEffect, useState } from "react";
 import { ResumeSearchSection } from "./ResumeSearchSection";
 import Pagination from "@/components/custom/Pagination";
-import { getResumes } from "@/services/resumeApi";
+import { getResumes, updateResumeStatus } from "@/services/resumeApi";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
 import { ResumeTable } from "./ResumeTable";
+import { ViewResumeDialog } from "./ViewResumeDialog";
 
 const ResumeManagerPage = () => {
   // ============================
@@ -27,6 +31,18 @@ const ResumeManagerPage = () => {
   // ============================
   const [searchCompanyName, setsearchCompanyName] = useState("");
   const [searchJobName, setSearchJobName] = useState("");
+
+  // ============================
+  // Dialog State
+  // ============================
+  const [isDialogOpen, setisDialogOpen] = useState(false);
+  const [selectedResume, setSelectedResume] =
+    useState<ResumeForDisplayResponseDto | null>(null);
+
+  const handleViewResumeDialog = (resume: ResumeForDisplayResponseDto) => {
+    setSelectedResume(resume);
+    setisDialogOpen(true);
+  };
 
   // ============================
   // HANDLE FETCHING DATA
@@ -67,7 +83,28 @@ const ResumeManagerPage = () => {
     setCurrentPage(1);
   }, [itemsPerPage, searchJobName, searchCompanyName]);
 
-  console.log(resumes);
+  // ============================
+  // HANDLE UPDATE RESUME STATUS
+  // ============================
+  const handleUpdateResumeStatus = async (
+    resume: UpdateResumeStatusRequestDto,
+  ) => {
+    setIsLoading(true);
+    try {
+      await updateResumeStatus(resume);
+      await fetchResumes(
+        currentPage,
+        itemsPerPage,
+        searchJobName,
+        searchCompanyName,
+      );
+      toast.success("Cập nhật trạng thái hồ sơ thành công");
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Cập nhật trạng thái hồ sơ thất bại"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -82,7 +119,11 @@ const ResumeManagerPage = () => {
       {/* Header Section */}
       <h2 className="text-lg font-semibold">Danh sách hồ sơ xin việc</h2>
 
-      <ResumeTable resumes={resumes} isLoading={isLoading} onEdit={() => {}} />
+      <ResumeTable
+        resumes={resumes}
+        isLoading={isLoading}
+        onViewResumePDF={handleViewResumeDialog}
+      />
 
       <Pagination
         currentPage={currentPage}
@@ -92,6 +133,14 @@ const ResumeManagerPage = () => {
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
         showItemsPerPageSelect={true}
+      />
+
+      <ViewResumeDialog
+        open={isDialogOpen}
+        onOpenChange={setisDialogOpen}
+        onUpdate={handleUpdateResumeStatus}
+        resume={selectedResume ?? ({} as ResumeForDisplayResponseDto)}
+        onCloseForm={() => setSelectedResume(null)}
       />
     </div>
   );

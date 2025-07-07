@@ -12,14 +12,24 @@ import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper";
 import type { ResumeForDisplayResponseDto } from "@/types/resume";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
 
 interface ResumeTableProps {
   resumes: ResumeForDisplayResponseDto[];
   isLoading: boolean;
-  onEdit: (resume: ResumeForDisplayResponseDto) => void;
+  onViewResumePDF: (resume: ResumeForDisplayResponseDto) => void;
 }
 
-export function ResumeTable({ resumes, isLoading, onEdit }: ResumeTableProps) {
+export function ResumeTable({
+  resumes,
+  isLoading,
+  onViewResumePDF,
+}: ResumeTableProps) {
   return (
     <div className="overflow-hidden rounded-lg border border-blue-600">
       <Table>
@@ -100,14 +110,23 @@ export function ResumeTable({ resumes, isLoading, onEdit }: ResumeTableProps) {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-center">
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="text-orange-500 hover:text-orange-600"
-                      onClick={() => onEdit(resume)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="text-orange-500 hover:text-orange-600"
+                            onClick={() => onViewResumePDF(resume)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Xem hồ sơ ứng viên</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 </TableCell>
               </TableRow>

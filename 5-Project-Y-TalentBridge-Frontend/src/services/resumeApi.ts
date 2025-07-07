@@ -4,7 +4,10 @@ import type {
   PageResponseDto,
   PaginationParams,
 } from "@/types/apiResponse";
-import type { ResumeForDisplayResponseDto } from "@/types/resume";
+import type {
+  ResumeForDisplayResponseDto,
+  UpdateResumeStatusRequestDto,
+} from "@/types/resume";
 
 export const saveResume = (formData: FormData) => {
   return axiosClient.post("/resumes", formData, {
@@ -26,7 +29,7 @@ export const getResumsByUserId = ({
 
   return axiosClient.get<
     ApiResponse<PageResponseDto<ResumeForDisplayResponseDto>>
-  >(`http://localhost:8080/resumes/user/${userId}?${params.toString()}`);
+  >(`/resumes/user/${userId}?${params.toString()}`);
 };
 
 export const removeResumeByUserIdAndJobId = (userId: number, jobId: number) => {
@@ -63,4 +66,8 @@ export const getResumes = ({
   return axiosClient.get<
     ApiResponse<PageResponseDto<ResumeForDisplayResponseDto>>
   >(`/resumes?${params.toString()}`);
+};
+
+export const updateResumeStatus = (resume: UpdateResumeStatusRequestDto) => {
+  return axiosClient.put(`/resumes/status`, resume);
 };

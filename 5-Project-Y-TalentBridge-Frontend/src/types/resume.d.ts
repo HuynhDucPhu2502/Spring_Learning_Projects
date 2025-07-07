@@ -14,12 +14,18 @@ export interface CreateResumeRequestDto {
 
 export interface ResumeForDisplayResponseDto {
   id: number;
+  status: string;
   pdfUrl: string;
   user: UserForResume;
   job: JobForResume;
   company: CompanyForResume;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface UpdateResumeStatusRequestDto {
+  id: number;
+  status: string;
 }
 
 // =============================
