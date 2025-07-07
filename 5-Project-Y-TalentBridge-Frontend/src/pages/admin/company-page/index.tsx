@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { CompanyTable } from "./CompanyTable";
 
-export default function CompanyPage() {
+export default function CompanyManagerPage() {
   // Data
   const [companies, setCompanies] = useState<Company[]>([]);
   const [isLoading, setIsLoading] = useState(false);

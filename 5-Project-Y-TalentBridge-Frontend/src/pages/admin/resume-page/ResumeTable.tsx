@@ -1,0 +1,120 @@
+import { Edit, Wrench } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { EmptyState } from "@/components/custom/EmptyState";
+import LoadingSpinner from "@/components/custom/LoadingSpinner";
+import { formatISO } from "@/utils/convertHelper";
+import type { ResumeForDisplayResponseDto } from "@/types/resume";
+
+interface ResumeTableProps {
+  resumes: ResumeForDisplayResponseDto[];
+  isLoading: boolean;
+  onEdit: (resume: ResumeForDisplayResponseDto) => void;
+}
+
+export function ResumeTable({ resumes, isLoading, onEdit }: ResumeTableProps) {
+  return (
+    <div className="overflow-hidden rounded-lg border border-blue-600">
+      <Table>
+        <TableHeader className="bg-blue-600 text-white">
+          <TableRow>
+            <TableHead className="text-center font-bold text-white">
+              ID
+            </TableHead>
+            <TableHead className="text-center font-bold text-white"></TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Công ty
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Công việc
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Người nộp
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Ngày nộp
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Lần cập nhật gần nhất
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Hành động
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isLoading ? (
+            <TableRow>
+              <TableCell colSpan={7}>
+                <div className="flex justify-center py-6">
+                  <LoadingSpinner />
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : resumes.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7}>
+                <EmptyState
+                  title="Không tìm thấy hồ sơ xin việc nào"
+                  description="Chưa có ai nộp hồ sơ cả"
+                  icon={
+                    <Wrench className="text-muted-foreground mb-4 h-12 w-12" />
+                  }
+                />
+              </TableCell>
+            </TableRow>
+          ) : (
+            resumes.map((resume) => (
+              <TableRow key={resume.id}>
+                <TableCell className="text-center">{resume.id}</TableCell>
+                <TableCell className="text-center">
+                  {resume.company.logoUrl && (
+                    <img
+                      src={resume.company.logoUrl}
+                      alt={resume.company.name}
+                      className="h-14 w-14 rounded-md border bg-white object-contain shadow-sm"
+                    />
+                  )}
+                </TableCell>
+                <TableCell className="w-[200px] text-center break-all whitespace-normal">
+                  {resume.company.name}
+                </TableCell>
+                <TableCell className="w-[200px] text-center break-all whitespace-normal">
+                  {resume.job.name}
+                </TableCell>
+                <TableCell className="text-center">
+                  {resume.user.email}
+                </TableCell>
+                <TableCell className="text-center">
+                  {formatISO(resume.createdAt)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {formatISO(resume.updatedAt)}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center justify-center">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="text-orange-500 hover:text-orange-600"
+                      onClick={() => onEdit(resume)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}

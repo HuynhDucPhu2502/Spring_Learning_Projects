@@ -7,24 +7,12 @@ import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 interface PDFViewerProps {
   fileUrl: string;
   className?: string;
-  versioning?: boolean;
 }
-
-// ========================
-// fileUrl: nhận file PDF để hiển thị
-// className: customize style div ngoài cùng
-// versioning: bật tính năng versioning
-// ==========================
 
 const PDFViewer: React.FC<PDFViewerProps> = ({
   fileUrl,
   className = "h-full w-full",
-  versioning = false,
 }) => {
-  const actualFileUrl =
-    versioning && fileUrl ? fileUrl.split("?PDFViewerVersion=")[0] : fileUrl;
-
-  // Plugins
   const toolbarPluginInstance = toolbarPlugin();
   const { Toolbar } = toolbarPluginInstance;
 
@@ -39,10 +27,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <Viewer
-          fileUrl={actualFileUrl}
-          plugins={[toolbarPluginInstance as Plugin]}
-        />
+        <Viewer fileUrl={fileUrl} plugins={[toolbarPluginInstance as Plugin]} />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Job } from "@/types/job";
-import { formatISO } from "@/utils/convertHelper";
+import { formatISO, formatSalary } from "@/utils/convertHelper";
 import { useNavigate } from "react-router-dom";
 
 type JobsSection = {
@@ -35,10 +35,7 @@ const JobsSection = ({ jobs }: JobsSection) => {
                       <strong>Địa điểm:</strong> {job.location}
                     </p>
                     <p>
-                      <strong>Lương:</strong>{" "}
-                      {job.salary === 0
-                        ? "Thương lượng"
-                        : `${job.salary.toLocaleString()} VND`}
+                      <strong>Lương:</strong> {formatSalary(job.salary)}
                     </p>
                     <p>
                       <strong>Số lượng:</strong> {job.quantity}

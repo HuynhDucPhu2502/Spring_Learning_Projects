@@ -12,9 +12,9 @@ import JobDetailsClientPage from "@/pages/client/job-page/details";
 
 // ADMIN PAGE
 import AdminPage from "@/pages/admin";
-import CompanyPage from "@/pages/admin/company-page";
+import CompanyManagerPage from "@/pages/admin/company-page";
 import DashboardPage from "@/pages/admin/dashboard-page";
-import RecruitmentPage from "@/pages/admin/recruitment-page";
+import RecruitmentManagerPage from "@/pages/admin/recruitment-page";
 import JobManagerPage from "@/pages/admin/recruitment-page/job-manager-page";
 import JobUpsertPage from "@/pages/admin/recruitment-page/job-manager-page/job-upsert-page";
 import SkillManagerPage from "@/pages/admin/recruitment-page/skill-manager-page";
@@ -24,6 +24,7 @@ import ErrorPage from "@/components/custom/ErrorPage";
 import UserPage from "@/pages/user";
 import UserInfoPage from "@/pages/user/user-info-page";
 import UserResumePage from "@/pages/user/user-resume-page";
+import ResumeManagerPage from "@/pages/admin/resume-page";
 
 const router = createBrowserRouter([
   // =========================
@@ -65,10 +66,10 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to={"/admin/dashboard"} /> },
       { path: "dashboard", element: <DashboardPage /> },
-      { path: "company", element: <CompanyPage /> },
+      { path: "company", element: <CompanyManagerPage /> },
       {
         path: "recruitment",
-        element: <RecruitmentPage />,
+        element: <RecruitmentManagerPage />,
         children: [
           {
             index: true,
@@ -82,6 +83,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+      { path: "resume", element: <ResumeManagerPage /> },
 
       { path: "*", element: <ErrorPage /> },
     ],

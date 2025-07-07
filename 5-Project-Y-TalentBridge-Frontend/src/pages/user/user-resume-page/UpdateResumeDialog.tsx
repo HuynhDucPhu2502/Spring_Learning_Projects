@@ -164,13 +164,13 @@ export function UpdateResumeDialog({ onSubmitFile }: UpdateResumeDialogProps) {
                   </Button>
                 </div>
                 {/* PDF Viewer */}
-                <ScrollArea className="m:h-[300px] md:h-[350px] lg:h-[450px]">
+                <ScrollArea className="h-[300px] border-2 md:h-[350px] lg:h-[400px]">
                   <PDFViewer fileUrl={fileUrl} />
                 </ScrollArea>
               </div>
             )}
 
-            <div className="flex flex-shrink-0 gap-4 pt-6">
+            <div className="mt-4 flex gap-4">
               <Button
                 type="button"
                 variant="outline"

@@ -12,7 +12,6 @@ import { FileX, MapPin, Sparkles } from "lucide-react";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import JobInfoDialog from "./JobInfoDialog";
 import { UpdateResumeDialog } from "./UpdateResumeDialog";
-import { useState } from "react";
 import { formatISO } from "@/utils/convertHelper";
 
 type Props = {
@@ -26,11 +25,8 @@ export default function ResumeCard({
   onDelete,
   onUpdateResumeFile,
 }: Props) {
-  const [version, setVersion] = useState(Date.now());
-
   const submitUpdatedResumeFile = async (file: File) => {
     await onUpdateResumeFile(resume.id, file);
-    setVersion(Date.now());
   };
 
   return (
@@ -102,10 +98,7 @@ export default function ResumeCard({
                 className="overflow-auto rounded-md border"
                 style={{ height: "500px" }}
               >
-                <PDFViewer
-                  fileUrl={resume.pdfUrl + "?PDFViewerVersion=" + version}
-                  versioning={true}
-                />
+                <PDFViewer fileUrl={resume.pdfUrl} />
               </div>
             </div>
           )}

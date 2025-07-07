@@ -47,3 +47,20 @@ export const updateResumeFileByResumeId = (
     },
   );
 };
+
+export const getResumes = ({
+  page = 0,
+  size = 5,
+  filter,
+}: PaginationParams) => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    size: size.toString(),
+  });
+
+  if (filter) params.append("filter", filter);
+
+  return axiosClient.get<
+    ApiResponse<PageResponseDto<ResumeForDisplayResponseDto>>
+  >(`/resumes?${params.toString()}`);
+};
