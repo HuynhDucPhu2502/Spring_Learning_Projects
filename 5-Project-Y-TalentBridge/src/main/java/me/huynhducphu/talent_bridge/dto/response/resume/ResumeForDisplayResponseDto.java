@@ -22,6 +22,9 @@ public class ResumeForDisplayResponseDto {
     private Job job;
     private Company company;
 
+    private String createdAt;
+    private String updatedAt;
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

@@ -10,6 +10,7 @@ import me.huynhducphu.talent_bridge.dto.response.resume.ResumeForDisplayResponse
 import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
 import me.huynhducphu.talent_bridge.model.Job;
 import me.huynhducphu.talent_bridge.model.Resume;
+import me.huynhducphu.talent_bridge.model.Skill;
 import me.huynhducphu.talent_bridge.model.User;
 import me.huynhducphu.talent_bridge.repository.JobRepository;
 import me.huynhducphu.talent_bridge.repository.ResumeRepository;
@@ -109,7 +110,7 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
                             resume.getJob().getId(),
                             resume.getJob().getName(),
                             resume.getJob().getLocation(),
-                            resume.getJob().getSkills().stream().map(x -> x.getName()).toList(),
+                            resume.getJob().getSkills().stream().map(Skill::getName).toList(),
                             resume.getJob().getLevel(),
                             resume.getJob().getDescription()
                     );
@@ -121,6 +122,9 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
                             resume.getJob().getCompany().getCompanyLogo().getLogoUrl()
                     );
                     resumeForDisplayResponseDto.setCompany(company);
+
+                    resumeForDisplayResponseDto.setCreatedAt(resume.getCreatedAt().toString());
+                    resumeForDisplayResponseDto.setUpdatedAt(resume.getUpdatedAt().toString());
 
                     return resumeForDisplayResponseDto;
                 });
@@ -174,7 +178,9 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
                 resume.getId(),
                 resume.getUser().getEmail(),
                 resume.getJob().getName(),
-                resume.getJob().getCompany().getName()
+                resume.getJob().getCompany().getName(),
+                resume.getCreatedAt().toString(),
+                resume.getUpdatedAt().toString()
         );
     }
 

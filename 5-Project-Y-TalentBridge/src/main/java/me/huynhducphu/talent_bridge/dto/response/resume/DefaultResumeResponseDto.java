@@ -16,6 +16,8 @@ public class DefaultResumeResponseDto {
     private String email;
     private String jobName;
     private String companyName;
+    private String createdAt;
+    private String updatedAt;
 
 
 }
