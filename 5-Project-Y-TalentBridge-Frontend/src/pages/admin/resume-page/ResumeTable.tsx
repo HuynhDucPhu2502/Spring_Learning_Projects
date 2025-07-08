@@ -18,6 +18,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
+import { Badge } from "@/components/ui/badge";
+import { getResumeStatusColor } from "@/utils/resumeFieldHelper";
 
 interface ResumeTableProps {
   resumes: ResumeForDisplayResponseDto[];
@@ -38,7 +40,9 @@ export function ResumeTable({
             <TableHead className="text-center font-bold text-white">
               ID
             </TableHead>
-            <TableHead className="text-center font-bold text-white"></TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Logo
+            </TableHead>
             <TableHead className="text-center font-bold text-white">
               Công ty
             </TableHead>
@@ -53,6 +57,9 @@ export function ResumeTable({
             </TableHead>
             <TableHead className="text-center font-bold text-white">
               Lần cập nhật gần nhất
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Trạng thái
             </TableHead>
             <TableHead className="text-center font-bold text-white">
               Hành động
@@ -93,10 +100,10 @@ export function ResumeTable({
                     />
                   )}
                 </TableCell>
-                <TableCell className="w-[200px] text-center break-all whitespace-normal">
+                <TableCell className="max-w-[200px] text-center break-all whitespace-normal">
                   {resume.company.name}
                 </TableCell>
-                <TableCell className="w-[200px] text-center break-all whitespace-normal">
+                <TableCell className="max-w-[200px] text-center break-all whitespace-normal">
                   {resume.job.name}
                 </TableCell>
                 <TableCell className="text-center">
@@ -107,6 +114,11 @@ export function ResumeTable({
                 </TableCell>
                 <TableCell className="text-center">
                   {formatISO(resume.updatedAt)}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Badge className={getResumeStatusColor(resume.status)}>
+                    {resume.status}
+                  </Badge>
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-center">
