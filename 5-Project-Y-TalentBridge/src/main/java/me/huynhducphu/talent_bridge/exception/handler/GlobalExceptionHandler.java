@@ -4,9 +4,11 @@ import jakarta.persistence.EntityNotFoundException;
 import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
 import me.huynhducphu.talent_bridge.exception.custom.InvalidImageDataException;
 import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.BadJwtException;
@@ -42,7 +44,7 @@ public class GlobalExceptionHandler {
                 .getBindingResult()
                 .getAllErrors()
                 .stream()
-                .map(error -> error.getDefaultMessage())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.joining(", "));
 
         return ResponseEntity
@@ -69,6 +71,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException ex
     ) {
+        assert ex.getRequiredType() != null;
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ApiResponse<>(
@@ -138,7 +141,7 @@ public class GlobalExceptionHandler {
 
 
         return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
+                .status(HttpStatus.CONFLICT)
                 .body(new ApiResponse<>(
                         message,
                         "ENTITY_ALREADY_EXISTS"
@@ -150,9 +153,26 @@ public class GlobalExceptionHandler {
             InvalidImageDataException ex
     ) {
         return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(new ApiResponse<>(
                         ex.getMessage(),
+                        "INVALID_IMAGE_DATA"
+                ));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<?>> handleAccessDeniedException(
+            AccessDeniedException ex
+    ) {
+        String message = "Không có quyền truy cập";
+        if (ex.getMessage() != null)
+            message = ex.getMessage();
+
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiResponse<>(
+                        message,
                         "INVALID_IMAGE_DATA"
                 ));
     }
