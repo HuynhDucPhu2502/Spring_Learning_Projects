@@ -10,6 +10,7 @@ import me.huynhducphu.talent_bridge.repository.RefreshTokenRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +60,15 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     @Override
     public Jwt validateToken(String token) {
         return jwtDecoder.decode(token);
+    }
+
+
+    @Override
+    public boolean isCurrentUser(User user) {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        String targetUserEmail = user.getEmail();
+        
+        return currentUserEmail.equalsIgnoreCase(targetUserEmail);
     }
 
     @Override

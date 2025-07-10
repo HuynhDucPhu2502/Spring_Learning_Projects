@@ -18,6 +18,8 @@ public interface AuthService {
 
     Jwt validateToken(String token);
 
+    boolean isCurrentUser(User user);
+
     AuthTokenResponseDto.UserInformation mapToUserInformation(User user);
 
     AuthTokenResponseDto.UserInformation mapToUserInformation(String email);
