@@ -127,7 +127,9 @@ export function CompanyForm({
             </Label>
             <RichTextEditor
               value={formData.description}
-              onChange={(value) => handleChange("description", value)}
+              onChange={(value) => {
+                handleChange("description", value);
+              }}
               placeholder="Nhập mô tả công ty..."
             />
           </div>

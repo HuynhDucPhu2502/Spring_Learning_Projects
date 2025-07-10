@@ -3,7 +3,6 @@ import {
   Building2,
   LayoutDashboard,
   FileText,
-  Shield,
   Wrench,
   MonitorIcon as MonitorCog,
   User,
@@ -11,6 +10,9 @@ import {
   Briefcase,
   Settings,
   type LucideIcon,
+  ShieldCheck,
+  KeyRound,
+  UserCog,
 } from "lucide-react";
 import {
   Sidebar,
@@ -74,8 +76,19 @@ const menuItems: MenuItem[] = [
   },
   {
     title: "Phân quyền",
-    url: "/admin/permission",
-    icon: Shield,
+    icon: ShieldCheck,
+    children: [
+      {
+        title: "Quyền hạn",
+        url: "/admin/access-control/permission",
+        icon: KeyRound,
+      },
+      {
+        title: "Chức vụ",
+        url: "/admin/access-control/role",
+        icon: UserCog,
+      },
+    ],
   },
 ];
 

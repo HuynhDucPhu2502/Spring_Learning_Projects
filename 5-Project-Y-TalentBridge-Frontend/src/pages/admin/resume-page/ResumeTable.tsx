@@ -69,7 +69,7 @@ export function ResumeTable({
         <TableBody>
           {isLoading ? (
             <TableRow>
-              <TableCell colSpan={7}>
+              <TableCell colSpan={9}>
                 <div className="flex justify-center py-6">
                   <LoadingSpinner />
                 </div>
@@ -77,7 +77,7 @@ export function ResumeTable({
             </TableRow>
           ) : resumes.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7}>
+              <TableCell colSpan={9}>
                 <EmptyState
                   title="Không tìm thấy hồ sơ xin việc nào"
                   description="Chưa có ai nộp hồ sơ cả"

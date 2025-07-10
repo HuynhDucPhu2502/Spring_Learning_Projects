@@ -38,7 +38,7 @@ export default function RichTextEditor({
         },
       },
     }),
-    [imageHandler]
+    [imageHandler],
   );
 
   const formats = [

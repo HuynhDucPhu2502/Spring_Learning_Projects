@@ -106,6 +106,15 @@ const ResumeManagerPage = () => {
     }
   };
 
+  // ============================
+  // HANDLE RESET
+  // ============================
+  const handleReset = () => {
+    setsearchCompanyName("");
+    setSearchJobName("");
+    setCurrentPage(1);
+  };
+
   return (
     <div className="space-y-6">
       <ResumeSearchSection
@@ -113,7 +122,7 @@ const ResumeManagerPage = () => {
         setSearchCompanyName={setsearchCompanyName}
         searchJobName={searchJobName}
         setSearchJobName={setSearchJobName}
-        onReset={() => {}}
+        onReset={handleReset}
       />
 
       {/* Header Section */}
