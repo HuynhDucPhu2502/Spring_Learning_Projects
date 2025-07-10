@@ -43,11 +43,9 @@ public class AuthConfiguration {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder
+        return NimbusJwtDecoder
                 .withSecretKey(getSecretKey())
                 .macAlgorithm(MAC_ALGORITHM).build();
-
-        return token -> jwtDecoder.decode(token);
     }
 
     @Bean

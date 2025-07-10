@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,13 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    private static final String[] WHITELIST = {
+            "/auth/login",
+            "/auth/logout",
+            "/auth/refresh-token",
+            "/companies/**",
+            "/jobs/**"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(
@@ -32,29 +40,21 @@ public class SecurityConfiguration {
             CustomAuthenticationEntryPoint customAuthenticationEntryPoint
     ) throws Exception {
         httpSecurity
-                .authorizeHttpRequests(
-                        auth ->
-                                auth
-                                        .requestMatchers(
-                                                "/auth/login",
-                                                "/auth/logout",
-                                                "/auth/refresh-token",
-                                                "/").permitAll()
-                                        .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(WHITELIST).permitAll()
+                        .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 ->
-                        oauth2
-                                .jwt(Customizer.withDefaults())
-                                .authenticationEntryPoint(customAuthenticationEntryPoint)
-                                .bearerTokenResolver(new SkipPathBearerTokenResolver())
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(Customizer.withDefaults())
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .bearerTokenResolver(new SkipPathBearerTokenResolver())
                 )
-                .sessionManagement(
-                        session ->
-                                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .csrf(csrf -> csrf.disable())
-                .formLogin(form -> form.disable())
-                .httpBasic(httpBasic -> httpBasic.disable());
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable);
 
 
         return httpSecurity.build();
