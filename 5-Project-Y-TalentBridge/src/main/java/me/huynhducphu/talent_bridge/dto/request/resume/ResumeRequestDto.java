@@ -2,6 +2,7 @@ package me.huynhducphu.talent_bridge.dto.request.resume;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,13 @@ public class ResumeRequestDto {
     )
     private String email;
 
+    @NotNull(message = "Trạng thái hồ sơ không được để trống")
     private ResumeStatus status;
 
+    @NotNull(message = "Người dùng không được để trống")
     private User user;
 
+    @NotNull(message = "Công việc không được để trống")
     private Job job;
 
     @AllArgsConstructor

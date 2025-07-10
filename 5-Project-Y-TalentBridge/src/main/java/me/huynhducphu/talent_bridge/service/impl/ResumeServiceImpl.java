@@ -17,10 +17,12 @@ import me.huynhducphu.talent_bridge.model.constant.ResumeStatus;
 import me.huynhducphu.talent_bridge.repository.JobRepository;
 import me.huynhducphu.talent_bridge.repository.ResumeRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
+import me.huynhducphu.talent_bridge.service.AuthService;
 import me.huynhducphu.talent_bridge.service.S3Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +40,7 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
+    private final AuthService authService;
     private final S3Service s3Service;
 
     @Override
@@ -107,6 +110,9 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
                 .findByUserIdAndJobId(userId, jobId)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
 
+        if (!authService.isCurrentUser(resume.getUser()))
+            throw new AccessDeniedException("Bạn không quyền truy câp");
+
         DefaultResumeResponseDto res = mapToResponseDto(resume);
 
         resume.setUser(null);
@@ -125,6 +131,9 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
         Resume resume = resumeRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
+
+        if (!authService.isCurrentUser(resume.getUser()))
+            throw new AccessDeniedException("Bạn không quyền truy câp");
 
         if (pdfFile != null && !pdfFile.isEmpty()) {
             resume.setVersion(resume.getVersion() + 1);
@@ -167,11 +176,11 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
         Resume resume = resumeRepository
                 .findById(updateResumeStatusRequestDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
+        
         resume.setStatus(updateResumeStatusRequestDto.getStatus());
         resumeRepository.save(resume);
         return mapToResponseDto(resume);
     }
-
 
     private String generateKey(String email, Long id, Long version) {
         String safeEmail = email.replaceAll("[^a-zA-Z0-9]", "_");
