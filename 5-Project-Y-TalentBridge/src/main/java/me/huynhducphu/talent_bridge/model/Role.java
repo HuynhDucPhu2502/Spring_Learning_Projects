@@ -40,4 +40,15 @@ public class Role extends BaseEntity {
     @ToString.Exclude
     private Set<Permission> permissions;
 
+    public Role(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.active = true;
+    }
+
+    public Role(String name, String description, boolean active) {
+        this.name = name;
+        this.description = description;
+        this.active = active;
+    }
 }

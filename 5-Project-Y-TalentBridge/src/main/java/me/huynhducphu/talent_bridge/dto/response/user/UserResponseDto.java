@@ -23,7 +23,7 @@ public class UserResponseDto {
     private String address;
     private Gender gender;
     private CompanyInformationDto company;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private RoleInformationDto role;
     private Instant createdAt;
     private Instant updatedAt;
 
@@ -31,6 +31,14 @@ public class UserResponseDto {
     @NoArgsConstructor
     @Data
     public static class CompanyInformationDto {
+        private Long id;
+        private String name;
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    public static class RoleInformationDto {
         private Long id;
         private String name;
     }

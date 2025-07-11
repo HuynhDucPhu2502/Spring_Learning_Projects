@@ -49,5 +49,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     private List<Resume> resumes;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    @ToString.Exclude
+    private Role role;
 }
 

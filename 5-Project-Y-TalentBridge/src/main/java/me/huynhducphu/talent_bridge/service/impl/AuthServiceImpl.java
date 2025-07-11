@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.config.auth.AuthConfiguration;
 import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
+import me.huynhducphu.talent_bridge.model.Role;
 import me.huynhducphu.talent_bridge.model.common.RefreshToken;
 import me.huynhducphu.talent_bridge.model.User;
 import me.huynhducphu.talent_bridge.repository.RefreshTokenRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 /**
  * Admin 6/9/2025
@@ -67,7 +69,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     public boolean isCurrentUser(User user) {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         String targetUserEmail = user.getEmail();
-        
+
         return currentUserEmail.equalsIgnoreCase(targetUserEmail);
     }
 
@@ -109,11 +111,17 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         JwsHeader jwsHeader = JwsHeader.with(AuthConfiguration.MAC_ALGORITHM).build();
 
         // Payload
+        Role role = user.getRole();
+        List<String> permissions = role != null && role.getPermissions() != null
+                ? role.getPermissions().stream().map(p -> p.getMethod() + " " + p.getApiPath()).toList()
+                : List.of();
+
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
                 .subject(user.getEmail())
                 .claim("user", mapToUserInformation(user))
+                .claim("permissions", permissions)
                 .build();
 
         String res = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();

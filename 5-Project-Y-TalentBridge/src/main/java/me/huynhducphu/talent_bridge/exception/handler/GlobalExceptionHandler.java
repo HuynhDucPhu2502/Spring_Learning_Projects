@@ -173,7 +173,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiResponse<>(
                         message,
-                        "INVALID_IMAGE_DATA"
+                        "ACCESS_DENIED"
                 ));
     }
 }

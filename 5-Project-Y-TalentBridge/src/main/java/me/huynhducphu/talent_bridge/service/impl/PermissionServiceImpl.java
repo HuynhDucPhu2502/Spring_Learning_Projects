@@ -12,6 +12,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Admin 7/10/2025
  **/
@@ -76,7 +78,6 @@ public class PermissionServiceImpl implements me.huynhducphu.talent_bridge.servi
         permissionRepository.delete(permission);
         return mapToDefaultResponseDto(permission);
     }
-
 
     private DefaultPermissionResponseDto mapToDefaultResponseDto(Permission permission) {
 

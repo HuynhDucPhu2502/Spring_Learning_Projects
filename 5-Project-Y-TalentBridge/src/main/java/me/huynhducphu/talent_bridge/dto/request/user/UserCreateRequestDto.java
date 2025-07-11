@@ -1,6 +1,5 @@
 package me.huynhducphu.talent_bridge.dto.request.user;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -36,5 +35,7 @@ public class UserCreateRequestDto {
     private Gender gender;
 
     private CompanyIdDto company;
+
+    private RoleIdDto role;
 
 }

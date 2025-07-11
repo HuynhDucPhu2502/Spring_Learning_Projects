@@ -1,6 +1,5 @@
 package me.huynhducphu.talent_bridge.dto.request.user;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +21,5 @@ public class UserUpdateRequestDto {
     private Integer age;
     private String address;
     private CompanyIdDto company;
+    private RoleIdDto role;
 }

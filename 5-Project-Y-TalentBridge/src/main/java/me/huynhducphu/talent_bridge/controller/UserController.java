@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,6 +39,7 @@ public class UserController {
 
     @GetMapping
     @ApiMessage(value = "Lấy danh sách người dùng")
+    @PreAuthorize("hasAuthority('GET /users/**')")
     public ResponseEntity<?> findAllUsers(
             @Filter Specification<User> spec,
             Pageable pageable
@@ -59,6 +61,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ApiMessage(value = "Lấy người dùng theo mã")
+    @PreAuthorize("hasAuthority('GET /users/**')")
     public ResponseEntity<?> findUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findUserById(id));
     }

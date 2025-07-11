@@ -6,12 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Admin 6/22/2025
+ * Admin 7/11/2025
  **/
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CompanyIdDto {
-    @NotNull(message = "Công ty không được để trống")
+public class RoleIdDto {
+    @NotNull(message = "Chức vụ không được để trống")
     private Long id;
 }
