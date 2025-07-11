@@ -61,7 +61,7 @@ export function PermissionTable({
         <TableBody>
           {isLoading ? (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={8}>
                 <div className="flex justify-center py-6">
                   <LoadingSpinner />
                 </div>
@@ -69,7 +69,7 @@ export function PermissionTable({
             </TableRow>
           ) : permissions.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={8}>
                 <EmptyState
                   title="Không tìm thấy quyền hạn nào"
                   description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm quyền hạn mới"
