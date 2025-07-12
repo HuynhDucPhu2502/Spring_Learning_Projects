@@ -20,6 +20,15 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+        Class<?> returnTypeClass = returnType.getParameterType();
+
+        if (returnTypeClass == byte[].class
+                || org.springframework.core.io.Resource.class.isAssignableFrom(returnTypeClass)
+                || org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody.class.isAssignableFrom(returnTypeClass)
+        ) {
+            return false;
+        }
+
         return true;
     }
 

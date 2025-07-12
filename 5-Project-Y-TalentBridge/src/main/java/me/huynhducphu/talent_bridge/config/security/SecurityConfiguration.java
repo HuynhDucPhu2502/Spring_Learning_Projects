@@ -27,11 +27,18 @@ public class SecurityConfiguration {
     }
 
     private static final String[] WHITELIST = {
+            // LOGIN
             "/auth/login",
             "/auth/logout",
             "/auth/refresh-token",
+
+            // BASIC MODULES
             "/companies/**",
-            "/jobs/**"
+            "/jobs/**",
+
+            // API DOCS
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
     };
 
     @Bean

@@ -1,6 +1,7 @@
 package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Tag(name = "Company")
 @RestController
 @RequestMapping("/companies")
 @RequiredArgsConstructor
@@ -82,7 +84,7 @@ public class CompanyController {
                 page.getTotalElements(),
                 page.getTotalPages()
         );
-        
+
         return ResponseEntity.ok(res);
     }
 

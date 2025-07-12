@@ -1,5 +1,6 @@
 package me.huynhducphu.talent_bridge.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Admin 7/11/2025
  **/
+@Tag(name = "Role")
 @RestController
 @RequestMapping("/roles")
 @RequiredArgsConstructor

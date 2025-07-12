@@ -1,6 +1,7 @@
 package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Admin 7/10/2025
  **/
+@Tag(name = "Permission")
 @RestController
 @RequestMapping("/permissions")
 @RequiredArgsConstructor

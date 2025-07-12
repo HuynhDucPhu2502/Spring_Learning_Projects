@@ -6,6 +6,7 @@ import me.huynhducphu.talent_bridge.dto.request.permission.DefaultPermissionRequ
 import me.huynhducphu.talent_bridge.dto.response.permission.DefaultPermissionResponseDto;
 import me.huynhducphu.talent_bridge.model.Permission;
 import me.huynhducphu.talent_bridge.repository.PermissionRepository;
+import me.huynhducphu.talent_bridge.repository.RoleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +24,7 @@ import java.util.List;
 public class PermissionServiceImpl implements me.huynhducphu.talent_bridge.service.PermissionService {
 
     private final PermissionRepository permissionRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     public Page<DefaultPermissionResponseDto> findAllPermission(
@@ -40,7 +42,6 @@ public class PermissionServiceImpl implements me.huynhducphu.talent_bridge.servi
             DefaultPermissionRequestDto defaultPermissionRequestDto
     ) {
         Permission permission = new Permission(
-                null,
                 defaultPermissionRequestDto.getName(),
                 defaultPermissionRequestDto.getApiPath(),
                 defaultPermissionRequestDto.getMethod(),
@@ -75,6 +76,11 @@ public class PermissionServiceImpl implements me.huynhducphu.talent_bridge.servi
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy quyền hạn này"));
 
+        permission.getRoles().forEach(role -> {
+            role.getPermissions().remove(permission);
+            roleRepository.saveAndFlush(role);
+        });
+        
         permissionRepository.delete(permission);
         return mapToDefaultResponseDto(permission);
     }

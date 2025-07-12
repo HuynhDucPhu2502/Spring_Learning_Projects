@@ -1,6 +1,7 @@
 package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Admin 6/23/2025
  **/
+@Tag(name = "Skill")
 @RestController
 @RequestMapping("/skills")
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class SkillController {
     private final SkillService skillService;
 
     @PostMapping
-    @ApiMessage(value = "Tạo kỹ năng")
+    @ApiMessage(value = "Tạo Skill")
     public ResponseEntity<?> saveSkill(@Valid @RequestBody CreateSkillRequestDto createSkillRequestDto) {
         return ResponseEntity
                 .ok(skillService.saveSkill(createSkillRequestDto));

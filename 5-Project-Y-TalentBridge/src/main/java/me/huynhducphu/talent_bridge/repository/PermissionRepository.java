@@ -18,4 +18,5 @@ public interface PermissionRepository extends
 
     @Query("SELECT DISTINCT p.module FROM Permission p")
     List<String> findDistinctModules();
+    
 }

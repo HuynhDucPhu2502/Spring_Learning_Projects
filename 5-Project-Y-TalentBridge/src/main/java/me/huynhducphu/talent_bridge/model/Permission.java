@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import me.huynhducphu.talent_bridge.model.common.BaseEntity;
 
+import java.util.Set;
+
 /**
  * Admin 7/10/2025
  **/
@@ -35,4 +37,13 @@ public class Permission extends BaseEntity {
     @Column(nullable = false)
     private String module;
 
+    @ManyToMany(mappedBy = "permissions")
+    private Set<Role> roles;
+
+    public Permission(String name, String apiPath, String method, String module) {
+        this.name = name;
+        this.apiPath = apiPath;
+        this.method = method;
+        this.module = module;
+    }
 }
