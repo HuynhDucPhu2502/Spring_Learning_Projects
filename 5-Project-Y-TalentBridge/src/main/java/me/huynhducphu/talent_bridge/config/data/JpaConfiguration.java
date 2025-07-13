@@ -18,10 +18,11 @@ public class JpaConfiguration {
 
     @Bean
     public AuditorAware<String> auditorProvider() {
+
         return () -> Optional.ofNullable(
                 SecurityContextHolder.getContext().getAuthentication()
         ).map(Authentication::getName);
-    }
 
+    }
 
 }

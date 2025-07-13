@@ -40,7 +40,8 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
             MethodParameter returnType,
             Class<? extends HttpMessageConverter<?>> converterType
     ) {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes attributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             String path = attributes.getRequest().getRequestURI();
             for (String pattern : EXCLUDE_PATTERNS) {

@@ -13,12 +13,13 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration
 public class SwaggerConfig {
+
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new Components()
-                        .addSecuritySchemes(
+                .components(
+                        new Components().addSecuritySchemes(
                                 "bearerAuth",
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
@@ -31,4 +32,5 @@ public class SwaggerConfig {
                         .version("1.0")
                         .description("API documentation"));
     }
+
 }
