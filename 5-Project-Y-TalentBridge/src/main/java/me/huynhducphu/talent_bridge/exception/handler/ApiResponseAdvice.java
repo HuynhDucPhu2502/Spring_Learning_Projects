@@ -9,17 +9,47 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Admin 6/8/2025
  **/
 @RestControllerAdvice
 public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
+    private static final List<String> EXCLUDE_PATTERNS = Arrays.asList(
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/favicon.ico",
+            "/actuator/**",
+            "/error",
+            "/doc.html"
+    );
+    private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(
+            MethodParameter returnType,
+            Class<? extends HttpMessageConverter<?>> converterType
+    ) {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            String path = attributes.getRequest().getRequestURI();
+            for (String pattern : EXCLUDE_PATTERNS) {
+                if (antPathMatcher.match(pattern, path)) {
+                    return false;
+                }
+            }
+        }
+
         Class<?> returnTypeClass = returnType.getParameterType();
 
         if (returnTypeClass == byte[].class
@@ -48,18 +78,16 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 
         ApiMessage apiMessage = returnType.getMethodAnnotation(ApiMessage.class);
 
-
         if (status >= 400)
             return new ApiResponse<>(
                     apiMessage == null ? "Fail" : apiMessage.value(),
                     status
             );
 
-
         return new ApiResponse<>(
                 apiMessage == null ? "Success" : apiMessage.value(),
                 body
         );
-
     }
 }
+

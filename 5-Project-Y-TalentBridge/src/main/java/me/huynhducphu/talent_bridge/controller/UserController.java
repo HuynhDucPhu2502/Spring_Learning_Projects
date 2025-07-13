@@ -25,7 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "USER")
+@Tag(name = "User")
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -41,7 +41,9 @@ public class UserController {
             description = "Yêu cầu quyền: <b>POST /users</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<?> saveUser(@Valid @RequestBody UserCreateRequestDto userCreateRequestDto) {
+    public ResponseEntity<UserResponseDto> saveUser(
+            @Valid @RequestBody UserCreateRequestDto userCreateRequestDto
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userService.saveUser(userCreateRequestDto));
@@ -55,7 +57,7 @@ public class UserController {
             description = "Yêu cầu quyền: <b>GET /users</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<?> findAllUsers(
+    public ResponseEntity<PageResponseDto<UserResponseDto>> findAllUsers(
             @Filter Specification<User> spec,
             Pageable pageable
     ) {
@@ -82,7 +84,7 @@ public class UserController {
             description = "Yêu cầu quyền: <b>GET /users/{id}</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<?> findUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findUserById(id));
     }
 
@@ -94,7 +96,7 @@ public class UserController {
             description = "Yêu cầu quyền: <b>PUT /users</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<?> updateUser(
+    public ResponseEntity<UserResponseDto> updateUser(
             @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto
     ) {
         return ResponseEntity.ok(userService.updateUser(userUpdateRequestDto));
@@ -108,7 +110,7 @@ public class UserController {
             description = "Yêu cầu quyền: <b>DELETE /users/{id}</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> deleteUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.deleteUserById(id));
     }
 

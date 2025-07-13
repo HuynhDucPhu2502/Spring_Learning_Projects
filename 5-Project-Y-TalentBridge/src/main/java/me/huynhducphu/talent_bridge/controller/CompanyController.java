@@ -90,7 +90,7 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     @ApiMessage(value = "Lấy công ty theo mã")
-    public ResponseEntity<?> findCompanyById(@PathVariable Long id) {
+    public ResponseEntity<CompanyResponseDto> findCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.findCompanyById(id));
     }
 
