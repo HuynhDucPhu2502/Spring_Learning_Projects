@@ -1,10 +1,10 @@
-import type { Company } from "@/types/company";
+import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
 import { Building2, MapPin, CalendarDays } from "lucide-react";
 import RichTextPreview from "@/components/custom/RichText/index-preview";
-import { formatISO } from "@/utils/convertHelper";
+import { formatISO } from "@/utils/convertHelper.ts";
 
 type CompanySectionProps = {
-  company: Company;
+  company: DefaultCompanyResponseDto;
   jobsCount: number;
 };
 

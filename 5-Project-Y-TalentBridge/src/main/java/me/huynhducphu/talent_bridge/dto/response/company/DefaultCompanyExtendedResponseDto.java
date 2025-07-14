@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CompanyExtendedResponseDto extends CompanyResponseDto {
+public class DefaultCompanyExtendedResponseDto extends DefaultCompanyResponseDto {
     private Long jobsCount;
 
-    public CompanyExtendedResponseDto(Long id, String name, String description, String address, String logoUrl, String createdAt, String updatedAt, Long jobsCount) {
+    public DefaultCompanyExtendedResponseDto(Long id, String name, String description, String address, String logoUrl, String createdAt, String updatedAt, Long jobsCount) {
         super(id, name, description, address, logoUrl, createdAt, updatedAt);
         this.jobsCount = jobsCount;
     }

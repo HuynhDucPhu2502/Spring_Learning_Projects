@@ -25,7 +25,7 @@ import UserPage from "@/pages/user";
 import UserInfoPage from "@/pages/user/user-info-page";
 import UserResumePage from "@/pages/user/user-resume-page";
 import ResumeManagerPage from "@/pages/admin/resume-page";
-import AccecssControlPage from "@/pages/admin/access-control-page";
+import AccessControlPage from "@/pages/admin/access-control-page";
 import PermissionManagerPage from "@/pages/admin/access-control-page/permission-page";
 import RoleManagerPage from "@/pages/admin/access-control-page/role-page";
 
@@ -89,7 +89,7 @@ const router = createBrowserRouter([
       { path: "resume", element: <ResumeManagerPage /> },
       {
         path: "access-control",
-        element: <AccecssControlPage />,
+        element: <AccessControlPage />,
         children: [
           {
             index: true,

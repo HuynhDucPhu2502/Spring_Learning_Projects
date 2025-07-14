@@ -24,7 +24,7 @@ import type {
 } from "@/types/resume";
 import PDFViewer from "@/components/custom/PDFViewer";
 import RichTextPreview from "@/components/custom/RichText/index-preview";
-import { statusOptions } from "@/utils/resumeFieldHelper";
+import { statusOptions } from "@/utils/tagColorMapper.ts";
 
 interface ViewResumeDialogProps {
   open: boolean;

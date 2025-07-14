@@ -5,11 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
-import me.huynhducphu.talent_bridge.dto.request.company.CompanyRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.company.DefaultCompanyRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
-import me.huynhducphu.talent_bridge.dto.response.company.CompanyExtendedResponseDto;
-import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyExtendedResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.service.CompanyService;
 import org.springframework.data.domain.Page;
@@ -32,22 +32,22 @@ public class CompanyController {
     @PostMapping
     @ApiMessage(value = "Tạo công ty")
     public ResponseEntity<?> saveCompany(
-            @Valid @RequestPart("company") CompanyRequestDto companyRequestDto,
+            @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
             @RequestPart(value = "logoFile", required = false) MultipartFile logoFile
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(companyService.saveCompany(companyRequestDto, logoFile));
+                .body(companyService.saveCompany(defaultCompanyRequestDto, logoFile));
     }
 
     @PutMapping(value = "/{id}")
     @ApiMessage(value = "Cập nhật công ty theo mã")
     public ResponseEntity<?> updateCompany(
-            @Valid @RequestPart("company") CompanyRequestDto companyRequestDto,
+            @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
             @RequestPart(value = "logoFile", required = false) MultipartFile logoFile,
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(companyService.updateCompany(companyRequestDto, id, logoFile));
+        return ResponseEntity.ok(companyService.updateCompany(defaultCompanyRequestDto, id, logoFile));
     }
 
     @GetMapping
@@ -56,9 +56,9 @@ public class CompanyController {
             @Filter Specification<Company> spec,
             @PageableDefault(size = 5) Pageable pageable
     ) {
-        Page<CompanyResponseDto> page = companyService.findAllCompanies(spec, pageable);
+        Page<DefaultCompanyResponseDto> page = companyService.findAllCompanies(spec, pageable);
 
-        PageResponseDto<CompanyResponseDto> res = new PageResponseDto<>(
+        PageResponseDto<DefaultCompanyResponseDto> res = new PageResponseDto<>(
                 page.getContent(),
                 pageable.getPageNumber() + 1,
                 pageable.getPageSize(),
@@ -75,9 +75,9 @@ public class CompanyController {
             @Filter Specification<Company> spec,
             @PageableDefault(size = 9) Pageable pageable
     ) {
-        Page<CompanyExtendedResponseDto> page = companyService.findAllCompaniesWithJobsCount(spec, pageable);
+        Page<DefaultCompanyExtendedResponseDto> page = companyService.findAllCompaniesWithJobsCount(spec, pageable);
 
-        PageResponseDto<CompanyExtendedResponseDto> res = new PageResponseDto<>(
+        PageResponseDto<DefaultCompanyExtendedResponseDto> res = new PageResponseDto<>(
                 page.getContent(),
                 pageable.getPageNumber() + 1,
                 pageable.getPageSize(),
@@ -90,7 +90,7 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     @ApiMessage(value = "Lấy công ty theo mã")
-    public ResponseEntity<CompanyResponseDto> findCompanyById(@PathVariable Long id) {
+    public ResponseEntity<DefaultCompanyResponseDto> findCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.findCompanyById(id));
     }
 

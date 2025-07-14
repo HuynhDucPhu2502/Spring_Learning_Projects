@@ -12,8 +12,8 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import RichTextPreview from "@/components/custom/RichText/index-preview";
-import { formatISO, formatSalary } from "@/utils/convertHelper";
-import { levelColors, levelLabels } from "@/utils/jobFieldHelper";
+import { formatISO, formatSalary } from "@/utils/convertHelper.ts";
+import { levelColors, levelLabels } from "@/utils/tagColorMapper.ts";
 
 type JobSectionProps = {
   job: Job;

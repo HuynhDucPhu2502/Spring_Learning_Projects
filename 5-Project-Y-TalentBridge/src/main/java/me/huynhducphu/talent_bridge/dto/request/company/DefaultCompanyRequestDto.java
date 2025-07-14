@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CompanyRequestDto {
+public class DefaultCompanyRequestDto {
 
 
     @NotBlank(message = "Tên công ty không được để trống")
@@ -22,5 +22,5 @@ public class CompanyRequestDto {
 
     @NotBlank(message = "Địa chỉ không được để trống")
     private String address;
-    
+
 }

@@ -3,7 +3,7 @@ import type {
   ApiResponse,
   PageResponseDto,
   PaginationParams,
-} from "@/types/apiResponse";
+} from "@/types/apiResponse.types.ts";
 import type {
   createSkillRequestDto,
   Skill,

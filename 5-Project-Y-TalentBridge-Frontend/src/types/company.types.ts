@@ -1,4 +1,4 @@
-export interface Company {
+export interface DefaultCompanyResponseDto {
   id: number;
   name: string;
   description: string;

@@ -1,8 +1,8 @@
 package me.huynhducphu.talent_bridge.service;
 
-import me.huynhducphu.talent_bridge.dto.request.company.CompanyRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.company.CompanyExtendedResponseDto;
-import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
+import me.huynhducphu.talent_bridge.dto.request.company.DefaultCompanyRequestDto;
+import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyExtendedResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,15 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
  * Admin 6/25/2025
  **/
 public interface CompanyService {
-    CompanyResponseDto saveCompany(CompanyRequestDto dto, MultipartFile logoFile);
+    DefaultCompanyResponseDto saveCompany(DefaultCompanyRequestDto dto, MultipartFile logoFile);
 
-    CompanyResponseDto updateCompany(CompanyRequestDto dto, Long id, MultipartFile logoFile);
+    DefaultCompanyResponseDto updateCompany(DefaultCompanyRequestDto dto, Long id, MultipartFile logoFile);
 
-    Page<CompanyResponseDto> findAllCompanies(Specification<Company> spec, Pageable pageable);
+    Page<DefaultCompanyResponseDto> findAllCompanies(Specification<Company> spec, Pageable pageable);
 
-    Page<CompanyExtendedResponseDto> findAllCompaniesWithJobsCount(Specification<Company> spec, Pageable pageable);
+    Page<DefaultCompanyExtendedResponseDto> findAllCompaniesWithJobsCount(Specification<Company> spec, Pageable pageable);
 
-    CompanyResponseDto findCompanyById(Long id);
+    DefaultCompanyResponseDto findCompanyById(Long id);
 
-    CompanyResponseDto deleteCompanyById(Long id);
+    DefaultCompanyResponseDto deleteCompanyById(Long id);
 }

@@ -1,5 +1,5 @@
 import axiosClient from "@/lib/axiosClient";
-import type { ApiResponse } from "@/types/apiResponse";
+import type { ApiResponse } from "@/types/apiResponse.types.ts";
 import type { loginForm, AuthResponse, User } from "@/types/user";
 import axios from "axios";
 

@@ -12,7 +12,7 @@ export interface PageResponseDto<T> {
   totalPages: number;
 }
 
-interface PaginationParams {
+export interface PaginationParams {
   page: number;
   size: number;
   filter: string | null;

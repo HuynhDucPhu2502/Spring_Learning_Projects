@@ -12,8 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { EmptyState } from "@/components/custom/EmptyState";
 import { useNavigate } from "react-router-dom";
-import { levelColors, levelLabels } from "@/utils/jobFieldHelper";
-import { formatISO, formatSalary } from "@/utils/convertHelper";
+import { formatISO, formatSalary } from "@/utils/convertHelper.ts";
+import { levelColors, levelLabels } from "@/utils/tagColorMapper.ts";
 
 type JobGridProps = {
   isLoading: boolean;

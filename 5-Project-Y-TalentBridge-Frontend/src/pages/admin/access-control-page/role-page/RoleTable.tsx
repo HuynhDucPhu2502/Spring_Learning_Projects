@@ -1,4 +1,4 @@
-import { Edit, KeyRound, Trash2 } from "lucide-react";
+import { Edit, Trash2, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -12,23 +12,22 @@ import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialo
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper.ts";
-import type { DefaultPermissionResponseDto } from "@/types/permission.types.ts";
-import { Badge } from "@/components/ui/badge";
-import { getMethodColor } from "@/utils/tagColorMapper.ts";
+import type { DefaultRoleResponseDto } from "@/types/role.types.ts";
+import { Badge } from "@/components/ui/badge.tsx";
 
-interface PermissionTableProps {
-  permissions: DefaultPermissionResponseDto[];
+interface RoleTableProps {
+  roles: DefaultRoleResponseDto[];
   isLoading: boolean;
-  onEdit: (skill: DefaultPermissionResponseDto) => void;
+  onEdit: (role: DefaultRoleResponseDto) => void;
   onDelete: (id: number) => void;
 }
 
-export function PermissionTable({
-  permissions,
+export function RoleTable({
+  roles,
   isLoading,
   onEdit,
   onDelete,
-}: PermissionTableProps) {
+}: RoleTableProps) {
   return (
     <div className="overflow-hidden rounded-lg border border-blue-600">
       <Table>
@@ -38,22 +37,16 @@ export function PermissionTable({
               ID
             </TableHead>
             <TableHead className="text-center font-bold text-white">
-              Tên quyền hạn
+              Tên chức vụ
             </TableHead>
             <TableHead className="text-center font-bold text-white">
-              Đường dẫn API
-            </TableHead>
-            <TableHead className="text-center font-bold text-white">
-              Phương thức
-            </TableHead>
-            <TableHead className="text-center font-bold text-white">
-              Module
+              Trạng thái
             </TableHead>
             <TableHead className="text-center font-bold text-white">
               Ngày tạo
             </TableHead>
             <TableHead className="text-center font-bold text-white">
-              Cập nhật
+              Lần cập nhật gần nhất
             </TableHead>
             <TableHead className="text-center font-bold text-white">
               Hành động
@@ -63,45 +56,41 @@ export function PermissionTable({
         <TableBody>
           {isLoading ? (
             <TableRow>
-              <TableCell colSpan={8}>
+              <TableCell colSpan={5}>
                 <div className="flex justify-center py-6">
                   <LoadingSpinner />
                 </div>
               </TableCell>
             </TableRow>
-          ) : permissions.length === 0 ? (
+          ) : roles.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={8}>
+              <TableCell colSpan={5}>
                 <EmptyState
-                  title="Không tìm thấy quyền hạn nào"
-                  description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm quyền hạn mới"
+                  title="Không tìm thấy kỹ năng nào"
+                  description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm kỹ năng mới"
                   icon={
-                    <KeyRound className="text-muted-foreground mb-4 h-12 w-12" />
+                    <Wrench className="text-muted-foreground mb-4 h-12 w-12" />
                   }
                 />
               </TableCell>
             </TableRow>
           ) : (
-            permissions.map((permission) => (
-              <TableRow key={permission.id}>
-                <TableCell className="text-center">{permission.id}</TableCell>
-                <TableCell className="text-center">{permission.name}</TableCell>
+            roles.map((role) => (
+              <TableRow key={role.id}>
+                <TableCell className="text-center">{role.id}</TableCell>
+                <TableCell className="text-center">{role.name}</TableCell>
                 <TableCell className="text-center">
-                  {permission.apiPath}
+                  {role.active ? (
+                    <Badge className={"bg-green-500 text-white"}>ACTIVE</Badge>
+                  ) : (
+                    <Badge className={"bg-red-500 text-white"}>DE-ACTIVE</Badge>
+                  )}
                 </TableCell>
                 <TableCell className="text-center">
-                  <Badge className={getMethodColor(permission.method)}>
-                    {permission.method}
-                  </Badge>
+                  {formatISO(role.createdAt)}
                 </TableCell>
                 <TableCell className="text-center">
-                  {permission.module}
-                </TableCell>
-                <TableCell className="text-center">
-                  {formatISO(permission.createdAt)}
-                </TableCell>
-                <TableCell className="text-center">
-                  {formatISO(permission.updatedAt)}
+                  {formatISO(role.updatedAt)}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-center gap-2">
@@ -109,13 +98,11 @@ export function PermissionTable({
                       size="icon"
                       variant="ghost"
                       className="text-orange-500 hover:text-orange-600"
-                      onClick={() => onEdit(permission)}
+                      onClick={() => onEdit(role)}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <DeleteConfirmDialog
-                      onConfirm={() => onDelete(permission.id)}
-                    >
+                    <DeleteConfirmDialog onConfirm={() => onDelete(role.id)}>
                       <Button
                         size="icon"
                         variant="ghost"

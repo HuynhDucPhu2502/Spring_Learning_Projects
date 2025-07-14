@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
-const AccecssControlPage = () => {
+const AccessControlPage = () => {
   return <Outlet />;
 };
 
-export default AccecssControlPage;
+export default AccessControlPage;

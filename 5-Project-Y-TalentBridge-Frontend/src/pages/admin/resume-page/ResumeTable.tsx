@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
-import { formatISO } from "@/utils/convertHelper";
+import { formatISO } from "@/utils/convertHelper.ts";
 import type { ResumeForDisplayResponseDto } from "@/types/resume";
 import {
   Tooltip,
@@ -19,7 +19,7 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { Badge } from "@/components/ui/badge";
-import { getResumeStatusColor } from "@/utils/resumeFieldHelper";
+import { getResumeStatusColor } from "@/utils/tagColorMapper.ts";
 
 interface ResumeTableProps {
   resumes: ResumeForDisplayResponseDto[];

@@ -2,14 +2,14 @@ import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { getCompaniesList } from "@/services/companyApi";
-import type { Company } from "@/types/company";
+import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
 import { Building2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 const TopCompaniesSection = () => {
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const [companies, setCompanies] = useState<DefaultCompanyResponseDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchCompanies = async () => {

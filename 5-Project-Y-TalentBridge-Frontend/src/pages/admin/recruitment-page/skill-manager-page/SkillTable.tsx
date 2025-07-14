@@ -12,7 +12,7 @@ import type { Skill } from "@/types/skill";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
-import { formatISO } from "@/utils/convertHelper";
+import { formatISO } from "@/utils/convertHelper.ts";
 
 interface SkillTableProps {
   skills: Skill[];

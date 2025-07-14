@@ -10,12 +10,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import RichTextEditor from "@/components/custom/RichText/index-editor";
-import type { Company, CreateAndUpdateRequestDto } from "@/types/company";
+import type { DefaultCompanyResponseDto, CreateAndUpdateRequestDto } from "@/types/company.types.ts";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface CompanyFormProps {
   onSubmit: (formData: FormData, id?: number) => void;
-  initialData: Company | null;
+  initialData: DefaultCompanyResponseDto | null;
   onCloseForm: () => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;

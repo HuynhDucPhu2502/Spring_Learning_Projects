@@ -8,6 +8,9 @@ import me.huynhducphu.talent_bridge.model.Permission;
 import me.huynhducphu.talent_bridge.model.Role;
 import me.huynhducphu.talent_bridge.repository.PermissionRepository;
 import me.huynhducphu.talent_bridge.repository.RoleRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,6 +95,15 @@ public class RoleServiceImpl implements me.huynhducphu.talent_bridge.service.Rol
         Role updatedRole = roleRepository.saveAndFlush(role);
 
         return mapToDefaultRoleResponseDto(updatedRole);
+    }
+
+    @Override
+    public Page<DefaultRoleResponseDto> findAllRoles(
+            Specification<Role> spec,
+            Pageable pageable) {
+        return roleRepository
+                .findAll(spec, pageable)
+                .map(this::mapToDefaultRoleResponseDto);
     }
 
     private DefaultRoleResponseDto mapToDefaultRoleResponseDto(Role role) {

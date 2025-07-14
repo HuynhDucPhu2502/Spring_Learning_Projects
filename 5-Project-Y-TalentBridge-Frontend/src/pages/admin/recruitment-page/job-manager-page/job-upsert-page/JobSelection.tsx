@@ -15,7 +15,7 @@ import type { CompanySummary } from "@/types/job";
 import { getCompaniesList } from "@/services/companyApi";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import Pagination from "@/components/custom/Pagination";
-import type { Company } from "@/types/company";
+import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { DialogDescription } from "@radix-ui/react-dialog";
@@ -64,7 +64,7 @@ const CompanySelection = ({
       const res = await getCompaniesList({ page, size, filter });
       const data = res.data.data;
 
-      const mapped: CompanySummary[] = data.content.map((company: Company) => ({
+      const mapped: CompanySummary[] = data.content.map((company: DefaultCompanyResponseDto) => ({
         id: company.id,
         name: company.name,
         address: company.address,

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CompanyForm } from "./CompanyForm";
-import type { Company } from "@/types/company";
+import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
 import {
   addCompany,
   deleteCompanyById,
@@ -19,7 +19,7 @@ import { CompanyTable } from "./CompanyTable";
 
 export default function CompanyManagerPage() {
   // Data
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const [companies, setCompanies] = useState<DefaultCompanyResponseDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Search
@@ -33,17 +33,17 @@ export default function CompanyManagerPage() {
   const [totalPages, setTotalPages] = useState(1);
 
   // Show Details Form
-  const [hoveredCompany, setHoveredCompany] = useState<Company | null>(null);
+  const [hoveredCompany, setHoveredCompany] = useState<DefaultCompanyResponseDto | null>(null);
   const [showDetailsSidebar, setShowDetailsSidebar] = useState(false);
 
   // Form State
-  const [editingCompany, setEditingCompany] = useState<Company | null>(null);
+  const [editingCompany, setEditingCompany] = useState<DefaultCompanyResponseDto | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   // ============================
   // HANDLE VIEW DETAILS
   // ============================
-  const handleViewDetails = (company: Company) => {
+  const handleViewDetails = (company: DefaultCompanyResponseDto) => {
     setHoveredCompany(company);
     setShowDetailsSidebar(true);
   };
@@ -56,7 +56,7 @@ export default function CompanyManagerPage() {
   // ============================
   // HANDLE OPEN FORM
   // ============================
-  const openEditForm = (company: Company) => {
+  const openEditForm = (company: DefaultCompanyResponseDto) => {
     setEditingCompany(company);
     setIsFormOpen(true);
     handleCloseSidebar();

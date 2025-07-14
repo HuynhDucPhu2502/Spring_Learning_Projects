@@ -1,14 +1,14 @@
-import type { Company } from "@/types/company";
+import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
 import { Building2, ChevronRight, MapPin, Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { getFirstLineFromHtml } from "@/utils/convertHelper";
+import { getFirstLineFromHtml } from "@/utils/convertHelper.ts";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { EmptyState } from "@/components/custom/EmptyState";
 import { useNavigate } from "react-router-dom";
 
 type CompanyGridProps = {
   isLoading: boolean;
-  companies: Company[];
+  companies: DefaultCompanyResponseDto[];
 };
 
 const CompanyGrid = ({ isLoading, companies }: CompanyGridProps) => {

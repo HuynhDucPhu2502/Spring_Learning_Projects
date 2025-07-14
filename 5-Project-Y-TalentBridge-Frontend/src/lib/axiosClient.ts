@@ -1,4 +1,4 @@
-import type { ApiResponse } from "@/types/apiResponse";
+import type { ApiResponse } from "@/types/apiResponse.types.ts";
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 

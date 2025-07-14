@@ -25,13 +25,12 @@ export function getFirstLineFromHtml(html: string): string {
     selectors: [{ selector: "a", format: "inline" }],
   });
 
-  const firstLine =
+  return (
     plainText
       .split(/\r?\n/)
       .find((line) => line.trim() !== "")
-      ?.trim() ?? "";
-
-  return firstLine;
+      ?.trim() ?? ""
+  );
 }
 
 export const formatSalary = (salary: number) => {

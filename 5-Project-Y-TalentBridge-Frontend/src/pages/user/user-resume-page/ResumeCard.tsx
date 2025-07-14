@@ -12,7 +12,7 @@ import { FileX, MapPin, Sparkles } from "lucide-react";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import JobInfoDialog from "./JobInfoDialog";
 import { UpdateResumeDialog } from "./UpdateResumeDialog";
-import { formatISO } from "@/utils/convertHelper";
+import { formatISO } from "@/utils/convertHelper.ts";
 import { Badge } from "@/components/ui/badge";
 
 type Props = {

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CompanyResponseDto {
+public class DefaultCompanyResponseDto {
 
     private Long id;
     private String name;

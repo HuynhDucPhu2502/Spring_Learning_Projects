@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
-import { formatISO } from "@/utils/convertHelper";
+import { formatISO } from "@/utils/convertHelper.ts";
 import type { Job } from "@/types/job";
 import RichTextPreview from "@/components/custom/RichText/index-preview";
 

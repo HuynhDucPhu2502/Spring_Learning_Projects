@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import type {
   DefaultPermissionRequestDto,
   DefaultPermissionResponseDto,
-} from "@/types/permission";
+} from "@/types/permission.types.ts";
 import {
   Select,
   SelectContent,
@@ -67,7 +67,7 @@ export function PermissionForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData, (initialData as any)?.id);
+    onSubmit(formData, initialData?.id);
     setFormData({ name: "", apiPath: "", method: "", module: "" });
     onOpenChange(false);
     onCloseForm?.();

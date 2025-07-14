@@ -8,18 +8,18 @@ import {
 } from "@/components/ui/table";
 import { Building2, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Company } from "@/types/company";
+import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { EmptyState } from "@/components/custom/EmptyState";
-import { formatISO } from "@/utils/convertHelper";
+import { formatISO } from "@/utils/convertHelper.ts";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 
 interface CompanyTableProps {
-  companies: Company[];
+  companies: DefaultCompanyResponseDto[];
   isLoading: boolean;
-  hoveredCompany: Company | null;
-  onViewDetails: (company: Company) => void;
-  onEdit: (company: Company) => void;
+  hoveredCompany: DefaultCompanyResponseDto | null;
+  onViewDetails: (company: DefaultCompanyResponseDto) => void;
+  onEdit: (company: DefaultCompanyResponseDto) => void;
   onDelete: (id: number) => void;
 }
 

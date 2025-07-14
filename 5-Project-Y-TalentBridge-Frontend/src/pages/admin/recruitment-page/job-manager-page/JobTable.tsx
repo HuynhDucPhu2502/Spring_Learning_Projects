@@ -11,9 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { Edit, Briefcase } from "lucide-react";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { EmptyState } from "@/components/custom/EmptyState";
-import { formatISO } from "@/utils/convertHelper";
+import { formatISO } from "@/utils/convertHelper.ts";
 import type { Job } from "@/types/job";
-import { levelColors } from "@/utils/jobFieldHelper";
+import { levelColors } from "@/utils/tagColorMapper.ts";
 
 interface JobTableProps {
   jobs: Job[];

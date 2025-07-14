@@ -2,9 +2,9 @@ package me.huynhducphu.talent_bridge.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.talent_bridge.dto.request.company.CompanyRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.company.CompanyExtendedResponseDto;
-import me.huynhducphu.talent_bridge.dto.response.company.CompanyResponseDto;
+import me.huynhducphu.talent_bridge.dto.request.company.DefaultCompanyRequestDto;
+import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyExtendedResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.model.CompanyLogo;
 import me.huynhducphu.talent_bridge.repository.CompanyLogoRepository;
@@ -34,7 +34,7 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
     private final S3Service s3Service;
 
     @Override
-    public CompanyResponseDto saveCompany(CompanyRequestDto dto, MultipartFile logoFile) {
+    public DefaultCompanyResponseDto saveCompany(DefaultCompanyRequestDto dto, MultipartFile logoFile) {
         Company company = new Company(dto.getName(), dto.getDescription(), dto.getAddress());
 
         Company savedCompany = companyRepository.saveAndFlush(company);
@@ -55,7 +55,7 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
     }
 
     @Override
-    public CompanyResponseDto updateCompany(CompanyRequestDto dto, Long id, MultipartFile logoFile) {
+    public DefaultCompanyResponseDto updateCompany(DefaultCompanyRequestDto dto, Long id, MultipartFile logoFile) {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công ty"));
 
@@ -79,27 +79,27 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
     }
 
     @Override
-    public Page<CompanyResponseDto> findAllCompanies(Specification<Company> spec, Pageable pageable) {
+    public Page<DefaultCompanyResponseDto> findAllCompanies(Specification<Company> spec, Pageable pageable) {
         return companyRepository.findAll(spec, pageable)
                 .map(this::mapToResponseDto);
     }
 
 
     @Override
-    public Page<CompanyExtendedResponseDto> findAllCompaniesWithJobsCount(Specification<Company> spec, Pageable pageable) {
+    public Page<DefaultCompanyExtendedResponseDto> findAllCompaniesWithJobsCount(Specification<Company> spec, Pageable pageable) {
         return companyRepository.findAll(spec, pageable)
                 .map(this::mapToExtendedResponseDto);
     }
 
     @Override
-    public CompanyResponseDto findCompanyById(Long id) {
+    public DefaultCompanyResponseDto findCompanyById(Long id) {
         return companyRepository.findById(id)
                 .map(this::mapToResponseDto)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công ty"));
     }
 
     @Override
-    public CompanyResponseDto deleteCompanyById(Long id) {
+    public DefaultCompanyResponseDto deleteCompanyById(Long id) {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công ty"));
 
@@ -115,14 +115,14 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         return mapToResponseDto(company);
     }
 
-    private CompanyResponseDto mapToResponseDto(Company company) {
+    private DefaultCompanyResponseDto mapToResponseDto(Company company) {
         String logoUrl = null;
 
         if (company.getCompanyLogo() != null)
             logoUrl = company.getCompanyLogo().getLogoUrl();
 
 
-        return new CompanyResponseDto(
+        return new DefaultCompanyResponseDto(
                 company.getId(),
                 company.getName(),
                 company.getDescription(),
@@ -133,7 +133,7 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         );
     }
 
-    private CompanyExtendedResponseDto mapToExtendedResponseDto(Company company) {
+    private DefaultCompanyExtendedResponseDto mapToExtendedResponseDto(Company company) {
         String logoUrl = null;
 
         if (company.getCompanyLogo() != null)
@@ -142,7 +142,7 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         Long jobsCount = jobRepository.countByCompanyId(company.getId());
 
 
-        return new CompanyExtendedResponseDto(
+        return new DefaultCompanyExtendedResponseDto(
                 company.getId(),
                 company.getName(),
                 company.getDescription(),

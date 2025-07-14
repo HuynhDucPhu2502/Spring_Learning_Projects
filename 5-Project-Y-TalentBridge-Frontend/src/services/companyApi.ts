@@ -3,8 +3,8 @@ import type {
   ApiResponse,
   PageResponseDto,
   PaginationParams,
-} from "@/types/apiResponse";
-import type { Company } from "@/types/company";
+} from "@/types/apiResponse.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
 
 export const getCompaniesList = ({
   page = 0,
@@ -18,7 +18,7 @@ export const getCompaniesList = ({
 
   if (filter) params.append("filter", filter);
 
-  return axiosClient.get<ApiResponse<PageResponseDto<Company>>>(
+  return axiosClient.get<ApiResponse<PageResponseDto<DefaultCompanyResponseDto>>>(
     `/companies?${params.toString()}`,
   );
 };
@@ -35,13 +35,13 @@ export const getCompaniesListWithJobsCount = ({
 
   if (filter) params.append("filter", filter);
 
-  return axiosClient.get<ApiResponse<PageResponseDto<Company>>>(
+  return axiosClient.get<ApiResponse<PageResponseDto<DefaultCompanyResponseDto>>>(
     `/companies/with-jobs-count?${params.toString()}`,
   );
 };
 
 export const getCompanyById = (id: number) => {
-  return axiosClient.get<ApiResponse<Company>>(`/companies/${id}`);
+  return axiosClient.get<ApiResponse<DefaultCompanyResponseDto>>(`/companies/${id}`);
 };
 
 export const deleteCompanyById = (id: number) => {

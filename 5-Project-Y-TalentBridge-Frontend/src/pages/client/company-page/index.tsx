@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Company } from "@/types/company";
+import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { getCompaniesListWithJobsCount } from "@/services/companyApi";
@@ -9,7 +9,7 @@ import { CompanySearchSection } from "./CompanySearchSection";
 
 export default function CompanyClientPage() {
   // Data
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const [companies, setCompanies] = useState<DefaultCompanyResponseDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Search

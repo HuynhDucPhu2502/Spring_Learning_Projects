@@ -5,7 +5,7 @@ import { getJobByCompanyId } from "@/services/jobApi";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
-import type { Company } from "@/types/company";
+import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
 import type { Job } from "@/types/job";
 import JobsSection from "./JobsSection";
 import CompanySection from "./CompanySection";
@@ -19,12 +19,12 @@ import {
 } from "@/components/ui/breadcrumb";
 
 type CompanyDetailsProp = {
-  initialCompany?: Company;
+  initialCompany?: DefaultCompanyResponseDto;
 };
 
 const CompanyDetailsClientPage = ({ initialCompany }: CompanyDetailsProp) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [company, setCompany] = useState<Company | undefined>(initialCompany);
+  const [company, setCompany] = useState<DefaultCompanyResponseDto | undefined>(initialCompany);
   const [jobs, setJobs] = useState<Job[]>([]);
   const { id } = useParams();
   const navigate = useNavigate();

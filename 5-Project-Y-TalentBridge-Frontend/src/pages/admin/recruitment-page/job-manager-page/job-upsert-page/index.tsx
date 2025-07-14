@@ -29,7 +29,7 @@ import CompanySelection from "./JobSelection";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
 import { getJobById, saveJob, updateJobById } from "@/services/jobApi";
-import { formatISOToYMD } from "@/utils/convertHelper";
+import { formatISOToYMD } from "@/utils/convertHelper.ts";
 
 const levels = [
   { value: "INTERN", label: "Intern" },

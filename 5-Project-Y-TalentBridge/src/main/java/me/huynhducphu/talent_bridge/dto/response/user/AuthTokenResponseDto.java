@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * Admin 6/9/2025
  **/
@@ -28,6 +30,7 @@ public class AuthTokenResponseDto {
         private String email;
         private String name;
         private Long id;
+        private List<String> permissions;
     }
 
 }
