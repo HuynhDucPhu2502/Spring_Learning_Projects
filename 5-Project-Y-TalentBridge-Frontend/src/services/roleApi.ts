@@ -4,7 +4,10 @@ import type {
   PaginationParams,
 } from "@/types/apiResponse.types.ts";
 import axiosClient from "@/lib/axiosClient.ts";
-import type { DefaultRoleResponseDto } from "@/types/role.types.ts";
+import type {
+  DefaultRoleRequestDto,
+  DefaultRoleResponseDto,
+} from "@/types/role.types.ts";
 
 export const getRolesList = ({
   page = 0,
@@ -21,4 +24,19 @@ export const getRolesList = ({
   return axiosClient.get<ApiResponse<PageResponseDto<DefaultRoleResponseDto>>>(
     `/roles?${params.toString()}`,
   );
+};
+
+export const saveRole = (data: DefaultRoleRequestDto) => {
+  return axiosClient.post<ApiResponse<DefaultRoleResponseDto>>("/roles", data);
+};
+
+export const updateRoleById = (id: number, data: DefaultRoleRequestDto) => {
+  return axiosClient.put<ApiResponse<DefaultRoleResponseDto>>(
+    `/roles/${id}`,
+    data,
+  );
+};
+
+export const deleteRoleById = (id: number) => {
+  return axiosClient.delete(`/roles/${id}`);
 };

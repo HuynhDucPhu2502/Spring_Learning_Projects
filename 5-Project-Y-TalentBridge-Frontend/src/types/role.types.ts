@@ -1,4 +1,3 @@
-
 // =============================
 // MAIN INTERFACE
 // =============================
@@ -12,12 +11,12 @@ export interface DefaultRoleRequestDto {
 export interface DefaultRoleResponseDto {
   id: number;
   name: string;
+  description: string;
   active: boolean;
   createdAt: string;
   updatedAt: string;
   permissions: PermissionForRole[];
 }
-
 
 // =============================
 // SECOND INTERFACE

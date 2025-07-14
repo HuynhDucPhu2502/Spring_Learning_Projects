@@ -1,13 +1,22 @@
-import type { DefaultRoleResponseDto } from "@/types/role.types.ts";
+import type {
+  DefaultRoleRequestDto,
+  DefaultRoleResponseDto,
+} from "@/types/role.types.ts";
 import { useEffect, useState } from "react";
 import { RoleSearchSection } from "@/pages/admin/access-control-page/role-page/RoleSearchSection.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Plus } from "lucide-react";
 import Pagination from "@/components/custom/Pagination.tsx";
-import { getRolesList } from "@/services/roleApi.ts";
+import {
+  deleteRoleById,
+  getRolesList,
+  saveRole,
+  updateRoleById,
+} from "@/services/roleApi.ts";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { RoleTable } from "@/pages/admin/access-control-page/role-page/RoleTable.tsx";
+import { RoleForm } from "@/pages/admin/access-control-page/role-page/RoleForm.tsx";
 
 const RoleManagerPage = () => {
   // Data
@@ -23,16 +32,17 @@ const RoleManagerPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
 
-  // Form State
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingRole, setEditingRole] = useState<DefaultRoleResponseDto | null>(
-    null,
-  );
+  // ============================
+  // Dialog State
+  // ============================
+  const [isDialogOpen, setisDialogOpen] = useState(false);
+  const [selectedRole, setSelectedRole] =
+    useState<DefaultRoleResponseDto | null>(null);
 
   // ============================
   // HANDLE FETCHING DATA
   // ============================
-  const fetchPermissions = async (
+  const fetchRoles = async (
     page: number,
     size: number,
     searchRoleName: string,
@@ -58,27 +68,84 @@ const RoleManagerPage = () => {
   };
 
   useEffect(() => {
-    fetchPermissions(1, itemsPerPage, searchRoleName);
+    fetchRoles(1, itemsPerPage, searchRoleName);
     setCurrentPage(1);
   }, [itemsPerPage, searchRoleName]);
 
   useEffect(() => {
-    fetchPermissions(currentPage, itemsPerPage, searchRoleName);
+    fetchRoles(currentPage, itemsPerPage, searchRoleName);
   }, [currentPage, itemsPerPage, searchRoleName]);
+
+  // ============================
+  // HANDLE RESET
+  // ============================
+  const handleReset = () => {
+    setSearchRoleName("");
+    setCurrentPage(1);
+  };
+
+  // ============================
+  // HANDLE CREATE OR UPDATE
+  // ============================
+  const handleSubmitUpsert = async (
+    data: DefaultRoleRequestDto,
+    id?: number,
+  ) => {
+    try {
+      setIsLoading(true);
+
+      if (id) {
+        await updateRoleById(id, data);
+        await fetchRoles(1, itemsPerPage, searchRoleName);
+        toast.success("Cập nhật chức vụ mới thành công");
+      } else {
+        await saveRole(data);
+        await fetchRoles(1, itemsPerPage, searchRoleName);
+        toast.success("Tạo chức vụ mới thành công");
+      }
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Thao tác thất bại"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleOpenUpdateDialog = (role: DefaultRoleResponseDto) => {
+    setisDialogOpen(true);
+    setSelectedRole(role);
+  };
+
+  // ============================
+  // HANDLE DELETE
+  // ============================
+  const handleDelete = async (id: number) => {
+    try {
+      setIsLoading(true);
+
+      await deleteRoleById(id);
+      await fetchRoles(1, itemsPerPage, searchRoleName);
+
+      toast.success("Xóa chức vụ thành công");
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Thao tác thất bại"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
       <RoleSearchSection
         searchRoleName={searchRoleName}
         setSearchRoleName={setSearchRoleName}
-        onReset={() => {}}
+        onReset={handleReset}
       />
 
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Danh sách chức vụ</h2>
         <Button
           className="bg-blue-600 hover:bg-blue-700"
-          // onClick={openCreateForm}
+          onClick={() => setisDialogOpen(true)}
         >
           <Plus className="mr-2 h-4 w-4" />
           Thêm chức vụ
@@ -88,8 +155,8 @@ const RoleManagerPage = () => {
       <RoleTable
         roles={roles}
         isLoading={isLoading}
-        onEdit={(role) => {}}
-        onDelete={(id) => {}}
+        onEdit={handleOpenUpdateDialog}
+        onDelete={handleDelete}
       />
 
       <Pagination
@@ -100,6 +167,14 @@ const RoleManagerPage = () => {
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
         showItemsPerPageSelect={true}
+      />
+
+      <RoleForm
+        open={isDialogOpen}
+        onOpenChange={setisDialogOpen}
+        initialData={selectedRole}
+        onSubmit={handleSubmitUpsert}
+        onCloseForm={() => setSelectedRole(null)}
       />
     </div>
   );
