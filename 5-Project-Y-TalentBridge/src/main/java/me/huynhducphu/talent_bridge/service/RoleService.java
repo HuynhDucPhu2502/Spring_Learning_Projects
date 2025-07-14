@@ -21,4 +21,6 @@ public interface RoleService {
     Page<DefaultRoleResponseDto> findAllRoles(
             Specification<Role> spec,
             Pageable pageable);
+
+    DefaultRoleResponseDto deleteRoleById(Long id);
 }

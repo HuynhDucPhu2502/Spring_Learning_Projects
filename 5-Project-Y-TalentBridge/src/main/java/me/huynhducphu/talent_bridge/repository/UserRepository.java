@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,13 +22,13 @@ public interface UserRepository extends
 
     boolean existsByEmail(String email);
 
-    boolean existsByEmailAndIdNot(String email, Long id);
-
     Optional<User> findByEmail(String email);
 
     @Modifying
     @Query("UPDATE User u SET u.company = null WHERE u.company = :company")
     void detachUsersFromCompany(@Param("company") Company company);
 
-
+    @Modifying
+    @Query("UPDATE User u SET u.role = null WHERE u.role.id = :roleId")
+    void detachUsersFromRole(@Param("roleId") Long roleId);
 }

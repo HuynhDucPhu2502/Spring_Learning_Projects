@@ -68,5 +68,11 @@ public class RoleController {
         return ResponseEntity.ok(res);
     }
 
+    @DeleteMapping("/{id}")
+    @ApiMessage(value = "Xóa role theo id")
+    public ResponseEntity<DefaultRoleResponseDto> deleteRoleById(@PathVariable Long id) {
+        return ResponseEntity.ok(roleService.deleteRoleById(id));
+    }
+
 
 }

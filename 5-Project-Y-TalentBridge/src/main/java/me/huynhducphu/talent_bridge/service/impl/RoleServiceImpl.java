@@ -8,6 +8,7 @@ import me.huynhducphu.talent_bridge.model.Permission;
 import me.huynhducphu.talent_bridge.model.Role;
 import me.huynhducphu.talent_bridge.repository.PermissionRepository;
 import me.huynhducphu.talent_bridge.repository.RoleRepository;
+import me.huynhducphu.talent_bridge.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,6 +30,7 @@ public class RoleServiceImpl implements me.huynhducphu.talent_bridge.service.Rol
 
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
+    private final UserRepository userRepository;
 
     @Override
     public DefaultRoleResponseDto saveRole(DefaultRoleRequestDto defaultRoleRequestDto) {
@@ -104,6 +106,21 @@ public class RoleServiceImpl implements me.huynhducphu.talent_bridge.service.Rol
         return roleRepository
                 .findAll(spec, pageable)
                 .map(this::mapToDefaultRoleResponseDto);
+    }
+
+    @Override
+    public DefaultRoleResponseDto deleteRoleById(Long id) {
+        Role role = roleRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Chức vụ không tồn tại"));
+
+        DefaultRoleResponseDto defaultRoleResponseDto = mapToDefaultRoleResponseDto(role);
+
+        if (role.getPermissions() != null) role.getPermissions().clear();
+        userRepository.detachUsersFromRole(role.getId());
+
+        roleRepository.delete(role);
+        return defaultRoleResponseDto;
     }
 
     private DefaultRoleResponseDto mapToDefaultRoleResponseDto(Role role) {
