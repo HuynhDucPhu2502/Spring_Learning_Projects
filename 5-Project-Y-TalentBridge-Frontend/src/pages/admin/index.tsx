@@ -1,18 +1,13 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { useAppDispatch, useAppSelector } from "@/features/hooks";
-import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
-import { getAccount } from "@/features/slices/auth/authThunk";
+import { useAppSelector } from "@/features/hooks";
+import { Navigate, Outlet } from "react-router-dom";
 import { AdminTopBar } from "./Topbar";
 import { AdminSidebar } from "./Sidebar";
 
 const AdminPage = () => {
-  const dispatch = useAppDispatch();
   const { isLogin } = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!isLogin) dispatch(getAccount());
-  }, [isLogin, dispatch]);
+  if (!isLogin) return <Navigate to={"/home"} replace />;
 
   return (
     <SidebarProvider>

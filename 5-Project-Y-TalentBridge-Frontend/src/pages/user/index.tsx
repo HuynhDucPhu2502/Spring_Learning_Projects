@@ -1,6 +1,6 @@
 import { User, BarChart3, Settings } from "lucide-react";
 import { useAppSelector } from "@/features/hooks";
-import { NavLink, Outlet } from "react-router-dom";
+import { Navigate, NavLink, Outlet } from "react-router-dom";
 
 const navigationItems = [
   { title: "Thông tin", icon: User, href: "info" },
@@ -9,7 +9,11 @@ const navigationItems = [
 ];
 
 export default function UserPage() {
-  const { user } = useAppSelector((state) => state.auth);
+  const { isLogin, user } = useAppSelector((state) => state.auth);
+
+  if (!isLogin || !user) {
+    return <Navigate to="/auth?mode=login" replace />;
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100 p-4">
@@ -18,7 +22,7 @@ export default function UserPage() {
         className={`hidden w-64 transform rounded-lg bg-white shadow-lg lg:block`}
         style={{ height: "fit-content", maxHeight: "80vh" }}
       >
-        {/* Welcome Header */}
+        {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-200 p-6">
           <h1 className="text-xl font-semibold text-gray-800">
             Xin chào <span className="text-yellow-500">{user.name}</span>!
