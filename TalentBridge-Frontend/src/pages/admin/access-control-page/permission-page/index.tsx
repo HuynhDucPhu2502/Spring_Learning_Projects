@@ -20,7 +20,7 @@ import { PermissionForm } from "./PermissionForm";
 
 const PermissionManagerPage = () => {
   // Data
-  const [Permissions, setPermissions] = useState<
+  const [permissions, setPermissions] = useState<
     DefaultPermissionResponseDto[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,8 +39,18 @@ const PermissionManagerPage = () => {
   // Dialog State
   // ============================
   const [isDialogOpen, setisDialogOpen] = useState(false);
-  const [selectedPermission, setselectedPermission] =
+  const [selectedPermission, setSelectedPermission] =
     useState<DefaultPermissionResponseDto | null>(null);
+
+  const handleOpenCreateForm = () => {
+    setSelectedPermission(null);
+    setisDialogOpen(true);
+  };
+
+  const handleOpenEditForm = (permission: DefaultPermissionResponseDto) => {
+    setSelectedPermission(permission);
+    setisDialogOpen(true);
+  };
 
   // ============================
   // HANDLE FETCHING DATA
@@ -116,11 +126,6 @@ const PermissionManagerPage = () => {
     }
   };
 
-  const handleOpenUpdateDialog = (permission: DefaultPermissionResponseDto) => {
-    setisDialogOpen(true);
-    setselectedPermission(permission);
-  };
-
   // ============================
   // HANDLE DELETE
   // ============================
@@ -153,7 +158,7 @@ const PermissionManagerPage = () => {
         <h2 className="text-lg font-semibold">Danh sách Kỹ năng</h2>
         <Button
           className="bg-blue-600 hover:bg-blue-700"
-          onClick={() => setisDialogOpen(true)}
+          onClick={handleOpenCreateForm}
         >
           <Plus className="mr-2 h-4 w-4" />
           Thêm quyền hạn
@@ -161,10 +166,10 @@ const PermissionManagerPage = () => {
       </div>
 
       <PermissionTable
-        permissions={Permissions}
+        permissions={permissions}
         isLoading={isLoading}
         onDelete={handleDelete}
-        onEdit={handleOpenUpdateDialog}
+        onEdit={handleOpenEditForm}
       />
 
       <Pagination
@@ -182,7 +187,7 @@ const PermissionManagerPage = () => {
         onOpenChange={setisDialogOpen}
         initialData={selectedPermission}
         onSubmit={handleSubmitUpsert}
-        onCloseForm={() => setselectedPermission(null)}
+        onCloseForm={() => setSelectedPermission(null)}
       />
     </div>
   );

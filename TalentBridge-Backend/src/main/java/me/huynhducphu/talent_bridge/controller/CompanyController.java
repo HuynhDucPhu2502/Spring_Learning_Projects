@@ -1,6 +1,8 @@
 package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +33,13 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @PostMapping
-    @ApiMessage(value = "Tạo công ty")
+    @ApiMessage(value = "Tạo Company")
+    @PreAuthorize("hasAuthority('POST /companies')")
+    @Operation(
+            summary = "Tạo Company",
+            description = "Yêu cầu quyền: <b>POST /companies</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<?> saveCompany(
             @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
             @RequestPart(value = "logoFile", required = false) MultipartFile logoFile
@@ -41,7 +50,13 @@ public class CompanyController {
     }
 
     @PutMapping(value = "/{id}")
-    @ApiMessage(value = "Cập nhật công ty theo mã")
+    @ApiMessage(value = "Cập nhật Company theo id")
+    @PreAuthorize("hasAuthority('PUT /companies/{id}')")
+    @Operation(
+            summary = "Cập nhật Company theo id",
+            description = "Yêu cầu quyền: <b>PUT /companies/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<?> updateCompany(
             @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
             @RequestPart(value = "logoFile", required = false) MultipartFile logoFile,
@@ -51,7 +66,13 @@ public class CompanyController {
     }
 
     @GetMapping
-    @ApiMessage(value = "Lấy danh sách công ty")
+    @ApiMessage(value = "Lấy danh sách Company")
+    @PreAuthorize("hasAuthority('GET /companies')")
+    @Operation(
+            summary = "Lấy danh sách Company",
+            description = "Yêu cầu quyền: <b>GET /companies</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<?> findAllCompanies(
             @Filter Specification<Company> spec,
             @PageableDefault(size = 5) Pageable pageable
@@ -70,7 +91,13 @@ public class CompanyController {
     }
 
     @GetMapping("/with-jobs-count")
-    @ApiMessage(value = "Lấy danh sách công ty")
+    @ApiMessage(value = "Lấy danh sách Company kèm với số lượng nghề")
+    @PreAuthorize("hasAuthority('GET /companies/with-jobs-count')")
+    @Operation(
+            summary = "Lấy danh sách Company kèm với số lượng nghề",
+            description = "Yêu cầu quyền: <b>GET /companies/with-jobs-count</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<?> findAllCompaniesWithJobsCount(
             @Filter Specification<Company> spec,
             @PageableDefault(size = 9) Pageable pageable
@@ -89,13 +116,25 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    @ApiMessage(value = "Lấy công ty theo mã")
+    @ApiMessage(value = "Lấy Company theo id")
+    @PreAuthorize("hasAuthority('GET /companies/{id}')")
+    @Operation(
+            summary = "Lấy Company theo id",
+            description = "Yêu cầu quyền: <b>GET /companies/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<DefaultCompanyResponseDto> findCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.findCompanyById(id));
     }
 
     @DeleteMapping("/{id}")
-    @ApiMessage(value = "Xóa công ty theo mã")
+    @ApiMessage(value = "Xóa company theo id")
+    @PreAuthorize("hasAuthority('DELETE /companies/{id}')")
+    @Operation(
+            summary = "Xóa company theo id",
+            description = "Yêu cầu quyền: <b>DELETE /companies/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<?> deleteCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(
                 new ApiResponse<>(

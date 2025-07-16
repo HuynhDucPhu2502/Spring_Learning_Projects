@@ -129,7 +129,8 @@ public class RoleServiceImpl implements me.huynhducphu.talent_bridge.service.Rol
                 role.isActive(),
                 role.getName(),
                 role.getCreatedAt().toString(),
-                role.getUpdatedAt().toString()
+                role.getUpdatedAt().toString(),
+                role.getDescription()
         );
 
         List<DefaultRoleResponseDto.Permission> permissions = role.getPermissions()

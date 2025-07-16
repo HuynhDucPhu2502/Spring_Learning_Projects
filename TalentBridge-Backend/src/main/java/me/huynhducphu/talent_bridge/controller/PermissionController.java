@@ -18,6 +18,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 /**
  * Admin 7/10/2025
@@ -48,6 +50,19 @@ public class PermissionController {
 
         return ResponseEntity.ok(res);
     }
+
+    @GetMapping("/all")
+    @ApiMessage("Lấy toàn bộ quyền hạn (không phân trang)")
+    public ResponseEntity<?> findAllPermissionsNoPaging(
+            @Filter Specification<Permission> spec
+    ) {
+        List<DefaultPermissionResponseDto> list = permissionService
+                .findAllPermission(spec, Pageable.unpaged())
+                .getContent();
+
+        return ResponseEntity.ok(list);
+    }
+
 
     @PostMapping
     @ApiMessage(value = "Tạo quyền hạn")

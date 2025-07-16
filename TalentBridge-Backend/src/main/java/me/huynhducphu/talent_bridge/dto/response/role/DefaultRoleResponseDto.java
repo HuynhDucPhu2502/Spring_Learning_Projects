@@ -16,6 +16,7 @@ public class DefaultRoleResponseDto {
 
     private Long id;
     private String name;
+    private String description;
     private boolean active;
     private String createdAt;
     private String updatedAt;
@@ -32,11 +33,15 @@ public class DefaultRoleResponseDto {
         private String module;
     }
 
-    public DefaultRoleResponseDto(Long id, boolean active, String name, String createdAt, String updatedAt) {
+    public DefaultRoleResponseDto(
+            Long id, boolean active, String name,
+            String createdAt, String updatedAt, String description
+    ) {
         this.id = id;
         this.active = active;
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.description = description;
     }
 }

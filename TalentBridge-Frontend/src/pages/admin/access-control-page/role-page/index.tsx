@@ -17,10 +17,15 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { RoleTable } from "@/pages/admin/access-control-page/role-page/RoleTable.tsx";
 import { RoleForm } from "@/pages/admin/access-control-page/role-page/RoleForm.tsx";
+import { getAllPermissionsNoPaging } from "@/services/permissionApi";
+import type { DefaultPermissionResponseDto } from "@/types/permission.types";
 
 const RoleManagerPage = () => {
   // Data
   const [roles, setRoles] = useState<DefaultRoleResponseDto[]>([]);
+  const [permissions, setPermissions] = useState<
+    DefaultPermissionResponseDto[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Search
@@ -38,6 +43,16 @@ const RoleManagerPage = () => {
   const [isDialogOpen, setisDialogOpen] = useState(false);
   const [selectedRole, setSelectedRole] =
     useState<DefaultRoleResponseDto | null>(null);
+
+  const handleOpenCreateForm = () => {
+    setSelectedRole(null);
+    setisDialogOpen(true);
+  };
+
+  const handleOpenEditForm = (role: DefaultRoleResponseDto) => {
+    setSelectedRole(role);
+    setisDialogOpen(true);
+  };
 
   // ============================
   // HANDLE FETCHING DATA
@@ -76,6 +91,23 @@ const RoleManagerPage = () => {
     fetchRoles(currentPage, itemsPerPage, searchRoleName);
   }, [currentPage, itemsPerPage, searchRoleName]);
 
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      setIsLoading(true);
+
+      try {
+        const res = (await getAllPermissionsNoPaging()).data;
+        setPermissions(res.data);
+      } catch (err) {
+        toast.error(getErrorMessage(err, "Không thể lấy danh sách công ty."));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPermissions();
+  }, []);
+
   // ============================
   // HANDLE RESET
   // ============================
@@ -110,11 +142,6 @@ const RoleManagerPage = () => {
     }
   };
 
-  const handleOpenUpdateDialog = (role: DefaultRoleResponseDto) => {
-    setisDialogOpen(true);
-    setSelectedRole(role);
-  };
-
   // ============================
   // HANDLE DELETE
   // ============================
@@ -145,7 +172,7 @@ const RoleManagerPage = () => {
         <h2 className="text-lg font-semibold">Danh sách chức vụ</h2>
         <Button
           className="bg-blue-600 hover:bg-blue-700"
-          onClick={() => setisDialogOpen(true)}
+          onClick={handleOpenCreateForm}
         >
           <Plus className="mr-2 h-4 w-4" />
           Thêm chức vụ
@@ -155,7 +182,7 @@ const RoleManagerPage = () => {
       <RoleTable
         roles={roles}
         isLoading={isLoading}
-        onEdit={handleOpenUpdateDialog}
+        onEdit={handleOpenEditForm}
         onDelete={handleDelete}
       />
 
@@ -175,6 +202,7 @@ const RoleManagerPage = () => {
         initialData={selectedRole}
         onSubmit={handleSubmitUpsert}
         onCloseForm={() => setSelectedRole(null)}
+        permissions={permissions}
       />
     </div>
   );
