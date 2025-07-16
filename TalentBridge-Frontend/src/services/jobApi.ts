@@ -36,7 +36,7 @@ export const getJobById = (id: number) => {
 };
 
 export const getJobByCompanyId = (id: number) => {
-  return axiosClient.get<ApiResponse<Job[]>>(`/jobs/company/${id}`);
+  return axiosClient.get<ApiResponse<Job[]>>(`/jobs/companies/${id}`);
 };
 
 export const deleteJobById = (id: number) => {
