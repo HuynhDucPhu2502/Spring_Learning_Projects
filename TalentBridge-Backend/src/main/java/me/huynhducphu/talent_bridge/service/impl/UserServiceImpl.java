@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.user.UserCreateRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.user.UserUpdateRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.user.UserResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.user.DefaultUserResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.model.Role;
 import me.huynhducphu.talent_bridge.model.User;
@@ -34,28 +34,25 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponseDto saveUser(UserCreateRequestDto userCreateRequestDto) {
+    public DefaultUserResponseDto saveUser(UserCreateRequestDto userCreateRequestDto) {
 
         if (userRepository.existsByEmail(userCreateRequestDto.getEmail()))
             throw new DataIntegrityViolationException("Email đã tồn tại");
 
-        User user = new User();
-        user.setName(userCreateRequestDto.getName());
-        user.setEmail(userCreateRequestDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userCreateRequestDto.getPassword()));
-        user.setAge(userCreateRequestDto.getAge());
-        user.setAddress(userCreateRequestDto.getAddress());
-        user.setGender(userCreateRequestDto.getGender());
+        User user = new User(
+                userCreateRequestDto.getName(),
+                userCreateRequestDto.getEmail(),
+                passwordEncoder.encode(userCreateRequestDto.getPassword()),
+                userCreateRequestDto.getAge(),
+                userCreateRequestDto.getAddress(),
+                userCreateRequestDto.getGender()
+        );
 
-        if (userCreateRequestDto.getCompany() != null) {
-            Company company = handleFindCompany(userCreateRequestDto.getCompany().getId());
-            user.setCompany(company);
-        }
+        if (userCreateRequestDto.getCompany() != null)
+            handleSetCompany(user, userCreateRequestDto.getCompany().getId());
 
-        if (userCreateRequestDto.getRole() != null) {
-            Role role = handleFindRole(userCreateRequestDto.getRole().getId());
-            user.setRole(role);
-        }
+        if (userCreateRequestDto.getRole() != null)
+            handleSetRole(user, userCreateRequestDto.getRole().getId());
 
 
         User savedUser = userRepository.saveAndFlush(user);
@@ -64,14 +61,14 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     }
 
     @Override
-    public Page<UserResponseDto> findAllUser(Specification<User> spec, Pageable pageable) {
+    public Page<DefaultUserResponseDto> findAllUser(Specification<User> spec, Pageable pageable) {
         return userRepository
                 .findAll(spec, pageable)
                 .map(this::mapToResponseDto);
     }
 
     @Override
-    public UserResponseDto findUserById(Long id) {
+    public DefaultUserResponseDto findUserById(Long id) {
         return userRepository
                 .findById(id)
                 .map(this::mapToResponseDto)
@@ -81,7 +78,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     }
 
     @Override
-    public UserResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto) {
+    public DefaultUserResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto) {
 
         User user = userRepository
                 .findById(userUpdateRequestDto.getId())
@@ -92,15 +89,12 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
         user.setAddress(userUpdateRequestDto.getAddress());
         user.setGender(userUpdateRequestDto.getGender());
 
-        if (userUpdateRequestDto.getCompany() != null) {
-            Company company = handleFindCompany(userUpdateRequestDto.getCompany().getId());
-            user.setCompany(company);
-        }
+        if (userUpdateRequestDto.getCompany() != null)
+            handleSetCompany(user, userUpdateRequestDto.getCompany().getId());
 
-        if (userUpdateRequestDto.getRole() != null) {
-            Role role = handleFindRole(userUpdateRequestDto.getRole().getId());
-            user.setRole(role);
-        }
+        if (userUpdateRequestDto.getRole() != null)
+            handleSetRole(user, userUpdateRequestDto.getRole().getId());
+
 
         User savedUser = userRepository.save(user);
 
@@ -108,7 +102,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     }
 
     @Override
-    public UserResponseDto deleteUserById(Long id) {
+    public DefaultUserResponseDto deleteUserById(Long id) {
         User user = userRepository
                 .findById(id)
                 .orElseThrow(() ->
@@ -126,22 +120,22 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
     }
 
-    public UserResponseDto mapToResponseDto(User user) {
-        UserResponseDto.CompanyInformationDto company = null;
+    private DefaultUserResponseDto mapToResponseDto(User user) {
+        DefaultUserResponseDto.CompanyInformationDto company = null;
         if (user.getCompany() != null)
-            company = new UserResponseDto.CompanyInformationDto(
+            company = new DefaultUserResponseDto.CompanyInformationDto(
                     user.getCompany().getId(),
                     user.getCompany().getName()
             );
 
-        UserResponseDto.RoleInformationDto role = null;
+        DefaultUserResponseDto.RoleInformationDto role = null;
         if (user.getRole() != null)
-            role = new UserResponseDto.RoleInformationDto(
+            role = new DefaultUserResponseDto.RoleInformationDto(
                     user.getRole().getId(),
                     user.getRole().getName()
             );
 
-        return new UserResponseDto(
+        return new DefaultUserResponseDto(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
@@ -155,16 +149,18 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
         );
     }
 
-    public Company handleFindCompany(Long id) {
-        return companyRepository
+    private void handleSetCompany(User user, Long id) {
+        Company company = companyRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy không công ty"));
+        user.setCompany(company);
     }
 
-    public Role handleFindRole(Long id) {
-        return roleService
+    private void handleSetRole(User user, Long id) {
+        Role role = roleService
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy không chức vụ"));
+        user.setRole(role);
     }
 
 

@@ -1,11 +1,11 @@
 import { useAppDispatch } from "@/features/hooks";
 import { login } from "@/features/slices/auth/authThunk";
-import type { loginForm } from "@/types/user";
+import type { loginRequestDto } from "@/types/user.types.ts";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function LoginPage() {
-  const [form, setForm] = useState<loginForm>({ email: "", password: "" });
+  const [form, setForm] = useState<loginRequestDto>({ email: "", password: "" });
   const [error, setError] = useState<string>("");
   const dispatch = useAppDispatch();
 

@@ -1,4 +1,4 @@
-import type { User } from "@/types/user";
+import type { UserSessionResponseDto } from "@/types/user.types.ts";
 import { createSlice } from "@reduxjs/toolkit";
 import { getAccount, login, logout, refreshToken } from "./authThunk";
 
@@ -6,7 +6,7 @@ import { getAccount, login, logout, refreshToken } from "./authThunk";
 // Slice
 // ===========================================
 type AuthState = {
-  user: User;
+  user: UserSessionResponseDto;
   isLogin: boolean;
   isLoading: boolean;
   error: string | null;

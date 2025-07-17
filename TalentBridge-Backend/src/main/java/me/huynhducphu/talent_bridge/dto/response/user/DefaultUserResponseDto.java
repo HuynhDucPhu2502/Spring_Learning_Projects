@@ -1,6 +1,5 @@
 package me.huynhducphu.talent_bridge.dto.response.user;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserResponseDto {
+public class DefaultUserResponseDto {
 
     private Long id;
     private String name;

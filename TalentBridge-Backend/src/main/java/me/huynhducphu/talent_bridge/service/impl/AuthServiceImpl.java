@@ -3,7 +3,11 @@ package me.huynhducphu.talent_bridge.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.config.auth.AuthConfiguration;
+import me.huynhducphu.talent_bridge.dto.request.user.LoginRequestDto;
+import me.huynhducphu.talent_bridge.dto.response.user.AuthResult;
 import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.user.UserSessionResponseDto;
 import me.huynhducphu.talent_bridge.model.Role;
 import me.huynhducphu.talent_bridge.model.common.RefreshToken;
 import me.huynhducphu.talent_bridge.model.User;
@@ -11,6 +15,9 @@ import me.huynhducphu.talent_bridge.repository.RefreshTokenRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
@@ -26,6 +33,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.AuthService {
 
+    private final AuthenticationManager authenticationManager;
+
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
@@ -39,31 +48,98 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     public Long refreshTokenExpiration;
 
     @Override
-    public String createAccessToken(User user) {
-        return buildJwt(accessTokenExpiration, user, false);
+    public void verifyLoginCredentials(LoginRequestDto loginRequestDto) {
+        // EXTRACT PRINCIPAL AND CREDENTIAL FROM REQUEST INTO TOKEN
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                loginRequestDto.getEmail(),
+                loginRequestDto.getPassword()
+        );
+
+        // VERIFY TOKEN + SAVE AUTHENTICATION INTO CONTEXT
+        Authentication authentication = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Override
-    public String createRefreshToken(User user) {
-        return buildJwt(refreshTokenExpiration, user, true);
-    }
-
-    @Override
-    public ResponseCookie createCookie(String refreshToken) {
+    public ResponseCookie logoutRemoveCookie() {
         return ResponseCookie
+                .from("refresh_token", "")
+                .httpOnly(true)
+                .path("/")
+                .sameSite("Strict")
+                .maxAge(0)
+                .build();
+    }
+
+    @Override
+    public AuthResult buildAuthResult(User user) {
+        String refreshToken = buildJwt(refreshTokenExpiration, user, true);
+        String accessToken = buildJwt(accessTokenExpiration, user, false);
+
+        ResponseCookie responseCookie = ResponseCookie
                 .from("refresh_token", refreshToken)
                 .httpOnly(true)
                 .path("/")
                 .sameSite("Strict")
                 .maxAge(refreshTokenExpiration)
                 .build();
+
+        AuthTokenResponseDto authTokenResponseDto = new AuthTokenResponseDto(
+                mapToUserInformation(user),
+                accessToken
+        );
+
+        return new AuthResult(authTokenResponseDto, responseCookie);
     }
+
+    @Override
+    public AuthResult buildAuthResult(String email) {
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        return buildAuthResult(user);
+    }
+
+    @Override
+    public UserSessionResponseDto getCurrentUser() {
+        String currentUserEmail = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        return mapToUserInformation(currentUserEmail);
+    }
+
+    @Override
+    public UserDetailsResponseDto getCurrentUserDetails() {
+        String currentUserEmail = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository
+                .findByEmail(currentUserEmail)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        return new UserDetailsResponseDto(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getAge(),
+                user.getAddress(),
+                user.getGender(),
+                user.getLogoUrl(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        );
+    }
+
 
     @Override
     public Jwt validateToken(String token) {
         return jwtDecoder.decode(token);
     }
-
 
     @Override
     public boolean isCurrentUser(User user) {
@@ -73,8 +149,8 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         return currentUserEmail.equalsIgnoreCase(targetUserEmail);
     }
 
-    @Override
-    public AuthTokenResponseDto.UserInformation mapToUserInformation(User user) {
+
+    private UserSessionResponseDto mapToUserInformation(User user) {
         if (user == null)
             throw new EntityNotFoundException("Không tìm thấy người dùng");
 
@@ -87,7 +163,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                     .map(x -> x.getMethod() + " " + x.getApiPath())
                     .toList();
 
-        return new AuthTokenResponseDto.UserInformation(
+        return new UserSessionResponseDto(
                 user.getEmail(),
                 user.getName(),
                 user.getId(),
@@ -95,8 +171,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         );
     }
 
-    @Override
-    public AuthTokenResponseDto.UserInformation mapToUserInformation(String email) {
+    private UserSessionResponseDto mapToUserInformation(String email) {
         if (email == null || email.isBlank())
             throw new EntityNotFoundException("Email không được để trống");
 

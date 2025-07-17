@@ -3,7 +3,7 @@ import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
 import { updateTokenManually } from "@/features/slices/auth/authSlice";
-import type { AuthResponse } from "@/types/user";
+import type { AuthTokenResponseDto } from "@/types/user.types.ts";
 import type { AppDispatch } from "@/features/store";
 import { logout } from "@/features/slices/auth/authThunk";
 
@@ -72,9 +72,11 @@ axiosClient.interceptors.response.use(
     };
 
     // Check lỗi có phải thuộc lại lỗi JWT Token
+    const { response } = error;
+    const errorCode = (response?.data as ApiResponse<null>)?.errorCode;
     const isUnauthorized =
-      error.response?.status === 401 &&
-      (error.response?.data as ApiResponse<null>)?.errorCode === "UNAUTHORIZED";
+      response?.status === 401 &&
+      (errorCode === "UNAUTHORIZED" || errorCode === "ACCESS_DENIED");
 
     if (isUnauthorized && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -116,7 +118,7 @@ axiosClient.interceptors.response.use(
 // Util Functions:
 // ============================================================
 const refreshTokenAndGetAuthResponse = async () => {
-  const res = await axios.post<ApiResponse<AuthResponse>>(
+  const res = await axios.post<ApiResponse<AuthTokenResponseDto>>(
     "http://localhost:8080/auth/refresh-token",
     {},
     { withCredentials: true },

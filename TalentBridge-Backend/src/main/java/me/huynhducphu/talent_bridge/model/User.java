@@ -41,6 +41,8 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    private String logoUrl;
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     @ToString.Exclude
@@ -54,5 +56,14 @@ public class User extends BaseEntity {
     @JoinColumn(name = "role_id")
     @ToString.Exclude
     private Role role;
+
+    public User(String email, String name, String password, Integer age, String address, Gender gender) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.age = age;
+        this.address = address;
+        this.gender = gender;
+    }
 }
 

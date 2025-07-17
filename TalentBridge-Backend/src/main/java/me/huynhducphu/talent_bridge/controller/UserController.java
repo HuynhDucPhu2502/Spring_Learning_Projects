@@ -1,9 +1,5 @@
 package me.huynhducphu.talent_bridge.controller;
 
-/**
- * Admin 6/7/2025
- **/
-
 import com.turkraft.springfilter.boot.Filter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -14,7 +10,7 @@ import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.user.UserCreateRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.user.UserUpdateRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
-import me.huynhducphu.talent_bridge.dto.response.user.UserResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.user.DefaultUserResponseDto;
 import me.huynhducphu.talent_bridge.model.User;
 import me.huynhducphu.talent_bridge.service.UserService;
 import org.springframework.data.domain.Page;
@@ -41,7 +37,7 @@ public class UserController {
             description = "Yêu cầu quyền: <b>POST /users</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<UserResponseDto> saveUser(
+    public ResponseEntity<DefaultUserResponseDto> saveUser(
             @Valid @RequestBody UserCreateRequestDto userCreateRequestDto
     ) {
         return ResponseEntity
@@ -57,15 +53,15 @@ public class UserController {
             description = "Yêu cầu quyền: <b>GET /users</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<PageResponseDto<UserResponseDto>> findAllUsers(
+    public ResponseEntity<PageResponseDto<DefaultUserResponseDto>> findAllUsers(
             @Filter Specification<User> spec,
             Pageable pageable
     ) {
 
 
-        Page<UserResponseDto> page = userService.findAllUser(spec, pageable);
+        Page<DefaultUserResponseDto> page = userService.findAllUser(spec, pageable);
 
-        PageResponseDto<UserResponseDto> res = new PageResponseDto<>(
+        PageResponseDto<DefaultUserResponseDto> res = new PageResponseDto<>(
                 page.getContent(),
                 pageable.getPageNumber() + 1,
                 pageable.getPageSize(),
@@ -84,7 +80,7 @@ public class UserController {
             description = "Yêu cầu quyền: <b>GET /users/{id}</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
+    public ResponseEntity<DefaultUserResponseDto> findUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findUserById(id));
     }
 
@@ -96,7 +92,7 @@ public class UserController {
             description = "Yêu cầu quyền: <b>PUT /users</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<UserResponseDto> updateUser(
+    public ResponseEntity<DefaultUserResponseDto> updateUser(
             @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto
     ) {
         return ResponseEntity.ok(userService.updateUser(userUpdateRequestDto));
@@ -110,7 +106,7 @@ public class UserController {
             description = "Yêu cầu quyền: <b>DELETE /users/{id}</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<UserResponseDto> deleteUserById(@PathVariable Long id) {
+    public ResponseEntity<DefaultUserResponseDto> deleteUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.deleteUserById(id));
     }
 
