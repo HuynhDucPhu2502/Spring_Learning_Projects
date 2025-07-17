@@ -1,5 +1,5 @@
 import {
-  getAccountApi,
+  getUserSession,
   loginApi,
   logoutApi,
   refreshTokenApi,
@@ -37,7 +37,7 @@ export const getAccount = createAsyncThunk(
   "auth/account",
   async (_, thunkAPI) => {
     try {
-      const res = await getAccountApi();
+      const res = await getUserSession();
       return res.data.data;
     } catch (err: unknown) {
       const message = getErrorMessage(err, "Lấy thông tin tài khoản thất bại");

@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@JsonPropertyOrder({"id", "name", "email", "password", "age", "address", "gender", "refreshToken"})
+@JsonPropertyOrder({"id", "name", "email", "password", "age", "address", "gender"})
 public class User extends BaseEntity {
 
     @Id

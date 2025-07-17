@@ -23,7 +23,7 @@ export default function JobInfoDialog({ job, companyName, location }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button className="border border-orange-500 bg-white py-3 font-semibold text-orange-500 hover:border-orange-600 hover:bg-orange-50">
           <BookText className="mr-2 h-4 w-4" />
           Xem mô tả công việc
         </Button>

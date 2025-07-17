@@ -10,7 +10,6 @@ import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserSessionResponseDto;
 import me.huynhducphu.talent_bridge.service.AuthService;
-import me.huynhducphu.talent_bridge.service.RefreshTokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/login")
     @ApiMessage(value = "Đăng nhập thành công")
@@ -41,11 +39,11 @@ public class AuthController {
     public ResponseEntity<?> logout(
             @CookieValue(value = "refresh_token", required = false) String refreshToken
     ) {
-        if (refreshToken != null) refreshTokenService.deleteByToken(refreshToken);
+        ResponseCookie responseCookie = authService.logoutRemoveCookie(refreshToken);
 
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, authService.logoutRemoveCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
                 .build();
     }
 
@@ -66,10 +64,15 @@ public class AuthController {
     public ResponseEntity<?> refreshToken(
             @CookieValue(value = "refresh_token") String refreshToken
     ) {
-        String email = authService.validateToken(refreshToken).getSubject();
-        refreshTokenService.verifyAndDeleteOldRefreshToken(email, refreshToken);
+        AuthResult authResult = authService.refreshAuthToken(refreshToken);
 
-        return buildAuthResponse(email);
+        AuthTokenResponseDto authTokenResponseDto = authResult.getAuthTokenResponseDto();
+        ResponseCookie responseCookie = authResult.getResponseCookie();
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(authTokenResponseDto);
     }
 
     private ResponseEntity<?> buildAuthResponse(String email) {

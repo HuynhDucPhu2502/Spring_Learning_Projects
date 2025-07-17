@@ -9,10 +9,9 @@ import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserSessionResponseDto;
 import me.huynhducphu.talent_bridge.model.Role;
-import me.huynhducphu.talent_bridge.model.common.RefreshToken;
 import me.huynhducphu.talent_bridge.model.User;
-import me.huynhducphu.talent_bridge.repository.RefreshTokenRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
+import me.huynhducphu.talent_bridge.service.RefreshTokenRedisService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -38,7 +38,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRedisService refreshTokenRedisService;
     private final UserRepository userRepository;
 
     @Value("${jwt.access-token-expiration}")
@@ -61,7 +61,9 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     }
 
     @Override
-    public ResponseCookie logoutRemoveCookie() {
+    public ResponseCookie logoutRemoveCookie(String refreshToken) {
+        refreshTokenRedisService.deleteRefreshToken(refreshToken);
+
         return ResponseCookie
                 .from("refresh_token", "")
                 .httpOnly(true)
@@ -69,6 +71,15 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                 .sameSite("Strict")
                 .maxAge(0)
                 .build();
+    }
+
+    @Override
+    public AuthResult buildAuthResult(String email) {
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        return buildAuthResult(user);
     }
 
     @Override
@@ -90,15 +101,6 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         );
 
         return new AuthResult(authTokenResponseDto, responseCookie);
-    }
-
-    @Override
-    public AuthResult buildAuthResult(String email) {
-        User user = userRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
-
-        return buildAuthResult(user);
     }
 
     @Override
@@ -135,10 +137,24 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         );
     }
 
-
     @Override
-    public Jwt validateToken(String token) {
-        return jwtDecoder.decode(token);
+    public AuthResult refreshAuthToken(String refreshToken) {
+        String email = jwtDecoder.decode(refreshToken).getSubject();
+
+        if (!refreshTokenRedisService.validateToken(refreshToken))
+            throw new BadJwtException(null);
+
+        String userIdFromRedis = refreshTokenRedisService.getUserIdByToken(refreshToken);
+        User user = userRepository
+                .findById(Long.parseLong(userIdFromRedis))
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        if (!user.getEmail().equalsIgnoreCase(email))
+            throw new BadJwtException(null);
+
+        refreshTokenRedisService.deleteRefreshToken(refreshToken);
+
+        return buildAuthResult(user);
     }
 
     @Override
@@ -148,7 +164,6 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
 
         return currentUserEmail.equalsIgnoreCase(targetUserEmail);
     }
-
 
     private UserSessionResponseDto mapToUserInformation(User user) {
         if (user == null)
@@ -210,15 +225,12 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
 
         String res = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 
-        if (isCreatingRefreshToken) {
-            RefreshToken refreshToken = new RefreshToken(
-                    null,
+        if (isCreatingRefreshToken)
+            refreshTokenRedisService.saveRefreshToken(
                     res,
-                    validity,
-                    user
-            );
-            refreshTokenRepository.save(refreshToken);
-        }
+                    user.getId().toString(),
+                    Duration.ofSeconds(expirationRate));
+
 
         return res;
     }

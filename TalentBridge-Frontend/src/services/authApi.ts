@@ -1,6 +1,11 @@
 import axiosClient from "@/lib/axiosClient";
 import type { ApiResponse } from "@/types/apiResponse.types.ts";
-import type { loginRequestDto, AuthTokenResponseDto, UserSessionResponseDto } from "@/types/user.types.ts";
+import type {
+  loginRequestDto,
+  AuthTokenResponseDto,
+  UserSessionResponseDto,
+  UserDetailsResponseDto
+} from "@/types/user.types.ts";
 import axios from "axios";
 
 export const loginApi = (data: loginRequestDto) => {
@@ -15,8 +20,12 @@ export const logoutApi = () => {
   );
 };
 
-export const getAccountApi = () => {
+export const getUserSession = () => {
   return axiosClient.get<ApiResponse<UserSessionResponseDto>>("/auth/me");
+};
+
+export const getUserDetails = () => {
+  return axiosClient.get<ApiResponse<UserDetailsResponseDto>>("/auth/me/details");
 };
 
 export const refreshTokenApi = () => {

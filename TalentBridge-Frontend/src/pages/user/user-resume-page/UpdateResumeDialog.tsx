@@ -84,7 +84,7 @@ export function UpdateResumeDialog({ onSubmitFile }: UpdateResumeDialogProps) {
     <>
       <Button
         onClick={() => setIsModalOpen(true)}
-        className="bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700"
+        className="border border-orange-500 bg-white py-3 font-semibold text-orange-500 hover:border-orange-600 hover:bg-orange-50"
         type="button"
       >
         <FileEdit className="mr-2 h-5 w-5" />

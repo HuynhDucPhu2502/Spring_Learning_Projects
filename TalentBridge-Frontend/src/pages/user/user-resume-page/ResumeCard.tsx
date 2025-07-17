@@ -119,7 +119,7 @@ export default function ResumeCard({
             title="Rút hồ sơ"
             description="Bạn có chắc chắn muốn rút hồ sơ không? Thao tác này không thể thu hồi"
           >
-            <Button variant="destructive" size="sm">
+            <Button className="bg-red-600 py-3 font-semibold text-white hover:bg-red-700">
               <FileX className="mr-2 h-4 w-4" />
               Rút hồ sơ
             </Button>

@@ -15,17 +15,17 @@ public interface AuthService {
 
     void verifyLoginCredentials(LoginRequestDto loginRequestDto);
 
-    ResponseCookie logoutRemoveCookie();
-
-    AuthResult buildAuthResult(User user);
+    ResponseCookie logoutRemoveCookie(String refreshToken);
 
     AuthResult buildAuthResult(String email);
 
     UserDetailsResponseDto getCurrentUserDetails();
 
-    Jwt validateToken(String token);
+    AuthResult refreshAuthToken(String refreshToken);
 
     boolean isCurrentUser(User user);
+
+    AuthResult buildAuthResult(User user);
 
     UserSessionResponseDto getCurrentUser();
 
