@@ -13,7 +13,7 @@ type AuthState = {
 };
 
 const initialValue: AuthState = {
-  user: { id: "", name: "", email: "" },
+  user: { id: "", name: "", email: "", logoUrl: "", permissions: [] },
   isLogin: false,
   isLoading: false,
   error: null,
@@ -54,7 +54,13 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(logout.fulfilled, (state) => {
-        state.user = { id: "", name: "", email: "" };
+        state.user = {
+          id: "",
+          name: "",
+          email: "",
+          logoUrl: "",
+          permissions: [],
+        };
         state.isLogin = false;
         state.isLoading = false;
         localStorage.removeItem("access_token");

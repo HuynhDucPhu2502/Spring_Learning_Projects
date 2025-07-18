@@ -34,10 +34,7 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
         >
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9 ring-2 ring-blue-100 transition-all group-hover:ring-orange-200">
-              <AvatarImage
-                src="/placeholder.svg?height=36&width=36"
-                alt={user?.name || "User"}
-              />
+              <AvatarImage src={user.logoUrl} alt={user?.name || "User"} />
               <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 font-semibold text-white">
                 {user?.name
                   ?.split(" ")
