@@ -8,9 +8,9 @@ import java.time.Duration;
 public interface RefreshTokenRedisService {
     void saveRefreshToken(String token, String userId, Duration expire);
 
-    boolean validateToken(String token);
+    boolean validateToken(String token, String userId);
 
-    void deleteRefreshToken(String token);
+    void deleteRefreshToken(String token, String userId);
 
-    String getUserIdByToken(String token);
+    String getUserIdByToken(String token, String userId);
 }

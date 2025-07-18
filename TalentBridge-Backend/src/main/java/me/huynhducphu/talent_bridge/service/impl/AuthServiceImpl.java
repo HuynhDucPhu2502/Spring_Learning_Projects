@@ -62,7 +62,15 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
 
     @Override
     public ResponseCookie logoutRemoveCookie(String refreshToken) {
-        refreshTokenRedisService.deleteRefreshToken(refreshToken);
+        if (refreshToken != null) {
+            String email = jwtDecoder.decode(refreshToken).getSubject();
+
+            User user = userRepository
+                    .findByEmail(email)
+                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+            refreshTokenRedisService.deleteRefreshToken(refreshToken, user.getId().toString());
+        }
 
         return ResponseCookie
                 .from("refresh_token", "")
@@ -141,18 +149,19 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     public AuthResult refreshAuthToken(String refreshToken) {
         String email = jwtDecoder.decode(refreshToken).getSubject();
 
-        if (!refreshTokenRedisService.validateToken(refreshToken))
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+        String userId = user.getId().toString();
+
+        if (!refreshTokenRedisService.validateToken(refreshToken, userId))
             throw new BadJwtException(null);
 
-        String userIdFromRedis = refreshTokenRedisService.getUserIdByToken(refreshToken);
-        User user = userRepository
-                .findById(Long.parseLong(userIdFromRedis))
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
 
         if (!user.getEmail().equalsIgnoreCase(email))
             throw new BadJwtException(null);
 
-        refreshTokenRedisService.deleteRefreshToken(refreshToken);
+        refreshTokenRedisService.deleteRefreshToken(refreshToken, userId);
 
         return buildAuthResult(user);
     }

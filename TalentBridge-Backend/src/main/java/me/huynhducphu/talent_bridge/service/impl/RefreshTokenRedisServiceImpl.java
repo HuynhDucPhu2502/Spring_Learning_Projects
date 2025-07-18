@@ -16,28 +16,28 @@ public class RefreshTokenRedisServiceImpl implements me.huynhducphu.talent_bridg
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    private String buildKey(String token) {
-        return "refresh_token:" + DigestUtils.sha256Hex(token);
+    private String buildKey(String token, String userId) {
+        return "auth::refresh_token:" + userId + ":" + DigestUtils.sha256Hex(token);
     }
 
     @Override
     public void saveRefreshToken(String token, String userId, Duration expire) {
-        redisTemplate.opsForValue().set(buildKey(token), userId, expire);
+        redisTemplate.opsForValue().set(buildKey(token, userId), userId, expire);
     }
 
     @Override
-    public boolean validateToken(String token) {
-        return redisTemplate.hasKey(buildKey(token));
+    public boolean validateToken(String token, String userId) {
+        return redisTemplate.hasKey(buildKey(token, userId));
     }
 
     @Override
-    public void deleteRefreshToken(String token) {
-        redisTemplate.delete(buildKey(token));
+    public void deleteRefreshToken(String token, String userId) {
+        redisTemplate.delete(buildKey(token, userId));
     }
 
     @Override
-    public String getUserIdByToken(String token) {
-        return redisTemplate.opsForValue().get(buildKey(token));
+    public String getUserIdByToken(String token, String userId) {
+        return redisTemplate.opsForValue().get(buildKey(token, userId));
     }
 
 }
