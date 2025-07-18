@@ -3,6 +3,7 @@ export interface UserSessionResponseDto {
   name: string;
   email: string;
   permissions: string[];
+  logoUrl: string;
 }
 
 export interface loginRequestDto {

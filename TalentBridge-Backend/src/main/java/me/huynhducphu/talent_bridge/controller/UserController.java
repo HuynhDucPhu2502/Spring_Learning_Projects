@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "User")
 @RestController
@@ -112,7 +113,7 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUserById(id));
     }
 
-    @PostMapping("/me")
+    @PostMapping("/me/update-profile")
     @ApiMessage(value = "Cập nhật Profile của người dùng hiện tại")
     public ResponseEntity<DefaultUserResponseDto> updateSelfUserProfile(
             @Valid @RequestBody SelfUserUpdateProfileRequestDto selfUserUpdateProfileRequestDto
@@ -126,6 +127,14 @@ public class UserController {
             @Valid @RequestBody SelfUserUpdatePasswordRequestDto selfUserUpdatePasswordRequestDto
     ) {
         return ResponseEntity.ok(userService.updateSelfUserPassword(selfUserUpdatePasswordRequestDto));
+    }
+
+    @PostMapping("/me/upload-avatar")
+    @ApiMessage(value = "Cập nhật Avatar của người dùng hiện tại")
+    public void updateSelfUserAvatar(
+            @RequestParam("avatar") MultipartFile avatarFile
+    ) {
+        userService.updateSelfUserAvatar(avatarFile);
     }
 
 

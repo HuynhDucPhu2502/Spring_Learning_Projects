@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useState } from "react";
 import type {
   SelfUserUpdatePasswordRequestDto,
@@ -30,9 +28,11 @@ import {
 import ProfileEditForm from "./ProfileEditForm";
 import PasswordChangeForm from "./PasswordChangeForm";
 import {
+  selfUserAvatarUpdateApi,
   selfUserPasswordUpdateApi,
   selfUserProfileUpdateApi,
 } from "@/services/userApi";
+import AvatarUploadForm from "./AvatarUploadForm";
 
 const UserInfoPage = () => {
   // Data
@@ -44,6 +44,7 @@ const UserInfoPage = () => {
   const [isOpenProfileEditForm, setisOpenProfileEditForm] = useState(false);
   const [isOpenPasswordChangeForm, setisOpenPasswordChangeForm] =
     useState(false);
+  const [isOpenAvatarUploadForm, setisOpenAvatarUploadForm] = useState(false);
 
   // ======================================
   // Handle Fetching User Details
@@ -78,6 +79,7 @@ const UserInfoPage = () => {
       await selfUserProfileUpdateApi(data);
       await fetchUserDetails();
       toast.success("Cập nhật thông tin thành công");
+      setisOpenProfileEditForm(false);
     } catch (err) {
       toast.error(getErrorMessage(err, "Thao tác thất bại"));
     } finally {
@@ -93,6 +95,7 @@ const UserInfoPage = () => {
       await selfUserPasswordUpdateApi(data);
       await fetchUserDetails();
       toast.success("Cập nhật mật khẩu thành công");
+      setisOpenPasswordChangeForm(false);
     } catch (err) {
       toast.error(getErrorMessage(err, "Thao tác thất bại"));
     } finally {
@@ -100,9 +103,23 @@ const UserInfoPage = () => {
     }
   };
 
-  const handleAvatarUpload = () => {
-    toast.info("Chức năng tải lên ảnh đại diện sẽ được triển khai");
-    // TODO: Implement avatar upload functionality
+  const handleAvatarUpload = async (avatarFile: File) => {
+    try {
+      setIsUpdating(true);
+
+      const data = new FormData();
+      if (avatarFile) data.append("avatar", avatarFile);
+      else toast.error("File ảnh không được trống");
+
+      await selfUserAvatarUpdateApi(data);
+      await fetchUserDetails();
+      toast.success("Cập nhật ảnh đại diện thành công");
+      setisOpenAvatarUploadForm(false);
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Thao tác thất bại"));
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   // ===================
@@ -231,7 +248,7 @@ const UserInfoPage = () => {
                 {/* Camera Overlay */}
                 <div
                   className="bg-opacity-50 absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-gray-300 opacity-0 transition-opacity duration-200 group-hover:opacity-90"
-                  onClick={handleAvatarUpload}
+                  onClick={() => setisOpenAvatarUploadForm(true)}
                 >
                   <Camera className="h-8 w-8 text-white" />
                 </div>
@@ -404,6 +421,17 @@ const UserInfoPage = () => {
         <PasswordChangeForm
           onSubmit={handleUpdatePassword}
           onCancel={() => setisOpenPasswordChangeForm(false)}
+          isLoading={isUpdating}
+        />
+      )}
+
+      {/* Avatar Upload Dialog */}
+      {isOpenAvatarUploadForm && userDetails && (
+        <AvatarUploadForm
+          currentAvatarUrl={userDetails.logoUrl}
+          userName={userDetails.name}
+          onSubmit={handleAvatarUpload}
+          onCancel={() => setisOpenAvatarUploadForm(false)}
           isLoading={isUpdating}
         />
       )}

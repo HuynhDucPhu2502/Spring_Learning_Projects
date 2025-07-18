@@ -9,6 +9,7 @@ import me.huynhducphu.talent_bridge.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Admin 6/7/2025
@@ -29,4 +30,6 @@ public interface UserService {
     DefaultUserResponseDto updateSelfUserProfile(SelfUserUpdateProfileRequestDto selfUserUpdateProfileRequestDto);
 
     DefaultUserResponseDto updateSelfUserPassword(SelfUserUpdatePasswordRequestDto selfUserUpdatePasswordRequestDto);
+
+    void updateSelfUserAvatar(MultipartFile avatarFile);
 }

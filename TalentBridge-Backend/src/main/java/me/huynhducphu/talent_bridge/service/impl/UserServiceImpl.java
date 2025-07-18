@@ -13,6 +13,7 @@ import me.huynhducphu.talent_bridge.model.User;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
 import me.huynhducphu.talent_bridge.repository.RoleRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
+import me.huynhducphu.talent_bridge.service.S3Service;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Admin 6/7/2025
@@ -33,6 +35,8 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final RoleRepository roleService;
+
+    private final S3Service s3Service;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -159,6 +163,21 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
         User savedUser = userRepository.saveAndFlush(user);
 
         return mapToResponseDto(savedUser);
+    }
+
+    @Override
+    public void updateSelfUserAvatar(MultipartFile avatarFile) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = findByEmail(email);
+
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            String url = s3Service.uploadFile(avatarFile, "avatar", user.getId().toString(), true);
+
+            user.setLogoUrl(url);
+        }
+
+        userRepository.saveAndFlush(user);
     }
 
 
