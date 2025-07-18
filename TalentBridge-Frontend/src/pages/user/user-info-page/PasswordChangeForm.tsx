@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 
 import { useState } from "react";
@@ -8,16 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { X, Lock, Eye, EyeOff } from "lucide-react";
+import type { SelfUserUpdatePasswordRequestDto } from "@/types/user.types.ts";
+import { toast } from "sonner";
 
 interface PasswordChangeFormProps {
-  onSubmit: (data: PasswordFormData) => void;
+  onSubmit: (data: SelfUserUpdatePasswordRequestDto) => void;
   onCancel: () => void;
   isLoading?: boolean;
 }
 
-interface PasswordFormData {
-  currentPassword: string;
-  newPassword: string;
+interface FormData extends SelfUserUpdatePasswordRequestDto {
   confirmPassword: string;
 }
 
@@ -26,62 +24,35 @@ const PasswordChangeForm = ({
   onCancel,
   isLoading = false,
 }: PasswordChangeFormProps) => {
-  const [formData, setFormData] = useState<PasswordFormData>({
-    currentPassword: "",
+  const [formData, setFormData] = useState<FormData>({
+    oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
-  const [errors, setErrors] = useState<Partial<PasswordFormData>>({});
   const [showPasswords, setShowPasswords] = useState({
     current: false,
     new: false,
     confirm: false,
   });
 
-  const validateForm = (): boolean => {
-    const newErrors: Partial<PasswordFormData> = {};
-
-    if (!formData.currentPassword) {
-      newErrors.currentPassword = "Mật khẩu hiện tại không được để trống";
-    }
-
-    if (!formData.newPassword) {
-      newErrors.newPassword = "Mật khẩu mới không được để trống";
-    } else if (formData.newPassword.length < 6) {
-      newErrors.newPassword = "Mật khẩu mới phải có ít nhất 6 ký tự";
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.newPassword)) {
-      newErrors.newPassword =
-        "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số";
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Xác nhận mật khẩu không được để trống";
-    } else if (formData.newPassword !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Mật khẩu xác nhận không khớp";
-    }
-
-    if (formData.currentPassword === formData.newPassword) {
-      newErrors.newPassword = "Mật khẩu mới phải khác mật khẩu hiện tại";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      onSubmit(formData);
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      toast.error("Mật khẩu mới không trùng");
+      return;
     }
+
+    const requestData: SelfUserUpdatePasswordRequestDto = {
+      oldPassword: formData.oldPassword,
+      newPassword: formData.newPassword,
+    };
+    onSubmit(requestData);
   };
 
-  const handleInputChange = (field: keyof PasswordFormData, value: string) => {
+  const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
   };
 
   const togglePasswordVisibility = (field: "current" | "new" | "confirm") => {
@@ -113,20 +84,19 @@ const PasswordChangeForm = ({
             {/* Current Password */}
             <div className="space-y-2">
               <Label
-                htmlFor="currentPassword"
+                htmlFor="oldPassword"
                 className="text-sm font-medium text-gray-700"
               >
                 Mật khẩu hiện tại *
               </Label>
               <div className="relative">
                 <Input
-                  id="currentPassword"
+                  id="oldPassword"
                   type={showPasswords.current ? "text" : "password"}
-                  value={formData.currentPassword}
+                  value={formData.oldPassword}
                   onChange={(e) =>
-                    handleInputChange("currentPassword", e.target.value)
+                    handleInputChange("oldPassword", e.target.value)
                   }
-                  className={`pr-10 ${errors.currentPassword ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-orange-500"}`}
                   placeholder="Nhập mật khẩu hiện tại"
                 />
                 <Button
@@ -143,9 +113,6 @@ const PasswordChangeForm = ({
                   )}
                 </Button>
               </div>
-              {errors.currentPassword && (
-                <p className="text-sm text-red-600">{errors.currentPassword}</p>
-              )}
             </div>
 
             {/* New Password */}
@@ -164,7 +131,6 @@ const PasswordChangeForm = ({
                   onChange={(e) =>
                     handleInputChange("newPassword", e.target.value)
                   }
-                  className={`pr-10 ${errors.newPassword ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-orange-500"}`}
                   placeholder="Nhập mật khẩu mới"
                 />
                 <Button
@@ -181,9 +147,6 @@ const PasswordChangeForm = ({
                   )}
                 </Button>
               </div>
-              {errors.newPassword && (
-                <p className="text-sm text-red-600">{errors.newPassword}</p>
-              )}
             </div>
 
             {/* Confirm Password */}
@@ -202,7 +165,6 @@ const PasswordChangeForm = ({
                   onChange={(e) =>
                     handleInputChange("confirmPassword", e.target.value)
                   }
-                  className={`pr-10 ${errors.confirmPassword ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-orange-500"}`}
                   placeholder="Nhập lại mật khẩu mới"
                 />
                 <Button
@@ -219,9 +181,6 @@ const PasswordChangeForm = ({
                   )}
                 </Button>
               </div>
-              {errors.confirmPassword && (
-                <p className="text-sm text-red-600">{errors.confirmPassword}</p>
-              )}
             </div>
           </div>
 

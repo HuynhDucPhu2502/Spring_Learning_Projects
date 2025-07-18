@@ -1,5 +1,11 @@
+"use client";
+
 import { useCallback, useEffect, useState } from "react";
-import type { UserDetailsResponseDto } from "@/types/user.types.ts";
+import type {
+  SelfUserUpdatePasswordRequestDto,
+  SelfUserUpdateProfileRequestDto,
+  UserDetailsResponseDto,
+} from "@/types/user.types.ts";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { getUserDetails } from "@/services/authApi.ts";
@@ -19,14 +25,20 @@ import {
   Clock,
   Camera,
   Shield,
+  Cake,
 } from "lucide-react";
 import ProfileEditForm from "./ProfileEditForm";
 import PasswordChangeForm from "./PasswordChangeForm";
+import {
+  selfUserPasswordUpdateApi,
+  selfUserProfileUpdateApi,
+} from "@/services/userApi";
 
 const UserInfoPage = () => {
   // Data
   const [userDetails, setUserDetails] = useState<UserDetailsResponseDto>();
   const [isLoading, setIsLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Form State
   const [isOpenProfileEditForm, setisOpenProfileEditForm] = useState(false);
@@ -60,14 +72,32 @@ const UserInfoPage = () => {
   // ===================
   // Handle Actions
   // ===================
-  const handleUpdateAccountInfo = () => {
-    toast.info("Chức năng cập nhật thông tin tài khoản sẽ được triển khai");
-    // TODO: Implement account info update functionality
+  const handleUpdateProfile = async (data: SelfUserUpdateProfileRequestDto) => {
+    try {
+      setIsUpdating(true);
+      await selfUserProfileUpdateApi(data);
+      await fetchUserDetails();
+      toast.success("Cập nhật thông tin thành công");
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Thao tác thất bại"));
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
-  const handleUpdatePassword = () => {
-    toast.info("Chức năng cập nhật mật khẩu sẽ được triển khai");
-    // TODO: Implement password update functionality
+  const handleUpdatePassword = async (
+    data: SelfUserUpdatePasswordRequestDto,
+  ) => {
+    try {
+      setIsUpdating(true);
+      await selfUserPasswordUpdateApi(data);
+      await fetchUserDetails();
+      toast.success("Cập nhật mật khẩu thành công");
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Thao tác thất bại"));
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const handleAvatarUpload = () => {
@@ -85,6 +115,14 @@ const UserInfoPage = () => {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+    });
+  };
+
+  const formatDateOfBirth = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("vi-VN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -204,6 +242,9 @@ const UserInfoPage = () => {
                 <h2 className="mb-1 text-2xl font-bold text-gray-900">
                   {userDetails.name}
                 </h2>
+                <p className="mb-3 font-medium text-orange-600">
+                  #{userDetails.id}
+                </p>
                 <Badge
                   className={`${getGenderColor(userDetails.gender)} border px-3 py-1 text-sm`}
                 >
@@ -257,6 +298,18 @@ const UserInfoPage = () => {
                     </div>
                     <p className="pl-7 font-medium text-gray-900">
                       {userDetails.email}
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg bg-gray-50 p-4">
+                    <div className="mb-2 flex items-center gap-3">
+                      <Cake className="h-4 w-4 text-orange-500" />
+                      <span className="text-sm font-medium text-gray-600">
+                        Ngày sinh
+                      </span>
+                    </div>
+                    <p className="pl-7 font-medium text-gray-900">
+                      {formatDateOfBirth(userDetails.dob)}
                     </p>
                   </div>
 
@@ -337,12 +390,13 @@ const UserInfoPage = () => {
         </Card>
       </div>
 
+      {/* Forms */}
       {isOpenProfileEditForm && userDetails && (
         <ProfileEditForm
           userDetails={userDetails}
-          onSubmit={handleUpdateAccountInfo}
+          onSubmit={handleUpdateProfile}
           onCancel={() => setisOpenProfileEditForm(false)}
-          isLoading={isLoading}
+          isLoading={isUpdating}
         />
       )}
 
@@ -350,7 +404,7 @@ const UserInfoPage = () => {
         <PasswordChangeForm
           onSubmit={handleUpdatePassword}
           onCancel={() => setisOpenPasswordChangeForm(false)}
-          isLoading={isLoading}
+          isLoading={isUpdating}
         />
       )}
     </div>

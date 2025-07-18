@@ -1,5 +1,6 @@
 package me.huynhducphu.talent_bridge.dto.request.user;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,19 +10,22 @@ import me.huynhducphu.talent_bridge.model.constant.Gender;
 import java.time.LocalDate;
 
 /**
- * Admin 6/14/2025
+ * Admin 7/18/2025
  **/
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserUpdateRequestDto {
+public class SelfUserUpdateProfileRequestDto {
 
-    @NotNull(message = "ID Không được để trống")
-    private Long id;
+    @NotBlank(message = "Tên không được để trống")
     private String name;
+
+    @NotNull(message = "Giới tính không được để trống")
     private Gender gender;
+
+    @NotNull(message = "Ngày sinh không được để trống")
     private LocalDate dob;
+    
     private String address;
-    private CompanyIdDto company;
-    private RoleIdDto role;
+
 }

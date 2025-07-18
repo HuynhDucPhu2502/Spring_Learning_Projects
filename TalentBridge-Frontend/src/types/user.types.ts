@@ -19,10 +19,22 @@ export interface UserDetailsResponseDto {
   id: number;
   name: string;
   email: string;
-  age: number;
+  dob: string;
   address: string;
-  gender: 'MALE' | 'FEMALE' | 'OTHER';
+  gender: "MALE" | "FEMALE" | "OTHER";
   logoUrl: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface SelfUserUpdateProfileRequestDto {
+  name: string;
+  gender: "MALE" | "FEMALE" | "OTHER";
+  dob: string;
+  address: string;
+}
+
+export interface SelfUserUpdatePasswordRequestDto {
+  oldPassword: string;
+  newPassword: string;
 }

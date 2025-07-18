@@ -2,6 +2,8 @@ package me.huynhducphu.talent_bridge.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import me.huynhducphu.talent_bridge.dto.request.user.SelfUserUpdatePasswordRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.user.SelfUserUpdateProfileRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.user.UserCreateRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.user.UserUpdateRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.user.DefaultUserResponseDto;
@@ -15,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +46,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                 userCreateRequestDto.getName(),
                 userCreateRequestDto.getEmail(),
                 passwordEncoder.encode(userCreateRequestDto.getPassword()),
-                userCreateRequestDto.getAge(),
+                userCreateRequestDto.getDob(),
                 userCreateRequestDto.getAddress(),
                 userCreateRequestDto.getGender()
         );
@@ -85,7 +88,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
 
         user.setName(userUpdateRequestDto.getName());
-        user.setAge(userUpdateRequestDto.getAge());
+        user.setDob(userUpdateRequestDto.getDob());
         user.setAddress(userUpdateRequestDto.getAddress());
         user.setGender(userUpdateRequestDto.getGender());
 
@@ -120,6 +123,45 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
     }
 
+    @Override
+    public DefaultUserResponseDto updateSelfUserProfile(SelfUserUpdateProfileRequestDto selfUserUpdateProfileRequestDto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = findByEmail(email);
+
+        user.setName(selfUserUpdateProfileRequestDto.getName());
+        user.setDob(selfUserUpdateProfileRequestDto.getDob());
+        user.setAddress(selfUserUpdateProfileRequestDto.getAddress());
+        user.setGender(selfUserUpdateProfileRequestDto.getGender());
+
+        User savedUser = userRepository.save(user);
+
+        return mapToResponseDto(savedUser);
+    }
+
+    @Override
+    public DefaultUserResponseDto updateSelfUserPassword(SelfUserUpdatePasswordRequestDto selfUserUpdatePasswordRequestDto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = findByEmail(email);
+
+        if (!passwordEncoder.matches(
+                selfUserUpdatePasswordRequestDto.getOldPassword(),
+                user.getPassword())
+        ) throw new DataIntegrityViolationException("Mật khẩu hiện tại không chính xác");
+
+        String encodedPassword = passwordEncoder.encode(
+                selfUserUpdatePasswordRequestDto.getNewPassword()
+        );
+
+        user.setPassword(encodedPassword);
+
+        User savedUser = userRepository.saveAndFlush(user);
+
+        return mapToResponseDto(savedUser);
+    }
+
+
     private DefaultUserResponseDto mapToResponseDto(User user) {
         DefaultUserResponseDto.CompanyInformationDto company = null;
         if (user.getCompany() != null)
@@ -139,7 +181,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getAge(),
+                user.getDob(),
                 user.getAddress(),
                 user.getGender(),
                 company,

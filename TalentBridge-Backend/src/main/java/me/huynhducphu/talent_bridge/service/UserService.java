@@ -1,5 +1,7 @@
 package me.huynhducphu.talent_bridge.service;
 
+import me.huynhducphu.talent_bridge.dto.request.user.SelfUserUpdatePasswordRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.user.SelfUserUpdateProfileRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.user.UserCreateRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.user.UserUpdateRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.user.DefaultUserResponseDto;
@@ -23,4 +25,8 @@ public interface UserService {
     DefaultUserResponseDto deleteUserById(Long id);
 
     User findByEmail(String email);
+
+    DefaultUserResponseDto updateSelfUserProfile(SelfUserUpdateProfileRequestDto selfUserUpdateProfileRequestDto);
+
+    DefaultUserResponseDto updateSelfUserPassword(SelfUserUpdatePasswordRequestDto selfUserUpdatePasswordRequestDto);
 }

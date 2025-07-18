@@ -136,7 +136,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getAge(),
+                user.getDob(),
                 user.getAddress(),
                 user.getGender(),
                 user.getLogoUrl(),

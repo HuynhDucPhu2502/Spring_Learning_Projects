@@ -13,21 +13,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { X, Save, User } from "lucide-react";
-import type { UserDetailsResponseDto } from "@/types/user.types.ts";
+import type {
+  SelfUserUpdateProfileRequestDto,
+  UserDetailsResponseDto,
+} from "@/types/user.types.ts";
 
 interface ProfileEditFormProps {
   userDetails: UserDetailsResponseDto;
-  onSubmit: (data: ProfileFormData) => void;
+  onSubmit: (data: SelfUserUpdateProfileRequestDto) => void;
   onCancel: () => void;
   isLoading?: boolean;
-}
-
-interface ProfileFormData {
-  name: string;
-  email: string;
-  age: number;
-  address: string;
-  gender: "MALE" | "FEMALE" | "OTHER";
 }
 
 const ProfileEditForm = ({
@@ -36,57 +31,27 @@ const ProfileEditForm = ({
   onCancel,
   isLoading = false,
 }: ProfileEditFormProps) => {
-  const [formData, setFormData] = useState<ProfileFormData>({
+  const [formData, setFormData] = useState<SelfUserUpdateProfileRequestDto>({
     name: userDetails.name,
-    email: userDetails.email,
-    age: userDetails.age,
+    dob: userDetails.dob ? userDetails.dob.split("T")[0] : "",
     address: userDetails.address,
     gender: userDetails.gender,
   });
 
-  const [errors, setErrors] = useState<Partial<ProfileFormData>>({});
-
-  const validateForm = (): boolean => {
-    const newErrors: Partial<ProfileFormData> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Tên không được để trống";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email không được để trống";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Email không hợp lệ";
-    }
-
-    if (!formData.age || formData.age < 1 || formData.age > 120) {
-      newErrors.age = "Tuổi phải từ 1 đến 120";
-    }
-
-    if (!formData.address.trim()) {
-      newErrors.address = "Địa chỉ không được để trống";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      onSubmit(formData);
-    }
+    const submitData = {
+      ...formData,
+      dob: new Date(formData.dob).toISOString(),
+    };
+    onSubmit(submitData);
   };
 
   const handleInputChange = (
-    field: keyof ProfileFormData,
-    value: string | number,
+    field: keyof SelfUserUpdateProfileRequestDto,
+    value: string,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
   };
 
   return (
@@ -124,58 +89,26 @@ const ProfileEditForm = ({
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                className={`${errors.name ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-orange-500"}`}
                 placeholder="Nhập họ và tên"
               />
-              {errors.name && (
-                <p className="text-sm text-red-600">{errors.name}</p>
-              )}
             </div>
 
-            {/* Email Field */}
+            {/* Date of Birth Field */}
             <div className="space-y-2">
               <Label
-                htmlFor="email"
+                htmlFor="dob"
                 className="text-sm font-medium text-gray-700"
               >
-                Email *
+                Ngày sinh *
               </Label>
               <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                className={`${errors.email ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-orange-500"}`}
-                placeholder="Nhập địa chỉ email"
+                id="dob"
+                type="date"
+                value={formData.dob}
+                onChange={(e) => handleInputChange("dob", e.target.value)}
+                max={new Date().toISOString().split("T")[0]}
+                required
               />
-              {errors.email && (
-                <p className="text-sm text-red-600">{errors.email}</p>
-              )}
-            </div>
-
-            {/* Age Field */}
-            <div className="space-y-2">
-              <Label
-                htmlFor="age"
-                className="text-sm font-medium text-gray-700"
-              >
-                Tuổi *
-              </Label>
-              <Input
-                id="age"
-                type="number"
-                min="1"
-                max="120"
-                value={formData.age}
-                onChange={(e) =>
-                  handleInputChange("age", Number.parseInt(e.target.value) || 0)
-                }
-                className={`${errors.age ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-orange-500"}`}
-                placeholder="Nhập tuổi"
-              />
-              {errors.age && (
-                <p className="text-sm text-red-600">{errors.age}</p>
-              )}
             </div>
 
             {/* Gender Field */}
@@ -202,26 +135,23 @@ const ProfileEditForm = ({
                 </SelectContent>
               </Select>
             </div>
-          </div>
 
-          {/* Address Field */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="address"
-              className="text-sm font-medium text-gray-700"
-            >
-              Địa chỉ *
-            </Label>
-            <Input
-              id="address"
-              value={formData.address}
-              onChange={(e) => handleInputChange("address", e.target.value)}
-              className={`${errors.address ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-orange-500"} min-h-[80px]`}
-              placeholder="Nhập địa chỉ đầy đủ"
-            />
-            {errors.address && (
-              <p className="text-sm text-red-600">{errors.address}</p>
-            )}
+            {/* Address Field */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="address"
+                className="text-sm font-medium text-gray-700"
+              >
+                Địa chỉ *
+              </Label>
+              <Input
+                id="address"
+                type="text"
+                value={formData.address}
+                onChange={(e) => handleInputChange("address", e.target.value)}
+                placeholder="Nhập địa chỉ đầy đủ"
+              />
+            </div>
           </div>
 
           {/* Action Buttons */}

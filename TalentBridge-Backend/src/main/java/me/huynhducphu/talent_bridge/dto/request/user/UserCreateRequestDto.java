@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.huynhducphu.talent_bridge.model.constant.Gender;
 
+import java.time.LocalDate;
+
 /**
  * Admin 6/7/2025
  **/
@@ -28,7 +30,7 @@ public class UserCreateRequestDto {
     @NotBlank(message = "Mật khẩu người dùng không được để trống")
     private String password;
 
-    private Integer age;
+    private LocalDate dob;
 
     private String address;
 

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import me.huynhducphu.talent_bridge.model.constant.Gender;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 /**
  * Admin 7/17/2025
@@ -17,7 +18,7 @@ public class UserDetailsResponseDto {
     private Long id;
     private String name;
     private String email;
-    private Integer age;
+    private LocalDate dob;
     private String address;
     private Gender gender;
     private String logoUrl;

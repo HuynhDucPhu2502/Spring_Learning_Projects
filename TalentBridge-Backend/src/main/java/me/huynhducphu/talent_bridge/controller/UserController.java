@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
+import me.huynhducphu.talent_bridge.dto.request.user.SelfUserUpdatePasswordRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.user.SelfUserUpdateProfileRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.user.UserCreateRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.user.UserUpdateRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
@@ -108,6 +110,22 @@ public class UserController {
     )
     public ResponseEntity<DefaultUserResponseDto> deleteUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.deleteUserById(id));
+    }
+
+    @PostMapping("/me")
+    @ApiMessage(value = "Cập nhật Profile của người dùng hiện tại")
+    public ResponseEntity<DefaultUserResponseDto> updateSelfUserProfile(
+            @Valid @RequestBody SelfUserUpdateProfileRequestDto selfUserUpdateProfileRequestDto
+    ) {
+        return ResponseEntity.ok(userService.updateSelfUserProfile(selfUserUpdateProfileRequestDto));
+    }
+
+    @PostMapping("/me/update-password")
+    @ApiMessage(value = "Cập nhật Password của người dùng hiện tại")
+    public ResponseEntity<DefaultUserResponseDto> updateSelfUserPassword(
+            @Valid @RequestBody SelfUserUpdatePasswordRequestDto selfUserUpdatePasswordRequestDto
+    ) {
+        return ResponseEntity.ok(userService.updateSelfUserPassword(selfUserUpdatePasswordRequestDto));
     }
 
 

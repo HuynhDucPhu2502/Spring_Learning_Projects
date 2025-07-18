@@ -6,6 +6,7 @@ import lombok.*;
 import me.huynhducphu.talent_bridge.model.common.BaseEntity;
 import me.huynhducphu.talent_bridge.model.constant.Gender;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    private Integer age;
+    private LocalDate dob;
 
     private String address;
 
@@ -57,11 +58,11 @@ public class User extends BaseEntity {
     @ToString.Exclude
     private Role role;
 
-    public User(String email, String name, String password, Integer age, String address, Gender gender) {
+    public User(String email, String name, String password, LocalDate dob, String address, Gender gender) {
         this.email = email;
         this.name = name;
         this.password = password;
-        this.age = age;
+        this.dob = dob;
         this.address = address;
         this.gender = gender;
     }
