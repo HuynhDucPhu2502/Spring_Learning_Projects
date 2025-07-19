@@ -5,7 +5,10 @@ import type {
   UserDetailsResponseDto,
 } from "@/types/user.types.ts";
 import { toast } from "sonner";
-import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
+import {
+  getAccount,
+  getErrorMessage,
+} from "@/features/slices/auth/authThunk.ts";
 import { getUserDetails } from "@/services/authApi.ts";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,8 +36,11 @@ import {
   selfUserProfileUpdateApi,
 } from "@/services/userApi";
 import AvatarUploadForm from "./AvatarUploadForm";
+import { useAppDispatch } from "@/features/hooks";
 
 const UserInfoPage = () => {
+  const dispatch = useAppDispatch();
+
   // Data
   const [userDetails, setUserDetails] = useState<UserDetailsResponseDto>();
   const [isLoading, setIsLoading] = useState(false);
@@ -78,6 +84,7 @@ const UserInfoPage = () => {
       setIsUpdating(true);
       await selfUserProfileUpdateApi(data);
       await fetchUserDetails();
+      dispatch(getAccount());
       toast.success("Cập nhật thông tin thành công");
       setisOpenProfileEditForm(false);
     } catch (err) {

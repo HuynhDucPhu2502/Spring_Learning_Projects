@@ -1,4 +1,4 @@
-import { User, Settings, LogOut, Briefcase } from "lucide-react";
+import { User, LogOut, Briefcase, LockKeyhole } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -99,7 +99,7 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
 
         <DropdownMenuItem>
           <Link
-            to={"user/resume"}
+            to={"user/resumes"}
             className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-blue-50"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
@@ -116,15 +116,17 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
 
         <DropdownMenuItem>
           <Link
-            to={"user/info"}
+            to={"user/sessions"}
             className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-blue-50"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
-              <Settings className="h-4 w-4 text-gray-600" />
+              <LockKeyhole className="h-4 w-4 text-gray-600" />
             </div>
             <div className="min-w-0">
-              <p className="font-medium">Cài đặt</p>
-              <p className="text-xs text-gray-500">Tùy chỉnh hệ thống</p>
+              <p className="font-medium">Bảo mật</p>
+              <p className="text-xs text-gray-500">
+                Xem các phiên đăng nhập tài khoản bạn
+              </p>
             </div>
           </Link>
         </DropdownMenuItem>

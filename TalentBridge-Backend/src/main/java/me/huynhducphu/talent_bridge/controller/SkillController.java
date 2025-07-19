@@ -47,7 +47,7 @@ public class SkillController {
 
     @GetMapping
     @ApiMessage(value = "Lấy danh sách Skill")
-    @PreAuthorize("hasAuthority('GET /skills')")
+    @PreAuthorize("hasAuthority('GET /skills') OR isAnonymous()")
     @Operation(
             summary = "Lấy danh sách Skill",
             description = "Yêu cầu quyền: <b>GET /skills</b>",
@@ -72,7 +72,7 @@ public class SkillController {
 
     @GetMapping("/{id}")
     @ApiMessage(value = "Lấy Skill theo id")
-    @PreAuthorize("hasAuthority('GET /skills/{id}')")
+    @PreAuthorize("hasAuthority('GET /skills/{id}') OR isAnonymous()")
     @Operation(
             summary = "Lấy Skill theo id",
             description = "Yêu cầu quyền: <b>GET /skills/{id}</b>",

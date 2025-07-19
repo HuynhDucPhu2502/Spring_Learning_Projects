@@ -1,11 +1,19 @@
 package me.huynhducphu.talent_bridge.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import me.huynhducphu.talent_bridge.dto.request.auth.SessionMetaRequest;
+import me.huynhducphu.talent_bridge.dto.response.auth.SessionMetaResponse;
+import me.huynhducphu.talent_bridge.model.SessionMeta;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Admin 7/17/2025
@@ -14,30 +22,63 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class RefreshTokenRedisServiceImpl implements me.huynhducphu.talent_bridge.service.RefreshTokenRedisService {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, SessionMeta> redisSessionMetaTemplate;
 
     private String buildKey(String token, String userId) {
         return "auth::refresh_token:" + userId + ":" + DigestUtils.sha256Hex(token);
     }
 
     @Override
-    public void saveRefreshToken(String token, String userId, Duration expire) {
-        redisTemplate.opsForValue().set(buildKey(token, userId), userId, expire);
+    public void saveRefreshToken(
+            String token, String userId,
+            SessionMetaRequest sessionMetaRequest, Duration expire
+    ) {
+        SessionMeta sessionMeta = new SessionMeta(
+                sessionMetaRequest.getDeviceName(),
+                sessionMetaRequest.getDeviceType(),
+                sessionMetaRequest.getUserAgent(),
+                Instant.now()
+        );
+
+        redisSessionMetaTemplate.opsForValue().set(buildKey(token, userId), sessionMeta, expire);
     }
 
     @Override
     public boolean validateToken(String token, String userId) {
-        return redisTemplate.hasKey(buildKey(token, userId));
+        return redisSessionMetaTemplate.hasKey(buildKey(token, userId));
     }
 
     @Override
     public void deleteRefreshToken(String token, String userId) {
-        redisTemplate.delete(buildKey(token, userId));
+        redisSessionMetaTemplate.delete(buildKey(token, userId));
     }
 
     @Override
-    public String getUserIdByToken(String token, String userId) {
-        return redisTemplate.opsForValue().get(buildKey(token, userId));
+    public List<SessionMetaResponse> getAllSessionMetas(String userId, String currentRefreshToken) {
+        String keyPattern = "auth::refresh_token:" + userId + ":*";
+        Set<String> keys = redisSessionMetaTemplate.keys(keyPattern);
+
+        if (keys == null || keys.isEmpty()) return Collections.emptyList();
+        String currentTokenHash = DigestUtils.sha256Hex(currentRefreshToken);
+
+        List<SessionMetaResponse> sessionMetas = new ArrayList<>();
+        for (String key : keys) {
+            SessionMeta meta = redisSessionMetaTemplate.opsForValue().get(key);
+            if (meta == null) continue;
+
+            String keyHash = key.substring(key.lastIndexOf(":") + 1);
+            boolean isCurrent = currentTokenHash.equals(keyHash);
+
+            SessionMetaResponse sessionMetaResponse = new SessionMetaResponse(
+                    meta.getDeviceName(),
+                    meta.getDeviceType(),
+                    meta.getUserAgent(),
+                    meta.getLoginAt(),
+                    isCurrent
+            );
+            sessionMetas.add(sessionMetaResponse);
+        }
+        return sessionMetas;
     }
 
 }

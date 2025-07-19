@@ -25,7 +25,7 @@ public class SelfUserUpdateProfileRequestDto {
 
     @NotNull(message = "Ngày sinh không được để trống")
     private LocalDate dob;
-    
+
     private String address;
 
 }

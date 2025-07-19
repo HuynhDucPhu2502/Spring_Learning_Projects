@@ -4,16 +4,14 @@ import { Navigate, NavLink, Outlet } from "react-router-dom";
 
 const navigationItems = [
   { title: "Thông tin", icon: User, href: "info" },
-  { title: "Hồ sơ tuyển dụng", icon: BarChart3, href: "resume" },
-  { title: "Cài đặt", icon: Settings, href: "settings" },
+  { title: "Hồ sơ tuyển dụng", icon: BarChart3, href: "resumes" },
+  { title: "Bảo mật", icon: Settings, href: "sessions" },
 ];
 
 export default function UserPage() {
   const { isLogin, user } = useAppSelector((state) => state.auth);
 
-  if (!isLogin || !user) {
-    return <Navigate to="/auth?mode=login" replace />;
-  }
+  if (!isLogin || !user) return <Navigate to="/auth?mode=login" replace />;
 
   return (
     <div className="flex min-h-screen bg-gray-100 p-4">

@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.dto.response.user;
+package me.huynhducphu.talent_bridge.dto.response.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

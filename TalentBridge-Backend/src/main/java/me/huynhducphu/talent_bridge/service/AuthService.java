@@ -1,31 +1,32 @@
 package me.huynhducphu.talent_bridge.service;
 
-import me.huynhducphu.talent_bridge.dto.request.user.LoginRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.user.AuthResult;
+import me.huynhducphu.talent_bridge.dto.request.auth.LoginRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.auth.SessionMetaRequest;
+import me.huynhducphu.talent_bridge.dto.response.auth.AuthResult;
+import me.huynhducphu.talent_bridge.dto.response.auth.SessionMetaResponse;
 import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserSessionResponseDto;
 import me.huynhducphu.talent_bridge.model.User;
 import org.springframework.http.ResponseCookie;
-import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.util.List;
 
 /**
  * Admin 6/12/2025
  **/
 public interface AuthService {
 
-    void verifyLoginCredentials(LoginRequestDto loginRequestDto);
+    AuthResult handleLogin(LoginRequestDto loginRequestDto);
 
-    ResponseCookie logoutRemoveCookie(String refreshToken);
-
-    AuthResult buildAuthResult(String email);
+    ResponseCookie handleLogout(String refreshToken);
 
     UserDetailsResponseDto getCurrentUserDetails();
 
-    AuthResult refreshAuthToken(String refreshToken);
+    AuthResult handleRefresh(String refreshToken, SessionMetaRequest sessionMetaRequest);
 
     boolean isCurrentUser(User user);
 
-    AuthResult buildAuthResult(User user);
+    List<SessionMetaResponse> getAllSessionMetas(String refreshToken);
 
     UserSessionResponseDto getCurrentUser();
 

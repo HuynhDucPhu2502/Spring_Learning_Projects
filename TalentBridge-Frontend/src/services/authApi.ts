@@ -4,12 +4,23 @@ import type {
   loginRequestDto,
   AuthTokenResponseDto,
   UserSessionResponseDto,
-  UserDetailsResponseDto
+  UserDetailsResponseDto,
+  SessionMetaRequest,
+  SessionMetaResponse,
 } from "@/types/user.types.ts";
+import { getSessionMeta } from "@/utils/sessionHelper";
 import axios from "axios";
 
 export const loginApi = (data: loginRequestDto) => {
-  return axiosClient.post<ApiResponse<AuthTokenResponseDto>>("/auth/login", data);
+  data = {
+    ...data,
+    sessionMetaRequest: getSessionMeta(),
+  };
+
+  return axiosClient.post<ApiResponse<AuthTokenResponseDto>>(
+    "/auth/login",
+    data,
+  );
 };
 
 export const logoutApi = () => {
@@ -25,13 +36,21 @@ export const getUserSession = () => {
 };
 
 export const getUserDetails = () => {
-  return axiosClient.get<ApiResponse<UserDetailsResponseDto>>("/auth/me/details");
+  return axiosClient.get<ApiResponse<UserDetailsResponseDto>>(
+    "/auth/me/details",
+  );
 };
 
 export const refreshTokenApi = () => {
+  const data: SessionMetaRequest = getSessionMeta();
+
   return axios.post<ApiResponse<AuthTokenResponseDto>>(
-    "/auth/refresh-token",
-    {},
+    "http://localhost:8080/auth/refresh-token",
+    data,
     { withCredentials: true },
   );
+};
+
+export const getSessions = () => {
+  return axiosClient.get<ApiResponse<SessionMetaResponse[]>>(`/auth/sessions`);
 };

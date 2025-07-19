@@ -9,6 +9,7 @@ export interface UserSessionResponseDto {
 export interface loginRequestDto {
   email: string;
   password: string;
+  sessionMetaRequest: SessionMetaRequest;
 }
 
 export interface AuthTokenResponseDto {
@@ -38,4 +39,18 @@ export interface SelfUserUpdateProfileRequestDto {
 export interface SelfUserUpdatePasswordRequestDto {
   oldPassword: string;
   newPassword: string;
+}
+
+export interface SessionMetaRequest {
+  deviceName: string;
+  deviceType: string;
+  userAgent: string;
+}
+
+export interface SessionMetaResponse {
+  deviceName: string;
+  deviceType: string;
+  userAgent: string;
+  loginAt: string;
+  current: boolean;
 }

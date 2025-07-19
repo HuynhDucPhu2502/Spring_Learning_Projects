@@ -1,11 +1,10 @@
 import type { ApiResponse } from "@/types/apiResponse.types.ts";
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
-
 import { updateTokenManually } from "@/features/slices/auth/authSlice";
-import type { AuthTokenResponseDto } from "@/types/user.types.ts";
 import type { AppDispatch } from "@/features/store";
 import { logout } from "@/features/slices/auth/authThunk";
+import { refreshTokenApi } from "@/services/authApi";
 
 // ============================================================
 // Setup dispatch từ store để sử dụng
@@ -92,7 +91,7 @@ axiosClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await refreshTokenAndGetAuthResponse();
+        const res = (await refreshTokenApi()).data.data;
 
         const accessToken = res.accessToken;
         dispatchRef(updateTokenManually(res));
@@ -113,19 +112,6 @@ axiosClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
-// ============================================================
-// Util Functions:
-// ============================================================
-const refreshTokenAndGetAuthResponse = async () => {
-  const res = await axios.post<ApiResponse<AuthTokenResponseDto>>(
-    "http://localhost:8080/auth/refresh-token",
-    {},
-    { withCredentials: true },
-  );
-
-  return res.data.data;
-};
 
 // ============================================================
 

@@ -67,7 +67,7 @@ public class CompanyController {
 
     @GetMapping
     @ApiMessage(value = "Lấy danh sách Company")
-    @PreAuthorize("hasAuthority('GET /companies')")
+    @PreAuthorize("hasAuthority('GET /companies') OR isAnonymous()")
     @Operation(
             summary = "Lấy danh sách Company",
             description = "Yêu cầu quyền: <b>GET /companies</b>",
@@ -92,7 +92,7 @@ public class CompanyController {
 
     @GetMapping("/with-jobs-count")
     @ApiMessage(value = "Lấy danh sách Company kèm với số lượng nghề")
-    @PreAuthorize("hasAuthority('GET /companies/with-jobs-count')")
+    @PreAuthorize("hasAuthority('GET /companies/with-jobs-count') OR isAnonymous()")
     @Operation(
             summary = "Lấy danh sách Company kèm với số lượng nghề",
             description = "Yêu cầu quyền: <b>GET /companies/with-jobs-count</b>",
@@ -117,7 +117,7 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     @ApiMessage(value = "Lấy Company theo id")
-    @PreAuthorize("hasAuthority('GET /companies/{id}')")
+    @PreAuthorize("hasAuthority('GET /companies/{id}') OR isAnonymous()")
     @Operation(
             summary = "Lấy Company theo id",
             description = "Yêu cầu quyền: <b>GET /companies/{id}</b>",

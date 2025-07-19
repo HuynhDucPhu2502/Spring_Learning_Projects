@@ -4,9 +4,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
-import me.huynhducphu.talent_bridge.dto.request.user.LoginRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.user.AuthResult;
-import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
+import me.huynhducphu.talent_bridge.dto.request.auth.LoginRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.auth.SessionMetaRequest;
+import me.huynhducphu.talent_bridge.dto.response.auth.AuthResult;
+import me.huynhducphu.talent_bridge.dto.response.auth.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserSessionResponseDto;
 import me.huynhducphu.talent_bridge.service.AuthService;
@@ -31,15 +32,22 @@ public class AuthController {
     public ResponseEntity<?> login(
             @Valid @RequestBody LoginRequestDto loginRequestDto
     ) {
-        authService.verifyLoginCredentials(loginRequestDto);
-        return buildAuthResponse(loginRequestDto.getEmail());
+        AuthResult authResult = authService.handleLogin(loginRequestDto);
+
+        AuthTokenResponseDto authTokenResponseDto = authResult.getAuthTokenResponseDto();
+        ResponseCookie responseCookie = authResult.getResponseCookie();
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .body(authTokenResponseDto);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(
             @CookieValue(value = "refresh_token", required = false) String refreshToken
     ) {
-        ResponseCookie responseCookie = authService.logoutRemoveCookie(refreshToken);
+        ResponseCookie responseCookie = authService.handleLogout(refreshToken);
 
         return ResponseEntity
                 .ok()
@@ -62,9 +70,10 @@ public class AuthController {
     @PostMapping("/refresh-token")
     @ApiMessage(value = "Lấy refresh token")
     public ResponseEntity<?> refreshToken(
-            @CookieValue(value = "refresh_token") String refreshToken
+            @CookieValue(value = "refresh_token") String refreshToken,
+            @RequestBody SessionMetaRequest sessionMetaRequest
     ) {
-        AuthResult authResult = authService.refreshAuthToken(refreshToken);
+        AuthResult authResult = authService.handleRefresh(refreshToken, sessionMetaRequest);
 
         AuthTokenResponseDto authTokenResponseDto = authResult.getAuthTokenResponseDto();
         ResponseCookie responseCookie = authResult.getResponseCookie();
@@ -75,15 +84,10 @@ public class AuthController {
                 .body(authTokenResponseDto);
     }
 
-    private ResponseEntity<?> buildAuthResponse(String email) {
-        AuthResult authResult = authService.buildAuthResult(email);
-        AuthTokenResponseDto authTokenResponseDto = authResult.getAuthTokenResponseDto();
-        ResponseCookie responseCookie = authResult.getResponseCookie();
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
-                .body(authTokenResponseDto);
+    @GetMapping("/sessions")
+    @ApiMessage(value = "Lấy session")
+    public ResponseEntity<?> getSessions(@CookieValue(value = "refresh_token") String refreshToken) {
+        return ResponseEntity.ok(authService.getAllSessionMetas(refreshToken));
     }
 
 

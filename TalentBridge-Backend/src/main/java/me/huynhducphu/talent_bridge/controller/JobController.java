@@ -45,7 +45,7 @@ public class JobController {
 
     @GetMapping("/{id}")
     @ApiMessage(value = "Lấy Job theo id")
-    @PreAuthorize("hasAuthority('GET /jobs/{id}')")
+    @PreAuthorize("hasAuthority('GET /jobs/{id}') OR isAnonymous()")
     @Operation(
             summary = "Lấy Job theo id",
             description = "Yêu cầu quyền: <b>GET /jobs/{id}</b>",
@@ -72,7 +72,7 @@ public class JobController {
 
     @GetMapping
     @ApiMessage(value = "Lấy danh sách Job")
-    @PreAuthorize("hasAuthority('GET /jobs')")
+    @PreAuthorize("hasAuthority('GET /jobs') OR isAnonymous()")
     @Operation(
             summary = "Lấy danh sách Job",
             description = "Yêu cầu quyền: <b>GET /jobs</b>",
@@ -97,7 +97,7 @@ public class JobController {
 
     @GetMapping("/companies/{id}")
     @ApiMessage(value = "Lấy Job theo Company")
-    @PreAuthorize("hasAuthority('GET /jobs/companies/{id}')")
+    @PreAuthorize("hasAuthority('GET /jobs/companies/{id}') OR isAnonymous()")
     @Operation(
             summary = "Lấy Job theo Company",
             description = "Yêu cầu quyền: <b>GET /jobs/companies/{id}</b>",

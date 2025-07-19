@@ -28,6 +28,7 @@ import ResumeManagerPage from "@/pages/admin/resume-page";
 import AccessControlPage from "@/pages/admin/access-control-page";
 import PermissionManagerPage from "@/pages/admin/access-control-page/permission-page";
 import RoleManagerPage from "@/pages/admin/access-control-page/role-page";
+import UserSessionPage from "@/pages/user/user-session-page";
 
 const router = createBrowserRouter([
   // =========================
@@ -53,7 +54,8 @@ const router = createBrowserRouter([
             element: <Navigate to={"info"} />,
           },
           { path: "info", element: <UserInfoPage /> },
-          { path: "resume", element: <UserResumePage /> },
+          { path: "resumes", element: <UserResumePage /> },
+          { path: "sessions", element: <UserSessionPage /> },
         ],
       },
     ],

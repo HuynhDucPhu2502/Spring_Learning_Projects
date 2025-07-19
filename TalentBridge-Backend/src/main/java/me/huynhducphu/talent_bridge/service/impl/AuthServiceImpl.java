@@ -3,9 +3,11 @@ package me.huynhducphu.talent_bridge.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.config.auth.AuthConfiguration;
-import me.huynhducphu.talent_bridge.dto.request.user.LoginRequestDto;
-import me.huynhducphu.talent_bridge.dto.response.user.AuthResult;
-import me.huynhducphu.talent_bridge.dto.response.user.AuthTokenResponseDto;
+import me.huynhducphu.talent_bridge.dto.request.auth.LoginRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.auth.SessionMetaRequest;
+import me.huynhducphu.talent_bridge.dto.response.auth.AuthResult;
+import me.huynhducphu.talent_bridge.dto.response.auth.AuthTokenResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.auth.SessionMetaResponse;
 import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserSessionResponseDto;
 import me.huynhducphu.talent_bridge.model.Role;
@@ -48,7 +50,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     public Long refreshTokenExpiration;
 
     @Override
-    public void verifyLoginCredentials(LoginRequestDto loginRequestDto) {
+    public AuthResult handleLogin(LoginRequestDto loginRequestDto) {
         // EXTRACT PRINCIPAL AND CREDENTIAL FROM REQUEST INTO TOKEN
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 loginRequestDto.getEmail(),
@@ -58,10 +60,14 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         // VERIFY TOKEN + SAVE AUTHENTICATION INTO CONTEXT
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return buildAuthResult(email, loginRequestDto.getSessionMetaRequest());
     }
 
     @Override
-    public ResponseCookie logoutRemoveCookie(String refreshToken) {
+    public ResponseCookie handleLogout(String refreshToken) {
         if (refreshToken != null) {
             String email = jwtDecoder.decode(refreshToken).getSubject();
 
@@ -82,33 +88,36 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     }
 
     @Override
-    public AuthResult buildAuthResult(String email) {
+    public AuthResult handleRefresh(String refreshToken, SessionMetaRequest sessionMetaRequest) {
+        String email = jwtDecoder.decode(refreshToken).getSubject();
+
         User user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+        String userId = user.getId().toString();
 
-        return buildAuthResult(user);
+        if (!refreshTokenRedisService.validateToken(refreshToken, userId))
+            throw new BadJwtException(null);
+
+
+        if (!user.getEmail().equalsIgnoreCase(email))
+            throw new BadJwtException(null);
+
+        refreshTokenRedisService.deleteRefreshToken(refreshToken, userId);
+
+        return buildAuthResult(user, sessionMetaRequest);
     }
 
     @Override
-    public AuthResult buildAuthResult(User user) {
-        String refreshToken = buildJwt(refreshTokenExpiration, user, true);
-        String accessToken = buildJwt(accessTokenExpiration, user, false);
+    public List<SessionMetaResponse> getAllSessionMetas(String refreshToken) {
+        String email = jwtDecoder.decode(refreshToken).getSubject();
 
-        ResponseCookie responseCookie = ResponseCookie
-                .from("refresh_token", refreshToken)
-                .httpOnly(true)
-                .path("/")
-                .sameSite("Strict")
-                .maxAge(refreshTokenExpiration)
-                .build();
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+        String userId = user.getId().toString();
 
-        AuthTokenResponseDto authTokenResponseDto = new AuthTokenResponseDto(
-                mapToUserInformation(user),
-                accessToken
-        );
-
-        return new AuthResult(authTokenResponseDto, responseCookie);
+        return refreshTokenRedisService.getAllSessionMetas(userId, refreshToken);
     }
 
     @Override
@@ -143,27 +152,6 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );
-    }
-
-    @Override
-    public AuthResult refreshAuthToken(String refreshToken) {
-        String email = jwtDecoder.decode(refreshToken).getSubject();
-
-        User user = userRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
-        String userId = user.getId().toString();
-
-        if (!refreshTokenRedisService.validateToken(refreshToken, userId))
-            throw new BadJwtException(null);
-
-
-        if (!user.getEmail().equalsIgnoreCase(email))
-            throw new BadJwtException(null);
-
-        refreshTokenRedisService.deleteRefreshToken(refreshToken, userId);
-
-        return buildAuthResult(user);
     }
 
     @Override
@@ -208,11 +196,49 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         return mapToUserInformation(user);
     }
 
-    private String buildJwt(
-            Long expirationRate,
-            User user,
-            boolean isCreatingRefreshToken
-    ) {
+    private AuthResult buildAuthResult(String email, SessionMetaRequest sessionMetaRequest) {
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        return buildAuthResult(user, sessionMetaRequest);
+    }
+
+    private AuthResult buildAuthResult(User user, SessionMetaRequest sessionMetaRequest) {
+
+        // ================================================
+        // HANDLE REFRESH TOKEN
+        String refreshToken = buildJwt(refreshTokenExpiration, user);
+        refreshTokenRedisService.saveRefreshToken(
+                refreshToken,
+                user.getId().toString(),
+                sessionMetaRequest,
+                Duration.ofSeconds(refreshTokenExpiration));
+
+        ResponseCookie responseCookie = ResponseCookie
+                .from("refresh_token", refreshToken)
+                .httpOnly(true)
+                .path("/")
+                .sameSite("Strict")
+                .maxAge(refreshTokenExpiration)
+                .build();
+        // ================================================
+
+        // ================================================
+        // HANDLE ACCESS TOKEN
+        String accessToken = buildJwt(accessTokenExpiration, user);
+
+        AuthTokenResponseDto authTokenResponseDto = new AuthTokenResponseDto(
+                mapToUserInformation(user),
+                accessToken
+        );
+        // ================================================
+
+
+        return new AuthResult(authTokenResponseDto, responseCookie);
+    }
+
+    private String buildJwt(Long expirationRate, User user) {
         Instant now = Instant.now();
         Instant validity = now.plus(expirationRate, ChronoUnit.SECONDS);
 
@@ -234,13 +260,6 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                 .build();
 
         String res = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
-
-        if (isCreatingRefreshToken)
-            refreshTokenRedisService.saveRefreshToken(
-                    res,
-                    user.getId().toString(),
-                    Duration.ofSeconds(expirationRate));
-
 
         return res;
     }
