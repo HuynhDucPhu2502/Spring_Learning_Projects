@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class LoginRequestDto {
+public class UserLoginRequestDto {
 
     @NotBlank(message = "Email người dùng không được để trống")
     @Email(

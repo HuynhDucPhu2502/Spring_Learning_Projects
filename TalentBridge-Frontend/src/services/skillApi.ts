@@ -6,12 +6,12 @@ import type {
 } from "@/types/apiResponse.types.ts";
 import type {
   createSkillRequestDto,
-  Skill,
+  DefaultSkillResponseDto,
   updateSkillRequestDto,
-} from "@/types/skill";
+} from "@/types/skill.types.ts";
 
 export const saveSkill = (data: createSkillRequestDto) => {
-  return axiosClient.post<ApiResponse<Skill>>("/skills", data);
+  return axiosClient.post<ApiResponse<DefaultSkillResponseDto>>("/skills", data);
 };
 
 export const getSkillsList = ({
@@ -26,17 +26,17 @@ export const getSkillsList = ({
 
   if (filter) params.append("filter", filter);
 
-  return axiosClient.get<ApiResponse<PageResponseDto<Skill>>>(
+  return axiosClient.get<ApiResponse<PageResponseDto<DefaultSkillResponseDto>>>(
     `/skills?${params.toString()}`,
   );
 };
 
 export const updateSkill = (data: updateSkillRequestDto) => {
-  return axiosClient.put<ApiResponse<PageResponseDto<Skill>>>("/skills", data);
+  return axiosClient.put<ApiResponse<PageResponseDto<DefaultSkillResponseDto>>>("/skills", data);
 };
 
 export const deleteSkillById = (id: number) => {
-  return axiosClient.delete<ApiResponse<PageResponseDto<Skill>>>(
+  return axiosClient.delete<ApiResponse<PageResponseDto<DefaultSkillResponseDto>>>(
     `/skills/${id}`,
   );
 };

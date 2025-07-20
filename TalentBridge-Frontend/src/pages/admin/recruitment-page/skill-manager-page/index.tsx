@@ -14,9 +14,9 @@ import {
 } from "@/services/skillApi";
 import type {
   createSkillRequestDto,
-  Skill,
+  DefaultSkillResponseDto,
   updateSkillRequestDto,
-} from "@/types/skill";
+} from "@/types/skill.types.ts";
 import Pagination from "@/components/custom/Pagination";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { SkillForm } from "./SkillForm";
@@ -25,7 +25,7 @@ import { SkillTable } from "./SkillTable";
 
 const SkillManagerPage = () => {
   // Data
-  const [skills, setSkills] = useState<Skill[]>([]);
+  const [skills, setSkills] = useState<DefaultSkillResponseDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Search
@@ -39,12 +39,12 @@ const SkillManagerPage = () => {
 
   // Form State
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
+  const [editingSkill, setEditingSkill] = useState<DefaultSkillResponseDto | null>(null);
 
   // ============================
   // HANDLE OPEN FORM
   // ============================
-  const openEditForm = (skill: Skill) => {
+  const openEditForm = (skill: DefaultSkillResponseDto) => {
     setEditingSkill(skill);
     setIsFormOpen(true);
   };

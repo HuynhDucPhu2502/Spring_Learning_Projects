@@ -3,8 +3,9 @@ package me.huynhducphu.talent_bridge.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.config.auth.AuthConfiguration;
-import me.huynhducphu.talent_bridge.dto.request.auth.LoginRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.auth.UserLoginRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.auth.SessionMetaRequest;
+import me.huynhducphu.talent_bridge.dto.request.auth.UserRegisterRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.auth.AuthResult;
 import me.huynhducphu.talent_bridge.dto.response.auth.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.auth.SessionMetaResponse;
@@ -12,6 +13,7 @@ import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserSessionResponseDto;
 import me.huynhducphu.talent_bridge.model.Role;
 import me.huynhducphu.talent_bridge.model.User;
+import me.huynhducphu.talent_bridge.repository.RoleRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
 import me.huynhducphu.talent_bridge.service.RefreshTokenRedisService;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
@@ -41,8 +44,11 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     private final JwtEncoder jwtEncoder;
     private final JwtDecoder jwtDecoder;
 
+    private final PasswordEncoder passwordEncoder;
+
     private final RefreshTokenRedisService refreshTokenRedisService;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @Value("${jwt.access-token-expiration}")
     public Long accessTokenExpiration;
@@ -51,11 +57,33 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     public Long refreshTokenExpiration;
 
     @Override
-    public AuthResult handleLogin(LoginRequestDto loginRequestDto) {
+    public UserSessionResponseDto handleRegister(UserRegisterRequestDto userRegisterRequestDto) {
+        User user = new User(
+                userRegisterRequestDto.getEmail(),
+                userRegisterRequestDto.getName(),
+                passwordEncoder.encode(userRegisterRequestDto.getPassword()),
+                userRegisterRequestDto.getDob(),
+                userRegisterRequestDto.getAddress(),
+                userRegisterRequestDto.getGender()
+        );
+
+        Role role = roleRepository
+                .findByName("USER")
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy chức vụ USER, đăng ký thất bại"));
+
+        user.setRole(role);
+
+        User savedUser = userRepository.saveAndFlush(user);
+
+        return mapToUserInformation(savedUser);
+    }
+
+    @Override
+    public AuthResult handleLogin(UserLoginRequestDto userLoginRequestDto) {
         // EXTRACT PRINCIPAL AND CREDENTIAL FROM REQUEST INTO TOKEN
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                loginRequestDto.getEmail(),
-                loginRequestDto.getPassword()
+                userLoginRequestDto.getEmail(),
+                userLoginRequestDto.getPassword()
         );
 
         // VERIFY TOKEN + SAVE AUTHENTICATION INTO CONTEXT
@@ -64,7 +92,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        return buildAuthResult(email, loginRequestDto.getSessionMetaRequest());
+        return buildAuthResult(email, userLoginRequestDto.getSessionMetaRequest());
     }
 
     @Override

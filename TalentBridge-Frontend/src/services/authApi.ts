@@ -1,17 +1,25 @@
 import axiosClient from "@/lib/axiosClient";
 import type { ApiResponse } from "@/types/apiResponse.types.ts";
 import type {
-  loginRequestDto,
+  UserLoginRequestDto,
   AuthTokenResponseDto,
   UserSessionResponseDto,
   UserDetailsResponseDto,
   SessionMetaRequest,
   SessionMetaResponse,
+  UserRegisterRequestDto,
 } from "@/types/user.types.ts";
 import { getSessionMeta } from "@/utils/sessionHelper";
 import axios from "axios";
 
-export const loginApi = (data: loginRequestDto) => {
+export const registerApi = (data: UserRegisterRequestDto) => {
+  return axiosClient.post<ApiResponse<UserSessionResponseDto>>(
+    "/auth/register",
+    data,
+  );
+};
+
+export const loginApi = (data: UserLoginRequestDto) => {
   data = {
     ...data,
     sessionMetaRequest: getSessionMeta(),

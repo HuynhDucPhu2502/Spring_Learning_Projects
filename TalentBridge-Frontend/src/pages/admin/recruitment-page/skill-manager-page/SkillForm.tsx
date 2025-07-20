@@ -9,17 +9,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type {
-  Skill,
+  DefaultSkillResponseDto,
   createSkillRequestDto,
   updateSkillRequestDto,
-} from "@/types/skill";
+} from "@/types/skill.types.ts";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface SkillFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: createSkillRequestDto, id?: number) => void;
-  initialData: Skill | null;
+  initialData: DefaultSkillResponseDto | null;
   onCloseForm: () => void;
 }
 

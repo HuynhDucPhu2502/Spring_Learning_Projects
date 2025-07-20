@@ -1,7 +1,8 @@
 package me.huynhducphu.talent_bridge.service;
 
-import me.huynhducphu.talent_bridge.dto.request.auth.LoginRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.auth.UserLoginRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.auth.SessionMetaRequest;
+import me.huynhducphu.talent_bridge.dto.request.auth.UserRegisterRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.auth.AuthResult;
 import me.huynhducphu.talent_bridge.dto.response.auth.SessionMetaResponse;
 import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
@@ -16,7 +17,9 @@ import java.util.List;
  **/
 public interface AuthService {
 
-    AuthResult handleLogin(LoginRequestDto loginRequestDto);
+    UserSessionResponseDto handleRegister(UserRegisterRequestDto userRegisterRequestDto);
+
+    AuthResult handleLogin(UserLoginRequestDto userLoginRequestDto);
 
     ResponseCookie handleLogout(String refreshToken);
 

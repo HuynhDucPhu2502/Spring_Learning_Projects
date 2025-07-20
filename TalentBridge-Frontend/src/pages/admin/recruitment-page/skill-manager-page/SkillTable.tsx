@@ -8,16 +8,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Skill } from "@/types/skill";
+import type { DefaultSkillResponseDto } from "@/types/skill.types.ts";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper.ts";
 
 interface SkillTableProps {
-  skills: Skill[];
+  skills: DefaultSkillResponseDto[];
   isLoading: boolean;
-  onEdit: (skill: Skill) => void;
+  onEdit: (skill: DefaultSkillResponseDto) => void;
   onDelete: (id: number) => void;
 }
 

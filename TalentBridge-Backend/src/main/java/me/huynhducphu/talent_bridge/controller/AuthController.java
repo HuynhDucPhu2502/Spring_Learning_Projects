@@ -4,8 +4,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
-import me.huynhducphu.talent_bridge.dto.request.auth.LoginRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.auth.UserLoginRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.auth.SessionMetaRequest;
+import me.huynhducphu.talent_bridge.dto.request.auth.UserRegisterRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.auth.AuthResult;
 import me.huynhducphu.talent_bridge.dto.response.auth.AuthTokenResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.auth.SessionMetaResponse;
@@ -30,12 +31,20 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @PostMapping("/register")
+    @ApiMessage(value = "Đăng ký thành công")
+    public ResponseEntity<UserSessionResponseDto> register(
+            @Valid @RequestBody UserRegisterRequestDto userRegisterRequestDto
+    ) {
+        return ResponseEntity.ok(authService.handleRegister(userRegisterRequestDto));
+    }
+
     @PostMapping("/login")
     @ApiMessage(value = "Đăng nhập thành công")
     public ResponseEntity<AuthTokenResponseDto> login(
-            @Valid @RequestBody LoginRequestDto loginRequestDto
+            @Valid @RequestBody UserLoginRequestDto userLoginRequestDto
     ) {
-        AuthResult authResult = authService.handleLogin(loginRequestDto);
+        AuthResult authResult = authService.handleLogin(userLoginRequestDto);
 
         AuthTokenResponseDto authTokenResponseDto = authResult.getAuthTokenResponseDto();
         ResponseCookie responseCookie = authResult.getResponseCookie();

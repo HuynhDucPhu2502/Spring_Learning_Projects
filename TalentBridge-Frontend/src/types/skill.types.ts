@@ -7,7 +7,7 @@ export interface updateSkillRequestDto {
   name: string;
 }
 
-export interface Skill {
+export interface DefaultSkillResponseDto {
   id: number;
   name: string;
   createdAt: string;

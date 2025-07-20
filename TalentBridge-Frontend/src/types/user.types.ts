@@ -1,20 +1,14 @@
+export interface AuthTokenResponseDto {
+  accessToken: string;
+  user: UserSessionResponseDto;
+}
+
 export interface UserSessionResponseDto {
   id: string;
   name: string;
   email: string;
   permissions: string[];
   logoUrl: string;
-}
-
-export interface loginRequestDto {
-  email: string;
-  password: string;
-  sessionMetaRequest: SessionMetaRequest;
-}
-
-export interface AuthTokenResponseDto {
-  accessToken: string;
-  user: UserSessionResponseDto;
 }
 
 export interface UserDetailsResponseDto {
@@ -27,18 +21,6 @@ export interface UserDetailsResponseDto {
   logoUrl: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface SelfUserUpdateProfileRequestDto {
-  name: string;
-  gender: "MALE" | "FEMALE" | "OTHER";
-  dob: string;
-  address: string;
-}
-
-export interface SelfUserUpdatePasswordRequestDto {
-  oldPassword: string;
-  newPassword: string;
 }
 
 export interface SessionMetaRequest {
@@ -54,4 +36,31 @@ export interface SessionMetaResponse {
   userAgent: string;
   loginAt: string;
   current: boolean;
+}
+
+export interface UserLoginRequestDto {
+  email: string;
+  password: string;
+  sessionMetaRequest: SessionMetaRequest | null;
+}
+
+export interface UserRegisterRequestDto {
+  name: string;
+  email: string;
+  password: string;
+  dob: string;
+  address: string;
+  gender: "MALE" | "FEMALE" | "OTHER";
+}
+
+export interface SelfUserUpdateProfileRequestDto {
+  name: string;
+  gender: "MALE" | "FEMALE" | "OTHER";
+  dob: string;
+  address: string;
+}
+
+export interface SelfUserUpdatePasswordRequestDto {
+  oldPassword: string;
+  newPassword: string;
 }

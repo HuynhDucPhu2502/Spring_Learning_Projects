@@ -30,6 +30,7 @@ public class SecurityConfiguration {
             // LOGIN
             "/auth/login",
             "/auth/logout",
+            "/auth/register",
             "/auth/refresh-token",
 
             // BASIC MODULES
