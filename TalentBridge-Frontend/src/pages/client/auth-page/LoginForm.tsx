@@ -1,11 +1,15 @@
 import { useAppDispatch } from "@/features/hooks";
 import { login } from "@/features/slices/auth/authThunk";
-import type { loginRequestDto } from "@/types/user.types.ts";
+import type { UserLoginRequestDto } from "@/types/user.types.ts";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function LoginPage() {
-  const [form, setForm] = useState<loginRequestDto>({ email: "", password: "" });
+  const [form, setForm] = useState<UserLoginRequestDto>({
+    email: "",
+    password: "",
+    sessionMetaRequest: null,
+  });
   const [error, setError] = useState<string>("");
   const dispatch = useAppDispatch();
 
@@ -35,44 +39,44 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col-reverse lg:flex-row w-11/12 max-w-6xl mx-auto my-20 shadow-xl rounded-xl overflow-hidden">
+    <div className="mx-auto my-20 flex w-11/12 max-w-6xl flex-col-reverse overflow-hidden rounded-xl shadow-xl lg:flex-row">
       {/* Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white p-8">
+      <div className="flex w-full items-center justify-center bg-white p-8 lg:w-1/2">
         <div className="w-full max-w-md">
-          <h2 className="text-3xl font-bold mb-6 text-center">Đăng nhập</h2>
+          <h2 className="mb-6 text-center text-3xl font-bold">Đăng nhập</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block mb-1 font-medium">Email</label>
+              <label className="mb-1 block font-medium">Email</label>
               <input
                 type="email"
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full rounded border border-gray-300 px-3 py-2"
                 placeholder="Nhập thư điện tử bạn ở đây"
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Mật khẩu</label>
+              <label className="mb-1 block font-medium">Mật khẩu</label>
               <input
                 type="password"
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full rounded border border-gray-300 px-3 py-2"
                 placeholder="Nhập mật khẩu bạn ở đây"
               />
             </div>
 
             {error && (
-              <div className="text-red-600 text-sm font-semibold">{error}</div>
+              <div className="text-sm font-semibold text-red-600">{error}</div>
             )}
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+              className="w-full rounded bg-blue-600 py-2 text-white transition hover:bg-blue-700"
             >
               Đăng nhập
             </button>
@@ -91,11 +95,11 @@ export default function LoginPage() {
       </div>
 
       {/* Illustration */}
-      <div className="w-full lg:w-1/2 h-64 lg:h-auto">
+      <div className="h-64 w-full lg:h-auto lg:w-1/2">
         <img
           src="login-illustration.png"
           alt="Login illustration"
-          className="object-cover w-full h-full"
+          className="h-full w-full object-cover"
         />
       </div>
     </div>

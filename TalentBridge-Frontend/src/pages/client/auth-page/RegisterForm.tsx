@@ -1,35 +1,34 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { getErrorMessage } from "@/features/slices/auth/authThunk";
+import { registerApi } from "@/services/authApi";
+import type { UserRegisterRequestDto } from "@/types/user.types";
+import type React from "react";
 
-interface RegisterFormData {
-  name: string;
-  email: string;
-  password: string;
-  age?: number;
-  address?: string;
-  gender: "MALE" | "FEMALE" | "OTHER";
-}
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
-  const [form, setForm] = useState<RegisterFormData>({
+  const [form, setForm] = useState<UserRegisterRequestDto>({
     name: "",
     email: "",
     password: "",
-    age: undefined,
+    dob: "",
     address: "",
     gender: "OTHER",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
 
     setForm((prev) => ({
       ...prev,
-      [name]: name === "age" ? (value ? Number(value) : undefined) : value,
+      [name]: value,
     }));
   };
 
@@ -38,34 +37,65 @@ export default function RegisterForm() {
     return regex.test(email);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateDateOfBirth = (dob: string): boolean => {
+    if (!dob) return true; // Optional field
+
+    const birthDate = new Date(dob);
+    const today = new Date();
+    const minDate = new Date(
+      today.getFullYear() - 120,
+      today.getMonth(),
+      today.getDate(),
+    );
+
+    return birthDate <= today && birthDate >= minDate;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.name || !form.email || !form.password) {
-      setError("Vui lòng điền các trường bắt buộc.");
-      return;
+    try {
+      setIsLoading(true);
+
+      if (!form.name || !form.email || !form.password) {
+        setError("Vui lòng điền các trường bắt buộc.");
+        return;
+      }
+
+      if (!validateEmail(form.email)) {
+        setError("Email không hợp lệ.");
+        return;
+      }
+
+      if (form.dob && !validateDateOfBirth(form.dob)) {
+        setError("Ngày sinh không hợp lệ.");
+        return;
+      }
+
+      await registerApi(form);
+      toast.info("Đăng ký thành công, vui lòng đăng nhập lại");
+      navigate("/auth?mode=login");
+    } catch (err) {
+      toast.error(getErrorMessage(err, "Thao tác thất bại"));
+    } finally {
+      setIsLoading(false);
+      setError("");
     }
 
-    if (!validateEmail(form.email)) {
-      setError("Email không hợp lệ.");
-      return;
-    }
-
-    // TODO: Gửi request đăng ký ở đây
     console.log("Đăng ký với:", form);
     setError("");
   };
 
   return (
-    <div className="flex flex-col-reverse lg:flex-row w-11/12 max-w-6xl mx-auto my-20 shadow-2xl bg-orange-400 rounded-xl overflow-hidden">
+    <div className="mx-auto my-20 flex w-11/12 max-w-6xl flex-col-reverse overflow-hidden rounded-xl bg-orange-400 shadow-2xl lg:flex-row">
       {/* Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white p-8">
+      <div className="flex w-full items-center justify-center bg-white p-8 lg:w-1/2">
         <div className="w-full max-w-md">
-          <h2 className="text-3xl font-bold mb-6 text-center">Đăng ký</h2>
+          <h2 className="mb-6 text-center text-3xl font-bold">Đăng ký</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block mb-1 font-medium">
+              <label className="mb-1 block font-medium">
                 Họ tên <span className="text-red-500">*</span>
               </label>
               <input
@@ -73,13 +103,13 @@ export default function RegisterForm() {
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full rounded border border-gray-300 px-3 py-2"
                 placeholder="Tên của bạn"
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">
+              <label className="mb-1 block font-medium">
                 Email <span className="text-red-500">*</span>
               </label>
               <input
@@ -87,13 +117,13 @@ export default function RegisterForm() {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full rounded border border-gray-300 px-3 py-2"
                 placeholder="your@email.com"
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">
+              <label className="mb-1 block font-medium">
                 Mật khẩu <span className="text-red-500">*</span>
               </label>
               <input
@@ -101,42 +131,42 @@ export default function RegisterForm() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full rounded border border-gray-300 px-3 py-2"
                 placeholder="********"
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Tuổi</label>
+              <label className="mb-1 block font-medium">Ngày sinh</label>
               <input
-                type="number"
-                name="age"
-                value={form.age ?? ""}
+                type="date"
+                name="dob"
+                value={form.dob ?? ""}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2"
-                placeholder="18"
+                className="w-full rounded border border-gray-300 px-3 py-2"
+                max={new Date().toISOString().split("T")[0]} // Prevent future dates
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Địa chỉ</label>
+              <label className="mb-1 block font-medium">Địa chỉ</label>
               <input
                 type="text"
                 name="address"
                 value={form.address}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full rounded border border-gray-300 px-3 py-2"
                 placeholder="Số nhà, đường, TP"
               />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">Giới tính</label>
+              <label className="mb-1 block font-medium">Giới tính</label>
               <select
                 name="gender"
                 value={form.gender}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full rounded border border-gray-300 px-3 py-2"
               >
                 <option value="MALE">Nam</option>
                 <option value="FEMALE">Nữ</option>
@@ -145,14 +175,15 @@ export default function RegisterForm() {
             </div>
 
             {error && (
-              <div className="text-red-600 text-sm font-semibold">{error}</div>
+              <div className="text-sm font-semibold text-red-600">{error}</div>
             )}
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+              disabled={isLoading}
+              className="w-full rounded bg-blue-600 py-2 text-white transition hover:bg-blue-700"
             >
-              Đăng ký
+              {isLoading ? "Đang đăng ký..." : "Đăng ký ngay"}
             </button>
           </form>
 
@@ -169,11 +200,11 @@ export default function RegisterForm() {
       </div>
 
       {/* Illustration */}
-      <div className="w-full lg:w-1/2 h-64 lg:h-auto">
+      <div className="h-64 w-full lg:h-auto lg:w-1/2">
         <img
           src="register-illustration.png"
           alt="Register illustration"
-          className="object-top object-cover lg:object-top lg:object-fill w-full h-full"
+          className="h-full w-full object-cover object-top lg:object-fill lg:object-top"
         />
       </div>
     </div>

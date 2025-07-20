@@ -4,7 +4,7 @@ import {
   logoutApi,
   refreshTokenApi,
 } from "@/services/authApi";
-import type { loginRequestDto } from "@/types/user.types.ts";
+import type { UserLoginRequestDto } from "@/types/user.types.ts";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -13,7 +13,7 @@ import axios from "axios";
 // ===========================================
 export const login = createAsyncThunk(
   "auth/login",
-  async (data: loginRequestDto, thunkAPI) => {
+  async (data: UserLoginRequestDto, thunkAPI) => {
     try {
       const res = await loginApi(data);
       return res.data.data;
