@@ -33,14 +33,17 @@ public class RefreshTokenRedisServiceImpl implements me.huynhducphu.talent_bridg
             String token, String userId,
             SessionMetaRequest sessionMetaRequest, Duration expire
     ) {
+        String sessionId = buildKey(token, userId);
+
         SessionMeta sessionMeta = new SessionMeta(
+                sessionId,
                 sessionMetaRequest.getDeviceName(),
                 sessionMetaRequest.getDeviceType(),
                 sessionMetaRequest.getUserAgent(),
                 Instant.now()
         );
 
-        redisSessionMetaTemplate.opsForValue().set(buildKey(token, userId), sessionMeta, expire);
+        redisSessionMetaTemplate.opsForValue().set(sessionId, sessionMeta, expire);
     }
 
     @Override
@@ -51,6 +54,11 @@ public class RefreshTokenRedisServiceImpl implements me.huynhducphu.talent_bridg
     @Override
     public void deleteRefreshToken(String token, String userId) {
         redisSessionMetaTemplate.delete(buildKey(token, userId));
+    }
+
+    @Override
+    public void deleteRefreshToken(String key) {
+        redisSessionMetaTemplate.delete(key);
     }
 
     @Override
@@ -70,6 +78,7 @@ public class RefreshTokenRedisServiceImpl implements me.huynhducphu.talent_bridg
             boolean isCurrent = currentTokenHash.equals(keyHash);
 
             SessionMetaResponse sessionMetaResponse = new SessionMetaResponse(
+                    meta.getSessionId(),
                     meta.getDeviceName(),
                     meta.getDeviceType(),
                     meta.getUserAgent(),

@@ -2,6 +2,7 @@ package me.huynhducphu.talent_bridge.exception.handler;
 
 import jakarta.persistence.EntityNotFoundException;
 import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
+import me.huynhducphu.talent_bridge.exception.custom.ImmutableFieldException;
 import me.huynhducphu.talent_bridge.exception.custom.InvalidImageDataException;
 import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -174,6 +175,22 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse<>(
                         message,
                         "ACCESS_DENIED"
+                ));
+    }
+
+    @ExceptionHandler(ImmutableFieldException.class)
+    public ResponseEntity<ApiResponse<?>> handleImmutableFieldException(
+            ImmutableFieldException ex
+    ) {
+        String message = "Không có quyền truy cập";
+        if (ex.getMessage() != null)
+            message = ex.getMessage();
+        
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiResponse<>(
+                        message,
+                        "IMMUTABLE_FIELD"
                 ));
     }
 }

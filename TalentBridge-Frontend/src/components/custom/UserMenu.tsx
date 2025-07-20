@@ -82,7 +82,7 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
 
         <DropdownMenuItem>
           <Link
-            to={"user/info"}
+            to={"/user/info"}
             className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-blue-50"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
@@ -99,7 +99,7 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
 
         <DropdownMenuItem>
           <Link
-            to={"user/resumes"}
+            to={"/user/resumes"}
             className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-blue-50"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
@@ -116,7 +116,7 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
 
         <DropdownMenuItem>
           <Link
-            to={"user/sessions"}
+            to={"/user/sessions"}
             className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-blue-50"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">

@@ -35,7 +35,6 @@ export function JobTable({
     const variants = {
       Active: "default",
       Inactive: "secondary",
-      Draft: "outline",
     } as const;
 
     return (

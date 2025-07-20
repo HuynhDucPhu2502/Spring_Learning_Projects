@@ -67,7 +67,13 @@ public class RoleServiceImpl implements me.huynhducphu.talent_bridge.service.Rol
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Chức vụ không tồn tại"));
 
-        role.setName(defaultRoleRequestDto.getName());
+        String currentName = role.getName();
+        if (
+                currentName != null
+                        && !currentName.equalsIgnoreCase("ADMIN")
+                        && !currentName.equalsIgnoreCase("USER")
+        ) role.setName(defaultRoleRequestDto.getName());
+
         role.setDescription(defaultRoleRequestDto.getDescription());
         role.setActive(defaultRoleRequestDto.isActive());
 
@@ -77,7 +83,7 @@ public class RoleServiceImpl implements me.huynhducphu.talent_bridge.service.Rol
                     .collect(Collectors.toSet());
 
             Set<Permission> currentPermissions = new HashSet<>(role.getPermissions());
-            currentPermissions.removeIf(x -> !currentPermissions.contains(x.getId()));
+            currentPermissions.removeIf(x -> !requestedPermissionIds.contains(x.getId()));
 
             Set<Long> currentPermissionIds = currentPermissions.stream()
                     .map(Permission::getId)

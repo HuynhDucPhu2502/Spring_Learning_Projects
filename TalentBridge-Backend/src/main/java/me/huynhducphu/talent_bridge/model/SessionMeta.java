@@ -14,6 +14,7 @@ import java.time.Instant;
 @Data
 public class SessionMeta {
 
+    private String sessionId;
     private String deviceName;
     private String deviceType;
     private String userAgent;

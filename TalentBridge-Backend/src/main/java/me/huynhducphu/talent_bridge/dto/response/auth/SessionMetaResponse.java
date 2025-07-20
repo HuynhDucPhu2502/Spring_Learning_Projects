@@ -14,10 +14,11 @@ import java.time.Instant;
 @Data
 public class SessionMetaResponse {
 
+    private String sessionId;
     private String deviceName;
     private String deviceType;
     private String userAgent;
     private Instant loginAt;
     private boolean current;
-    
+
 }

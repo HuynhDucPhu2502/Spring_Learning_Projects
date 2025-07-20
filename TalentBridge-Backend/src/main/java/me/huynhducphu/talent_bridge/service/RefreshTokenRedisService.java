@@ -17,5 +17,7 @@ public interface RefreshTokenRedisService {
 
     void deleteRefreshToken(String token, String userId);
 
+    void deleteRefreshToken(String key);
+
     List<SessionMetaResponse> getAllSessionMetas(String userId, String currentRefreshToken);
 }

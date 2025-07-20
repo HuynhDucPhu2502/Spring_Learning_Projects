@@ -16,6 +16,7 @@ import me.huynhducphu.talent_bridge.repository.UserRepository;
 import me.huynhducphu.talent_bridge.service.RefreshTokenRedisService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -121,16 +122,6 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     }
 
     @Override
-    public UserSessionResponseDto getCurrentUser() {
-        String currentUserEmail = SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
-
-        return mapToUserInformation(currentUserEmail);
-    }
-
-    @Override
     public UserDetailsResponseDto getCurrentUserDetails() {
         String currentUserEmail = SecurityContextHolder
                 .getContext()
@@ -152,6 +143,35 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );
+    }
+
+    @Override
+    public UserSessionResponseDto getCurrentUser() {
+        String currentUserEmail = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        return mapToUserInformation(currentUserEmail);
+    }
+
+    @Override
+    public void removeSession(String sessionId) {
+        String[] part = sessionId.split(":");
+        String sessionUserId = part[3];
+
+        String loginUserId = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+        User user = userRepository
+                .findByEmail(loginUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        if (!user.getId().toString().equalsIgnoreCase(sessionUserId))
+            throw new AccessDeniedException("Không có quyền truy cập");
+
+        refreshTokenRedisService.deleteRefreshToken(sessionId);
     }
 
     @Override

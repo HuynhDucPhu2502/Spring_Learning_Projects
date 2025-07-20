@@ -8,6 +8,7 @@ import me.huynhducphu.talent_bridge.dto.request.auth.LoginRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.auth.SessionMetaRequest;
 import me.huynhducphu.talent_bridge.dto.response.auth.AuthResult;
 import me.huynhducphu.talent_bridge.dto.response.auth.AuthTokenResponseDto;
+import me.huynhducphu.talent_bridge.dto.response.auth.SessionMetaResponse;
 import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserSessionResponseDto;
 import me.huynhducphu.talent_bridge.service.AuthService;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Admin 6/8/2025
@@ -29,7 +32,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ApiMessage(value = "Đăng nhập thành công")
-    public ResponseEntity<?> login(
+    public ResponseEntity<AuthTokenResponseDto> login(
             @Valid @RequestBody LoginRequestDto loginRequestDto
     ) {
         AuthResult authResult = authService.handleLogin(loginRequestDto);
@@ -44,7 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(
+    public ResponseEntity<Void> logout(
             @CookieValue(value = "refresh_token", required = false) String refreshToken
     ) {
         ResponseCookie responseCookie = authService.handleLogout(refreshToken);
@@ -69,7 +72,7 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     @ApiMessage(value = "Lấy refresh token")
-    public ResponseEntity<?> refreshToken(
+    public ResponseEntity<AuthTokenResponseDto> refreshToken(
             @CookieValue(value = "refresh_token") String refreshToken,
             @RequestBody SessionMetaRequest sessionMetaRequest
     ) {
@@ -86,8 +89,16 @@ public class AuthController {
 
     @GetMapping("/sessions")
     @ApiMessage(value = "Lấy session")
-    public ResponseEntity<?> getSessions(@CookieValue(value = "refresh_token") String refreshToken) {
+    public ResponseEntity<List<SessionMetaResponse>> getSessions(@CookieValue(value = "refresh_token") String refreshToken) {
         return ResponseEntity.ok(authService.getAllSessionMetas(refreshToken));
+    }
+
+    @DeleteMapping("/sessions/{sessionId}")
+    @ApiMessage(value = "Xóa session")
+    public ResponseEntity<Void> removeSession(@PathVariable String sessionId) {
+        authService.removeSession(sessionId);
+
+        return ResponseEntity.ok().build();
     }
 
 
