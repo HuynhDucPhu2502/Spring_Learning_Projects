@@ -48,6 +48,7 @@ export interface SessionMetaRequest {
 }
 
 export interface SessionMetaResponse {
+  sessionId: string;
   deviceName: string;
   deviceType: string;
   userAgent: string;

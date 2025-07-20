@@ -1,6 +1,6 @@
 import type React from "react";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -118,6 +118,11 @@ export function RoleForm({
     });
   };
 
+  const isDefaultRoleName = useMemo(
+    () => initialData?.name === "USER" || initialData?.name === "ADMIN",
+    [initialData],
+  );
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -162,7 +167,13 @@ export function RoleForm({
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, name: e.target.value }))
                   }
+                  disabled={isDefaultRoleName}
                 />
+                {isDefaultRoleName && (
+                  <span className="text-sm text-red-600 italic">
+                    Chức vụ mặc định không được phép đổi tên
+                  </span>
+                )}
               </div>
 
               {/* Description */}
@@ -180,7 +191,13 @@ export function RoleForm({
                       description: e.target.value,
                     }))
                   }
+                  disabled={isDefaultRoleName}
                 />
+                {isDefaultRoleName && (
+                  <span className="text-sm text-red-600 italic">
+                    Chức vụ mặc định không được phép đổi mô tả
+                  </span>
+                )}
               </div>
 
               {/* Active */}

@@ -54,3 +54,7 @@ export const refreshTokenApi = () => {
 export const getSessions = () => {
   return axiosClient.get<ApiResponse<SessionMetaResponse[]>>(`/auth/sessions`);
 };
+
+export const removeSessionId = (sessionId: string) => {
+  return axiosClient.delete(`/auth/sessions/${sessionId}`);
+};
