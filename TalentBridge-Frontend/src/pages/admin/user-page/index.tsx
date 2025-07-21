@@ -9,6 +9,7 @@ import { Plus } from "lucide-react";
 import Pagination from "@/components/custom/Pagination";
 import { UserTable } from "./UserTable";
 import { useNavigate } from "react-router-dom";
+import HasPermission from "@/components/custom/HasPermission";
 
 const UserManagerPage = () => {
   const navigate = useNavigate();
@@ -121,13 +122,15 @@ const UserManagerPage = () => {
 
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Danh sách người dùng</h2>
-        <Button
-          onClick={handleOpenCreatePage}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Thêm người dùng
-        </Button>
+        <HasPermission perm={"POST /users"}>
+          <Button
+            onClick={handleOpenCreatePage}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Thêm người dùng
+          </Button>
+        </HasPermission>
       </div>
 
       <UserTable

@@ -1,6 +1,8 @@
 package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,11 @@ public class PermissionController {
 
     @GetMapping
     @ApiMessage("Lấy danh sách quyền hạn")
+    @Operation(
+            summary = "Lấy danh sách quyền hạn",
+            description = "Yêu cầu quyền: <b>'GET /permissions/*</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<?> findAllPermissions(
             @Filter Specification<Permission> spec,
             @PageableDefault(size = 5) Pageable pageable
@@ -55,6 +62,11 @@ public class PermissionController {
 
     @GetMapping("/all")
     @ApiMessage("Lấy toàn bộ quyền hạn (không phân trang)")
+    @Operation(
+            summary = "Lấy toàn bộ quyền hạn (không phân trang)",
+            description = "Yêu cầu quyền: <b>'GET /permissions/*</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<?> findAllPermissionsNoPaging(
             @Filter Specification<Permission> spec
     ) {
@@ -68,6 +80,11 @@ public class PermissionController {
 
     @PostMapping
     @ApiMessage(value = "Tạo quyền hạn")
+    @Operation(
+            summary = "Tạo quyền hạn",
+            description = "Yêu cầu quyền: <b>'GET /permissions/*</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public DefaultPermissionResponseDto savePermission(
             @Valid @RequestBody DefaultPermissionRequestDto defaultPermissionRequestDto
     ) {
@@ -76,6 +93,11 @@ public class PermissionController {
 
     @PutMapping("/{id}")
     @ApiMessage(value = "Cập nhật quyền hạn")
+    @Operation(
+            summary = "Cập nhật quyền hạn",
+            description = "Yêu cầu quyền: <b>'GET /permissions/*</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public DefaultPermissionResponseDto updatePermission(
             @Valid @RequestBody DefaultPermissionRequestDto defaultPermissionRequestDto,
             @PathVariable Long id
@@ -85,6 +107,11 @@ public class PermissionController {
 
     @DeleteMapping("/{id}")
     @ApiMessage(value = "Xóa quyền hạn")
+    @Operation(
+            summary = "Xóa quyền hạn",
+            description = "Yêu cầu quyền: <b>'GET /permissions/*</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public DefaultPermissionResponseDto deletePermission(
             @PathVariable Long id
     ) {
