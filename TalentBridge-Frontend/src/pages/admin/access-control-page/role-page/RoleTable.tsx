@@ -14,7 +14,7 @@ import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper.ts";
 import type { DefaultRoleResponseDto } from "@/types/role.d.ts";
 import { Badge } from "@/components/ui/badge.tsx";
-import HasPermission from "@/components/custom/HasPermission";
+import HasPermission from "@/pages/common/HasPermission.tsx";
 
 interface RoleTableProps {
   roles: DefaultRoleResponseDto[];

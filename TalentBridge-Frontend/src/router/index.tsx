@@ -19,19 +19,23 @@ import AdminPage from "@/pages/admin";
 import CompanyManagerPage from "@/pages/admin/company-page";
 import DashboardPage from "@/pages/admin/dashboard-page";
 import RecruitmentManagerPage from "@/pages/admin/recruitment-page";
+import SkillManagerAdminPage from "@/pages/admin/recruitment-page/skill-manage-page";
 import JobManagerPage from "@/pages/admin/recruitment-page/job-manager-page";
 import JobUpsertPage from "@/pages/admin/recruitment-page/job-manager-page/job-upsert-page";
-import SkillManagerPage from "@/pages/admin/recruitment-page/skill-manager-page";
 import ResumeManagerPage from "@/pages/admin/resume-page";
 import AccessControlPage from "@/pages/admin/access-control-page";
 import PermissionManagerPage from "@/pages/admin/access-control-page/permission-page";
 import RoleManagerPage from "@/pages/admin/access-control-page/role-page";
 import UserManagerPage from "@/pages/admin/user-page";
+import UserUpsertPage from "@/pages/admin/user-page/user-upsert-page";
+
+// RECRUITER PAGE
+import RecruiterPage from "@/pages/recruiter";
+import SkillManagerRecruiterPage from "@/pages/recruiter/skill-manager-page";
 
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
-import UserUpsertPage from "@/pages/admin/user-page/user-upsert-page";
-import { ProtectedRoute } from "@/components/custom/ProtectedRoute";
+import { ProtectedRoute } from "@/pages/common/ProtectedRoute.tsx";
 
 const router = createBrowserRouter([
   // =========================
@@ -105,7 +109,7 @@ const router = createBrowserRouter([
             path: "skill-manager",
             element: (
               <ProtectedRoute to="/admin" requiredPermission="GET /skills">
-                <SkillManagerPage />
+                <SkillManagerAdminPage />
               </ProtectedRoute>
             ),
           },
@@ -177,6 +181,25 @@ const router = createBrowserRouter([
       },
 
       // NOT FOUND
+      { path: "*", element: <ErrorPage /> },
+    ],
+  },
+
+  // =========================
+  // RECRUITER ROUTE GROUP
+  // =========================
+  {
+    path: "recruiter",
+    element: <RecruiterPage />,
+    children: [
+      {
+        path: "skill-manager",
+        element: (
+          <ProtectedRoute to="/recruiter" requiredPermission="GET /skills">
+            <SkillManagerRecruiterPage />
+          </ProtectedRoute>
+        ),
+      },
       { path: "*", element: <ErrorPage /> },
     ],
   },

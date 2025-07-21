@@ -8,60 +8,50 @@ const routeTitles: Record<
   string,
   { title: string; subtitle?: string; icon?: string }
 > = {
-  "/admin/dashboard": {
-    title: "Dashboard",
-    subtitle: "Tổng quan hệ thống",
-    icon: "📊",
-  },
-  "/admin/company": {
-    title: "Quản lý công ty",
-    subtitle: "Danh sách và thông tin công ty",
+  "/recruiter/company": {
+    title: "Công ty tôi",
+    subtitle: "Thông tin và cài đặt công ty",
     icon: "🏢",
   },
-  "/admin/user-manager": {
-    title: "Quản lý người dùng",
-    subtitle: "Tài khoản và phân quyền",
-    icon: "👥",
-  },
-  "/admin/recruitment/job-manager": {
-    title: "Quản lý việc làm",
-    subtitle: "Đăng tải và quản lý job",
+  "/recruiter/jobs": {
+    title: "Việc làm",
+    subtitle: "Quản lý tin tuyển dụng",
     icon: "💼",
   },
-  "/admin/recruitment/job-manager/upsert": {
-    title: "Thêm việc làm",
-    subtitle: "Tạo job posting mới",
+  "/recruiter/jobs/create": {
+    title: "Tạo việc làm mới",
+    subtitle: "Đăng tin tuyển dụng",
     icon: "➕",
   },
-  "/admin/recruitment/skill-manager": {
-    title: "Quản lý kỹ năng",
-    subtitle: "Danh sách kỹ năng",
+  "/recruiter/jobs/edit": {
+    title: "Chỉnh sửa việc làm",
+    subtitle: "Cập nhật tin tuyển dụng",
+    icon: "✏️",
+  },
+  "/recruiter/skills": {
+    title: "Kỹ năng",
+    subtitle: "Quản lý kỹ năng yêu cầu",
     icon: "🛠️",
   },
-  "/admin/resume": {
-    title: "Quản lý CV",
-    subtitle: "Hồ sơ ứng viên",
+  "/recruiter/resumes": {
+    title: "Hồ sơ ứng tuyển",
+    subtitle: "Danh sách CV ứng viên",
     icon: "📄",
   },
-  "/admin/access-control/permission": {
-    title: "Phân quyền",
-    subtitle: "Quản lý quyền truy cập",
-    icon: "🔐",
-  },
-  "/admin/access-control/role": {
-    title: "Chức vụ",
-    subtitle: "Chỉnh sửa quyền cho chức vụ",
-    icon: "🔐",
+  "/recruiter/resumes/detail": {
+    title: "Chi tiết hồ sơ",
+    subtitle: "Thông tin ứng viên",
+    icon: "👤",
   },
 };
 
-export function AdminTopBar() {
+export function RecruiterTopBar() {
   const { isLogin } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
   const currentRoute = routeTitles[location.pathname] || {
-    title: "Admin",
-    subtitle: "Quản trị hệ thống",
+    title: "Recruiter",
+    subtitle: "Hệ thống tuyển dụng",
   };
 
   return (
@@ -69,11 +59,11 @@ export function AdminTopBar() {
       {/* Left side */}
       <div className="flex items-center gap-4">
         <SidebarTrigger
-          className={`transition-colors hover:bg-blue-50 hover:text-blue-600 lg:hidden`}
+          className={`transition-colors hover:bg-purple-50 hover:text-purple-600 lg:hidden`}
         />
         <div className="flex items-center gap-3">
           {currentRoute.icon && (
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100">
               <span className="text-lg">{currentRoute.icon}</span>
             </div>
           )}

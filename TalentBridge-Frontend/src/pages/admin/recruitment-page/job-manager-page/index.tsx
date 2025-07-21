@@ -15,7 +15,7 @@ import Pagination from "@/components/custom/Pagination";
 
 import { JobDetailsSidebar } from "./JobDetailsSidebar";
 import { JobTable } from "./JobTable";
-import HasPermission from "@/components/custom/HasPermission";
+import HasPermission from "@/pages/common/HasPermission.tsx";
 
 const JobManagerPage = () => {
   const navigate = useNavigate();

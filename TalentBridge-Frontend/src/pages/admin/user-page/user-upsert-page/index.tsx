@@ -27,7 +27,7 @@ import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
 import { getUserById, saveUser, updateUser } from "@/services/userApi";
 import type { CompanySummary } from "@/types/job";
-import CompanySelection from "../../../../components/custom/CompanySelection.tsx";
+import CompanySelection from "../../../common/CompanySelection.tsx";
 import type { RoleSummary } from "@/types/role.js";
 import RoleSelection from "@/components/custom/RoleSelection.tsx";
 import { useAppSelector } from "@/features/hooks.ts";

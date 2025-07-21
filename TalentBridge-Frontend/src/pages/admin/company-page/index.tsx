@@ -16,7 +16,7 @@ import { CompanySearchSection } from "./CompanySearchSection";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { CompanyTable } from "./CompanyTable";
-import HasPermission from "@/components/custom/HasPermission";
+import HasPermission from "@/pages/common/HasPermission.tsx";
 
 export default function CompanyManagerPage() {
   // Data

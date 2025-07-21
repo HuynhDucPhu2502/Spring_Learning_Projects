@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -11,20 +11,24 @@ import {
   getSkillsList,
   saveSkill,
   updateSkill,
-} from "@/services/skillApi";
+} from "@/services/skillApi.ts";
 import type {
   createSkillRequestDto,
   DefaultSkillResponseDto,
   updateSkillRequestDto,
 } from "@/types/skill.d.ts";
-import Pagination from "@/components/custom/Pagination";
-import { getErrorMessage } from "@/features/slices/auth/authThunk";
-import { SkillForm } from "./SkillForm";
-import { SkillSearchSection } from "./SkillSearchSection";
-import { SkillTable } from "./SkillTable";
-import HasPermission from "@/components/custom/HasPermission";
+import Pagination from "@/components/custom/Pagination.tsx";
+import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
+import { SkillForm } from "./SkillForm.tsx";
+import { SkillSearchSection } from "./SkillSearchSection.tsx";
+import { SkillTable } from "./SkillTable.tsx";
+import HasPermission from "@/pages/common/HasPermission.tsx";
 
-const SkillManagerPage = () => {
+interface SkillManagerProps {
+  theme?: string;
+}
+
+const SkillManagerPage = ({ theme = "blue" }: SkillManagerProps) => {
   // Data
   const [skills, setSkills] = useState<DefaultSkillResponseDto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -140,7 +144,7 @@ const SkillManagerPage = () => {
         <h2 className="text-lg font-semibold">Danh sách Kỹ năng</h2>
         <HasPermission perm={"POST /skills"}>
           <Button
-            className="bg-blue-600 hover:bg-blue-700"
+            className={`bg-${theme}-600 hover:bg-${theme}-700`}
             onClick={openCreateForm}
           >
             <Plus className="mr-2 h-4 w-4" />
@@ -154,6 +158,7 @@ const SkillManagerPage = () => {
         isLoading={isLoading}
         onEdit={openEditForm}
         onDelete={handleDeleteSkill}
+        theme={theme}
       />
 
       <Pagination
@@ -164,6 +169,7 @@ const SkillManagerPage = () => {
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
         showItemsPerPageSelect={true}
+        theme={theme}
       />
 
       <SkillForm
@@ -172,6 +178,7 @@ const SkillManagerPage = () => {
         onSubmit={handleAddOrUpdateSkill}
         initialData={editingSkill}
         onCloseForm={() => setEditingSkill(null)}
+        theme={theme}
       />
     </div>
   );

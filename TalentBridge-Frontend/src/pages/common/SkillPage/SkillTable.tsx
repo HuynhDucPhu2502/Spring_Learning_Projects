@@ -1,5 +1,5 @@
 import { Edit, Trash2, Wrench } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Table,
   TableBody,
@@ -7,19 +7,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table.tsx";
 import type { DefaultSkillResponseDto } from "@/types/skill.d.ts";
-import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
-import { EmptyState } from "@/components/custom/EmptyState";
-import LoadingSpinner from "@/components/custom/LoadingSpinner";
+import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog.tsx";
+import { EmptyState } from "@/components/custom/EmptyState.tsx";
+import LoadingSpinner from "@/components/custom/LoadingSpinner.tsx";
 import { formatISO } from "@/utils/convertHelper.ts";
-import HasPermission from "@/components/custom/HasPermission";
+import HasPermission from "@/pages/common/HasPermission.tsx";
 
 interface SkillTableProps {
   skills: DefaultSkillResponseDto[];
   isLoading: boolean;
   onEdit: (skill: DefaultSkillResponseDto) => void;
   onDelete: (id: number) => void;
+  theme?: string;
 }
 
 export function SkillTable({
@@ -27,11 +28,12 @@ export function SkillTable({
   isLoading,
   onEdit,
   onDelete,
+  theme = "blue",
 }: SkillTableProps) {
   return (
-    <div className="overflow-hidden rounded-lg border border-blue-600">
+    <div className={`overflow-hidden rounded-lg border border-${theme}-600`}>
       <Table>
-        <TableHeader className="bg-blue-600 text-white">
+        <TableHeader className={`bg-${theme}-600 text-white`}>
           <TableRow>
             <TableHead className="text-center font-bold text-white">
               ID

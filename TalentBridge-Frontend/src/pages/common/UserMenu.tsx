@@ -1,5 +1,5 @@
 import { User, LogOut, Briefcase, LockKeyhole } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,12 +7,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAppDispatch, useAppSelector } from "@/features/hooks";
-import { logout } from "@/features/slices/auth/authThunk";
+} from "@/components/ui/dropdown-menu.tsx";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
+import { useAppDispatch, useAppSelector } from "@/features/hooks.ts";
+import { logout } from "@/features/slices/auth/authThunk.ts";
 import { Link } from "react-router-dom";
-import { Badge } from "../ui/badge";
+import { Badge } from "../../components/ui/badge.tsx";
 
 interface UserMenuProps {
   blackTheme?: boolean;

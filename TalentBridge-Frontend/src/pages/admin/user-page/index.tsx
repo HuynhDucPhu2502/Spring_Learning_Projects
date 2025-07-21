@@ -9,7 +9,7 @@ import { Plus } from "lucide-react";
 import Pagination from "@/components/custom/Pagination";
 import { UserTable } from "./UserTable";
 import { useNavigate } from "react-router-dom";
-import HasPermission from "@/components/custom/HasPermission";
+import HasPermission from "@/pages/common/HasPermission.tsx";
 
 const UserManagerPage = () => {
   const navigate = useNavigate();

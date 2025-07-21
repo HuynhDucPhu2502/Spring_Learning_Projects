@@ -20,7 +20,7 @@ import {
 } from "@radix-ui/react-tooltip";
 import { Badge } from "@/components/ui/badge";
 import { getResumeStatusColor } from "@/utils/tagColorMapper.ts";
-import HasPermission from "@/components/custom/HasPermission";
+import HasPermission from "@/pages/common/HasPermission.tsx";
 
 interface ResumeTableProps {
   resumes: ResumeForDisplayResponseDto[];

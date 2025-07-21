@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/dialog.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import type {
   DefaultSkillResponseDto,
   createSkillRequestDto,
@@ -21,6 +21,7 @@ interface SkillFormProps {
   onSubmit: (data: createSkillRequestDto, id?: number) => void;
   initialData: DefaultSkillResponseDto | null;
   onCloseForm: () => void;
+  theme?: string;
 }
 
 export function SkillForm({
@@ -29,6 +30,7 @@ export function SkillForm({
   onSubmit,
   initialData,
   onCloseForm,
+  theme = "blue",
 }: SkillFormProps) {
   const [formData, setFormData] = useState<
     createSkillRequestDto | updateSkillRequestDto
@@ -81,7 +83,10 @@ export function SkillForm({
             >
               Hủy
             </Button>
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              type="submit"
+              className={`bg-${theme}-600 hover:bg-${theme}-700`}
+            >
               {initialData ? "Lưu thay đổi" : "Thêm"}
             </Button>
           </div>

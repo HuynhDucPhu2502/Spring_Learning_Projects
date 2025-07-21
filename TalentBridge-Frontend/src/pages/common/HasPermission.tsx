@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/features/hooks";
+import { useAppSelector } from "@/features/hooks.ts";
 import React from "react";
 
 interface HasPermissionProps {

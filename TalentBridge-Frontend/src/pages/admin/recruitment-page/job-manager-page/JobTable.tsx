@@ -14,7 +14,7 @@ import { EmptyState } from "@/components/custom/EmptyState";
 import { formatISO } from "@/utils/convertHelper.ts";
 import type { Job } from "@/types/job";
 import { levelColors } from "@/utils/tagColorMapper.ts";
-import HasPermission from "@/components/custom/HasPermission";
+import HasPermission from "@/pages/common/HasPermission.tsx";
 
 interface JobTableProps {
   jobs: Job[];
