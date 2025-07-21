@@ -5,7 +5,7 @@ import { getJobByCompanyId } from "@/services/jobApi";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import type { Job } from "@/types/job";
 import JobsSection from "./JobsSection";
 import CompanySection from "./CompanySection";

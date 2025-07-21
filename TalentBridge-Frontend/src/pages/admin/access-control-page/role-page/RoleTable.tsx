@@ -12,7 +12,7 @@ import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialo
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper.ts";
-import type { DefaultRoleResponseDto } from "@/types/role.types.ts";
+import type { DefaultRoleResponseDto } from "@/types/role.d.ts";
 import { Badge } from "@/components/ui/badge.tsx";
 
 interface RoleTableProps {

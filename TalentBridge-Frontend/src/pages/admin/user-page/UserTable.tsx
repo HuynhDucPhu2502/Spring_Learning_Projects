@@ -1,4 +1,4 @@
-import { Edit, Trash2, Wrench } from "lucide-react";
+import { Edit, KeyRound, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -8,25 +8,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { DefaultSkillResponseDto } from "@/types/skill.d.ts";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper.ts";
 
-interface SkillTableProps {
-  skills: DefaultSkillResponseDto[];
+import type { DefaultUserResponseDto } from "@/types/user";
+
+interface UserTableProps {
+  users: DefaultUserResponseDto[];
   isLoading: boolean;
-  onEdit: (skill: DefaultSkillResponseDto) => void;
+  onEdit: (skill: DefaultUserResponseDto) => void;
   onDelete: (id: number) => void;
 }
 
-export function SkillTable({
-  skills,
+export function UserTable({
+  users,
   isLoading,
   onEdit,
   onDelete,
-}: SkillTableProps) {
+}: UserTableProps) {
   return (
     <div className="overflow-hidden rounded-lg border border-blue-600">
       <Table>
@@ -36,13 +37,16 @@ export function SkillTable({
               ID
             </TableHead>
             <TableHead className="text-center font-bold text-white">
-              Tên kỹ năng
+              Tên người dùng
+            </TableHead>
+            <TableHead className="text-center font-bold text-white">
+              Email
             </TableHead>
             <TableHead className="text-center font-bold text-white">
               Ngày tạo
             </TableHead>
             <TableHead className="text-center font-bold text-white">
-              Cập nhật
+              Lần cập nhật gần nhất
             </TableHead>
             <TableHead className="text-center font-bold text-white">
               Hành động
@@ -52,34 +56,35 @@ export function SkillTable({
         <TableBody>
           {isLoading ? (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={6}>
                 <div className="flex justify-center py-6">
                   <LoadingSpinner />
                 </div>
               </TableCell>
             </TableRow>
-          ) : skills.length === 0 ? (
+          ) : users.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={6}>
                 <EmptyState
-                  title="Không tìm thấy kỹ năng nào"
-                  description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm kỹ năng mới"
+                  title="Không tìm thấy người dùng nào"
+                  description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm người dùng mới"
                   icon={
-                    <Wrench className="text-muted-foreground mb-4 h-12 w-12" />
+                    <KeyRound className="text-muted-foreground mb-4 h-12 w-12" />
                   }
                 />
               </TableCell>
             </TableRow>
           ) : (
-            skills.map((skill) => (
-              <TableRow key={skill.id}>
-                <TableCell className="text-center">{skill.id}</TableCell>
-                <TableCell className="text-center">{skill.name}</TableCell>
+            users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell className="text-center">{user.id}</TableCell>
+                <TableCell className="text-center">{user.name}</TableCell>
+                <TableCell className="text-center">{user.email}</TableCell>
                 <TableCell className="text-center">
-                  {formatISO(skill.createdAt)}
+                  {formatISO(user.createdAt)}
                 </TableCell>
                 <TableCell className="text-center">
-                  {formatISO(skill.updatedAt)}
+                  {formatISO(user.updatedAt)}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-center gap-2">
@@ -87,11 +92,11 @@ export function SkillTable({
                       size="icon"
                       variant="ghost"
                       className="text-orange-500 hover:text-orange-600"
-                      onClick={() => onEdit(skill)}
+                      onClick={() => onEdit(user)}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <DeleteConfirmDialog onConfirm={() => onDelete(skill.id)}>
+                    <DeleteConfirmDialog onConfirm={() => onDelete(user.id)}>
                       <Button
                         size="icon"
                         variant="ghost"

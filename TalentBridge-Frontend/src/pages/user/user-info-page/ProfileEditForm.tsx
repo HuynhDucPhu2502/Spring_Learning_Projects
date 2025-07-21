@@ -16,7 +16,7 @@ import { X, Save, User } from "lucide-react";
 import type {
   SelfUserUpdateProfileRequestDto,
   UserDetailsResponseDto,
-} from "@/types/user.types.ts";
+} from "@/types/user.d.ts";
 
 interface ProfileEditFormProps {
   userDetails: UserDetailsResponseDto;

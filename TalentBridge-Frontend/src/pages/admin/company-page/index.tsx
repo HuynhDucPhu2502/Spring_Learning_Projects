@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CompanyForm } from "./CompanyForm";
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import {
   addCompany,
   deleteCompanyById,

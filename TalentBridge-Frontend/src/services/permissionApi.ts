@@ -3,11 +3,11 @@ import type {
   ApiResponse,
   PageResponseDto,
   PaginationParams,
-} from "@/types/apiResponse.types.ts";
+} from "@/types/apiResponse.d.ts";
 import type {
   DefaultPermissionRequestDto,
   DefaultPermissionResponseDto,
-} from "@/types/permission.types.ts";
+} from "@/types/permission.d.ts";
 
 export const getPermissionList = ({
   page = 0,

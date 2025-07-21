@@ -15,7 +15,7 @@ import type { CompanySummary } from "@/types/job";
 import { getCompaniesList } from "@/services/companyApi";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import Pagination from "@/components/custom/Pagination";
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { DialogDescription } from "@radix-ui/react-dialog";

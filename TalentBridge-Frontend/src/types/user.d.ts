@@ -1,3 +1,6 @@
+// =============================
+// MAIN INTERFACE
+// =============================
 export interface AuthTokenResponseDto {
   accessToken: string;
   user: UserSessionResponseDto;
@@ -21,6 +24,41 @@ export interface UserDetailsResponseDto {
   logoUrl: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface DefaultUserResponseDto {
+  id: number;
+  name: string;
+  email: string;
+  dob: string;
+  address: string;
+  gender: "MALE" | "FEMALE" | "OTHER";
+  logoUrl: string;
+  company: CompanyForUser;
+  role: RoleForUser;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserCreateRequestDto {
+  name: string;
+  email: string;
+  password: string;
+  dob: string;
+  address: string;
+  gender: "MALE" | "FEMALE" | "OTHER";
+  company: CompanyIdForUser;
+  role: RoleIdForUser;
+}
+
+export interface UserUpdateRequestDto {
+  id: string;
+  name: string;
+  gender: "MALE" | "FEMALE" | "OTHER";
+  dob: string;
+  address: string;
+  company: CompanyIdForUser;
+  role: RoleIdForUser;
 }
 
 export interface SessionMetaRequest {
@@ -63,4 +101,26 @@ export interface SelfUserUpdateProfileRequestDto {
 export interface SelfUserUpdatePasswordRequestDto {
   oldPassword: string;
   newPassword: string;
+}
+
+// =============================
+// SECONDARY INTERFACE
+// =============================
+export interface CompanyForUser {
+  id: number;
+  name: string;
+  logoUrl: string;
+}
+
+export interface RoleForUser {
+  id: number;
+  name: string;
+}
+
+export interface CompanyIdForUser {
+  id: number;
+}
+
+export interface RoleIdForUser {
+  id: number;
 }

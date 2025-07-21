@@ -49,7 +49,7 @@ public class User extends BaseEntity {
     @ToString.Exclude
     private Company company;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Resume> resumes;
 

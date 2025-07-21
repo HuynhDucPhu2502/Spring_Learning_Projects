@@ -74,7 +74,7 @@ const menuItems: MenuItem[] = [
   },
   {
     title: "Tài khoản",
-    url: "/admin/user",
+    url: "/admin/user-manager",
     icon: User,
     permission: "GET /users",
   },

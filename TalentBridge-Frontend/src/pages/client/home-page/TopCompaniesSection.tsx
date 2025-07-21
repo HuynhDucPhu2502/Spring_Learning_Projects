@@ -2,7 +2,7 @@ import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { getCompaniesList } from "@/services/companyApi";
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { Building2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";

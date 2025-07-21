@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import RichTextEditor from "@/components/custom/RichText/index-editor";
-import type { DefaultCompanyResponseDto, CreateAndUpdateRequestDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto, CreateAndUpdateRequestDto } from "@/types/company.d.ts";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface CompanyFormProps {

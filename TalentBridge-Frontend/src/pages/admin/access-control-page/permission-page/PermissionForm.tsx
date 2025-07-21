@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import type {
   DefaultPermissionRequestDto,
   DefaultPermissionResponseDto,
-} from "@/types/permission.types.ts";
+} from "@/types/permission.d.ts";
 import {
   Select,
   SelectContent,

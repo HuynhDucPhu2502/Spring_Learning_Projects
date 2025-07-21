@@ -8,6 +8,7 @@ import me.huynhducphu.talent_bridge.dto.request.user.UserCreateRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.user.UserUpdateRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.user.DefaultUserResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
+import me.huynhducphu.talent_bridge.model.Resume;
 import me.huynhducphu.talent_bridge.model.Role;
 import me.huynhducphu.talent_bridge.model.User;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * Admin 6/7/2025
  **/
@@ -34,7 +37,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
-    private final RoleRepository roleService;
+    private final RoleRepository roleRepository;
 
     private final S3Service s3Service;
 
@@ -116,6 +119,12 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                         new EntityNotFoundException("Không tìm thấy người dùng")
                 );
 
+        user.setRole(null);
+        user.setCompany(null);
+
+        List<Resume> resumes = user.getResumes();
+        resumes.forEach(x -> s3Service.deleteFileByKey(x.getFileKey()));
+
         userRepository.delete(user);
         return mapToResponseDto(user);
     }
@@ -186,7 +195,8 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
         if (user.getCompany() != null)
             company = new DefaultUserResponseDto.CompanyInformationDto(
                     user.getCompany().getId(),
-                    user.getCompany().getName()
+                    user.getCompany().getName(),
+                    user.getCompany().getCompanyLogo().getLogoUrl()
             );
 
         DefaultUserResponseDto.RoleInformationDto role = null;
@@ -203,6 +213,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                 user.getDob(),
                 user.getAddress(),
                 user.getGender(),
+                user.getLogoUrl(),
                 company,
                 role,
                 user.getCreatedAt(),
@@ -218,7 +229,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
     }
 
     private void handleSetRole(User user, Long id) {
-        Role role = roleService
+        Role role = roleRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy không chức vụ"));
         user.setRole(role);

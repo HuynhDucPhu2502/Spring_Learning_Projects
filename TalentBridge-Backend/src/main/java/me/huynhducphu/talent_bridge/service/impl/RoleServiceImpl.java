@@ -12,6 +12,7 @@ import me.huynhducphu.talent_bridge.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,13 +121,22 @@ public class RoleServiceImpl implements me.huynhducphu.talent_bridge.service.Rol
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Chức vụ không tồn tại"));
 
-        DefaultRoleResponseDto defaultRoleResponseDto = mapToDefaultRoleResponseDto(role);
+        String currentName = role.getName();
+        if (
+                currentName != null
+                        && !currentName.equalsIgnoreCase("ADMIN")
+                        && !currentName.equalsIgnoreCase("USER")
+        ) {
+            DefaultRoleResponseDto defaultRoleResponseDto = mapToDefaultRoleResponseDto(role);
 
-        if (role.getPermissions() != null) role.getPermissions().clear();
-        userRepository.detachUsersFromRole(role.getId());
+            if (role.getPermissions() != null) role.getPermissions().clear();
+            userRepository.detachUsersFromRole(role.getId());
 
-        roleRepository.delete(role);
-        return defaultRoleResponseDto;
+            roleRepository.delete(role);
+            return defaultRoleResponseDto;
+        }
+
+        throw new AccessDeniedException("Không thể xóa chức vụ mặc định");
     }
 
     private DefaultRoleResponseDto mapToDefaultRoleResponseDto(Role role) {

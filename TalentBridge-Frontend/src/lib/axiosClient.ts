@@ -1,4 +1,4 @@
-import type { ApiResponse } from "@/types/apiResponse.types.ts";
+import type { ApiResponse } from "@/types/apiResponse.d.ts";
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 import { updateTokenManually } from "@/features/slices/auth/authSlice";

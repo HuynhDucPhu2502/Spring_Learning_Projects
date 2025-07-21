@@ -1,4 +1,4 @@
-import type { SessionMetaRequest } from "@/types/user.types";
+import type { SessionMetaRequest } from "@/types/user";
 import { Globe, Monitor, Smartphone, Tablet } from "lucide-react";
 import { UAParser } from "ua-parser-js";
 

@@ -3,7 +3,7 @@ import { X, Building2, MapPin, Calendar, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { formatISO } from "@/utils/convertHelper.ts";
 import RichTextPreview from "@/components/custom/RichText/index-preview";

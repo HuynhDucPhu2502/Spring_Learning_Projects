@@ -3,8 +3,8 @@ import type {
   ApiResponse,
   PageResponseDto,
   PaginationParams,
-} from "@/types/apiResponse.types.ts";
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+} from "@/types/apiResponse.d.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 
 export const getCompaniesList = ({
   page = 0,

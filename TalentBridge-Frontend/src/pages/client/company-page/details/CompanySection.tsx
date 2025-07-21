@@ -1,4 +1,4 @@
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { Building2, MapPin, CalendarDays } from "lucide-react";
 import RichTextPreview from "@/components/custom/RichText/index-preview";
 import { formatISO } from "@/utils/convertHelper.ts";

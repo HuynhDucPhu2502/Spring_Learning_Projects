@@ -25,7 +25,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import RichTextEditor from "@/components/custom/RichText/index-editor";
 import SkillSelection from "./SkillSelection";
 import type { CompanySummary, JobUpsertDto, SkillSummary } from "@/types/job";
-import CompanySelection from "./JobSelection";
+import CompanySelection from "./CompanySelection.tsx";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
 import { getJobById, saveJob, updateJobById } from "@/services/jobApi";

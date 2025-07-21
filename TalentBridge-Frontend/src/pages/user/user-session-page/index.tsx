@@ -1,6 +1,6 @@
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { getSessions, removeSessionId } from "@/services/authApi";
-import type { SessionMetaResponse } from "@/types/user.types";
+import type { SessionMetaResponse } from "@/types/user";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

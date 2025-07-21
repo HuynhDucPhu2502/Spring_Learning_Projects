@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { getCompaniesListWithJobsCount } from "@/services/companyApi";

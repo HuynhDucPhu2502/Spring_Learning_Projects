@@ -2,12 +2,12 @@ import type {
   ApiResponse,
   PageResponseDto,
   PaginationParams,
-} from "@/types/apiResponse.types.ts";
+} from "@/types/apiResponse.d.ts";
 import axiosClient from "@/lib/axiosClient.ts";
 import type {
   DefaultRoleRequestDto,
   DefaultRoleResponseDto,
-} from "@/types/role.types.ts";
+} from "@/types/role.d.ts";
 
 export const getRolesList = ({
   page = 0,

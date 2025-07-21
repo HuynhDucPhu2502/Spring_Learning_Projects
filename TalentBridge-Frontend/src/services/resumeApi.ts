@@ -3,7 +3,7 @@ import type {
   ApiResponse,
   PageResponseDto,
   PaginationParams,
-} from "@/types/apiResponse.types.ts";
+} from "@/types/apiResponse.d.ts";
 import type {
   ResumeForDisplayResponseDto,
   UpdateResumeStatusRequestDto,

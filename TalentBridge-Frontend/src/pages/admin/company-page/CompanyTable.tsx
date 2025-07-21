@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Building2, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
 import { EmptyState } from "@/components/custom/EmptyState";
 import { formatISO } from "@/utils/convertHelper.ts";

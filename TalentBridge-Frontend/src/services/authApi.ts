@@ -1,5 +1,5 @@
 import axiosClient from "@/lib/axiosClient";
-import type { ApiResponse } from "@/types/apiResponse.types.ts";
+import type { ApiResponse } from "@/types/apiResponse.d.ts";
 import type {
   UserLoginRequestDto,
   AuthTokenResponseDto,
@@ -8,7 +8,7 @@ import type {
   SessionMetaRequest,
   SessionMetaResponse,
   UserRegisterRequestDto,
-} from "@/types/user.types.ts";
+} from "@/types/user.d.ts";
 import { getSessionMeta } from "@/utils/sessionHelper";
 import axios from "axios";
 

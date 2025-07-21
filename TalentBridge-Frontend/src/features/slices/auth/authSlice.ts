@@ -1,4 +1,4 @@
-import type { UserSessionResponseDto } from "@/types/user.types.ts";
+import type { UserSessionResponseDto } from "@/types/user.d.ts";
 import { createSlice } from "@reduxjs/toolkit";
 import { getAccount, login, logout, refreshToken } from "./authThunk";
 

@@ -1,6 +1,6 @@
 import { useAppDispatch } from "@/features/hooks";
 import { login } from "@/features/slices/auth/authThunk";
-import type { UserLoginRequestDto } from "@/types/user.types.ts";
+import type { UserLoginRequestDto } from "@/types/user.d.ts";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 

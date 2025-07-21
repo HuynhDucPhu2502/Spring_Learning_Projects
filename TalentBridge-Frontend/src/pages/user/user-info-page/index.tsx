@@ -3,7 +3,7 @@ import type {
   SelfUserUpdatePasswordRequestDto,
   SelfUserUpdateProfileRequestDto,
   UserDetailsResponseDto,
-} from "@/types/user.types.ts";
+} from "@/types/user.d.ts";
 import { toast } from "sonner";
 import {
   getAccount,

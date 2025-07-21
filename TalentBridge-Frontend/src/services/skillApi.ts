@@ -3,12 +3,12 @@ import type {
   ApiResponse,
   PageResponseDto,
   PaginationParams,
-} from "@/types/apiResponse.types.ts";
+} from "@/types/apiResponse.d.ts";
 import type {
   createSkillRequestDto,
   DefaultSkillResponseDto,
   updateSkillRequestDto,
-} from "@/types/skill.types.ts";
+} from "@/types/skill.d.ts";
 
 export const saveSkill = (data: createSkillRequestDto) => {
   return axiosClient.post<ApiResponse<DefaultSkillResponseDto>>("/skills", data);

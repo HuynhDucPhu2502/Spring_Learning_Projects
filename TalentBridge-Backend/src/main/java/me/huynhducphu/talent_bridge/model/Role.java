@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import me.huynhducphu.talent_bridge.model.common.BaseEntity;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,6 +40,10 @@ public class Role extends BaseEntity {
     )
     @ToString.Exclude
     private Set<Permission> permissions;
+
+    @OneToMany(mappedBy = "role")
+    @ToString.Exclude
+    private List<User> users;
 
     public Role(String name, String description) {
         this.name = name;

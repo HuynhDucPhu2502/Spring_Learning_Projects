@@ -12,7 +12,7 @@ import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialo
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper.ts";
-import type { DefaultPermissionResponseDto } from "@/types/permission.types.ts";
+import type { DefaultPermissionResponseDto } from "@/types/permission.d.ts";
 import { Badge } from "@/components/ui/badge";
 import { getMethodColor } from "@/utils/tagColorMapper.ts";
 

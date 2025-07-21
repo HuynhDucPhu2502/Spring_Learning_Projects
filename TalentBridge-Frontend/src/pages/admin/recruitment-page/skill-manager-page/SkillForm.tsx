@@ -12,7 +12,7 @@ import type {
   DefaultSkillResponseDto,
   createSkillRequestDto,
   updateSkillRequestDto,
-} from "@/types/skill.types.ts";
+} from "@/types/skill.d.ts";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface SkillFormProps {

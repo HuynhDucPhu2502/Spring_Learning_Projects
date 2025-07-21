@@ -1,6 +1,6 @@
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { registerApi } from "@/services/authApi";
-import type { UserRegisterRequestDto } from "@/types/user.types";
+import type { UserRegisterRequestDto } from "@/types/user";
 import type React from "react";
 
 import { useState } from "react";
@@ -82,8 +82,7 @@ export default function RegisterForm() {
       setError("");
     }
 
-    console.log("Đăng ký với:", form);
-    setError("");
+
   };
 
   return (

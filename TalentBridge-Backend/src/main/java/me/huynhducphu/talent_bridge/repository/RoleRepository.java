@@ -17,4 +17,6 @@ public interface RoleRepository extends
     boolean existsByName(String name);
 
     Optional<Role> findByName(String name);
+
+
 }

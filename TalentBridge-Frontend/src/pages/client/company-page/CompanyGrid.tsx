@@ -1,4 +1,4 @@
-import type { DefaultCompanyResponseDto } from "@/types/company.types.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { Building2, ChevronRight, MapPin, Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { getFirstLineFromHtml } from "@/utils/convertHelper.ts";

@@ -1,7 +1,7 @@
 import type {
   DefaultRoleRequestDto,
   DefaultRoleResponseDto,
-} from "@/types/role.types.ts";
+} from "@/types/role.d.ts";
 import { useEffect, useState } from "react";
 import { RoleSearchSection } from "@/pages/admin/access-control-page/role-page/RoleSearchSection.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -18,7 +18,7 @@ import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { RoleTable } from "@/pages/admin/access-control-page/role-page/RoleTable.tsx";
 import { RoleForm } from "@/pages/admin/access-control-page/role-page/RoleForm.tsx";
 import { getAllPermissionsNoPaging } from "@/services/permissionApi";
-import type { DefaultPermissionResponseDto } from "@/types/permission.types";
+import type { DefaultPermissionResponseDto } from "@/types/permission";
 
 const RoleManagerPage = () => {
   // Data

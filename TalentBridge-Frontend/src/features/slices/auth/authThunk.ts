@@ -4,7 +4,7 @@ import {
   logoutApi,
   refreshTokenApi,
 } from "@/services/authApi";
-import type { UserLoginRequestDto } from "@/types/user.types.ts";
+import type { UserLoginRequestDto } from "@/types/user.d.ts";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 

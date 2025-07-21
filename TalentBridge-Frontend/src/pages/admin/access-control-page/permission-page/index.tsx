@@ -8,7 +8,7 @@ import {
 import type {
   DefaultPermissionRequestDto,
   DefaultPermissionResponseDto,
-} from "@/types/permission.types.ts";
+} from "@/types/permission.d.ts";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PermissionSearchSection } from "./PermissionSearchSection";

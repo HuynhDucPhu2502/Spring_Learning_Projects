@@ -9,6 +9,10 @@ import CompanyClientPage from "@/pages/client/company-page";
 import CompanyDetailsClientPage from "@/pages/client/company-page/details";
 import JobClientPage from "@/pages/client/job-page";
 import JobDetailsClientPage from "@/pages/client/job-page/details";
+import UserPage from "@/pages/user";
+import UserInfoPage from "@/pages/user/user-info-page";
+import UserResumePage from "@/pages/user/user-resume-page";
+import UserSessionPage from "@/pages/user/user-session-page";
 
 // ADMIN PAGE
 import AdminPage from "@/pages/admin";
@@ -18,17 +22,14 @@ import RecruitmentManagerPage from "@/pages/admin/recruitment-page";
 import JobManagerPage from "@/pages/admin/recruitment-page/job-manager-page";
 import JobUpsertPage from "@/pages/admin/recruitment-page/job-manager-page/job-upsert-page";
 import SkillManagerPage from "@/pages/admin/recruitment-page/skill-manager-page";
-
-// Components
-import ErrorPage from "@/components/custom/ErrorPage";
-import UserPage from "@/pages/user";
-import UserInfoPage from "@/pages/user/user-info-page";
-import UserResumePage from "@/pages/user/user-resume-page";
 import ResumeManagerPage from "@/pages/admin/resume-page";
 import AccessControlPage from "@/pages/admin/access-control-page";
 import PermissionManagerPage from "@/pages/admin/access-control-page/permission-page";
 import RoleManagerPage from "@/pages/admin/access-control-page/role-page";
-import UserSessionPage from "@/pages/user/user-session-page";
+import UserManagerPage from "@/pages/admin/user-page";
+
+// Components
+import ErrorPage from "@/components/custom/ErrorPage";
 
 const router = createBrowserRouter([
   // =========================
@@ -89,6 +90,7 @@ const router = createBrowserRouter([
         ],
       },
       { path: "resume", element: <ResumeManagerPage /> },
+      { path: "user-manager", element: <UserManagerPage /> },
       {
         path: "access-control",
         element: <AccessControlPage />,

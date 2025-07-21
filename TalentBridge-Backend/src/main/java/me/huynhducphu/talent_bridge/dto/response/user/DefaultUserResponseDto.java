@@ -22,6 +22,7 @@ public class DefaultUserResponseDto {
     private LocalDate dob;
     private String address;
     private Gender gender;
+    private String logoUrl;
     private CompanyInformationDto company;
     private RoleInformationDto role;
     private Instant createdAt;
@@ -33,6 +34,7 @@ public class DefaultUserResponseDto {
     public static class CompanyInformationDto {
         private Long id;
         private String name;
+        private String logoUrl;
     }
 
     @AllArgsConstructor

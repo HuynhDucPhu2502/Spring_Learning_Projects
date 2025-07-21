@@ -3,7 +3,7 @@ import type {
   ApiResponse,
   PageResponseDto,
   PaginationParams,
-} from "@/types/apiResponse.types.ts";
+} from "@/types/apiResponse.d.ts";
 import type { Job, JobUpsertDto } from "@/types/job";
 
 export const saveJob = (data: JobUpsertDto) => {

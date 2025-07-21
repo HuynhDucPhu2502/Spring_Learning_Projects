@@ -16,7 +16,7 @@ import type {
   createSkillRequestDto,
   DefaultSkillResponseDto,
   updateSkillRequestDto,
-} from "@/types/skill.types.ts";
+} from "@/types/skill.d.ts";
 import Pagination from "@/components/custom/Pagination";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { SkillForm } from "./SkillForm";

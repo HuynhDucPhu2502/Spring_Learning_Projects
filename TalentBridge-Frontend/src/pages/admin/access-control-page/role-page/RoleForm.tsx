@@ -21,8 +21,8 @@ import {
 import type {
   DefaultRoleRequestDto,
   DefaultRoleResponseDto,
-} from "@/types/role.types";
-import type { DefaultPermissionResponseDto } from "@/types/permission.types";
+} from "@/types/role";
+import type { DefaultPermissionResponseDto } from "@/types/permission";
 import { getMethodColor } from "@/utils/tagColorMapper";
 
 interface RoleFormProps {

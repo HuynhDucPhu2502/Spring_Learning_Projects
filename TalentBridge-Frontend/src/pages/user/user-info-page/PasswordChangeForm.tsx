@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { X, Lock, Eye, EyeOff } from "lucide-react";
-import type { SelfUserUpdatePasswordRequestDto } from "@/types/user.types.ts";
+import type { SelfUserUpdatePasswordRequestDto } from "@/types/user.d.ts";
 import { toast } from "sonner";
 
 interface PasswordChangeFormProps {

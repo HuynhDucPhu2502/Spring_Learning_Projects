@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { getSkillsList } from "@/services/skillApi";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import type { SkillSummary } from "@/types/job";
-import type { DefaultSkillResponseDto } from "@/types/skill.types.ts";
+import type { DefaultSkillResponseDto } from "@/types/skill.d.ts";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { EmptyState } from "@/components/custom/EmptyState";
 import Pagination from "@/components/custom/Pagination";
