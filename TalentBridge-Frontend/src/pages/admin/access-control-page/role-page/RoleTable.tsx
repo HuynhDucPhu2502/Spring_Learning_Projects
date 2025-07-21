@@ -14,6 +14,7 @@ import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper.ts";
 import type { DefaultRoleResponseDto } from "@/types/role.d.ts";
 import { Badge } from "@/components/ui/badge.tsx";
+import HasPermission from "@/components/custom/HasPermission";
 
 interface RoleTableProps {
   roles: DefaultRoleResponseDto[];
@@ -94,23 +95,28 @@ export function RoleTable({
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-center gap-2">
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="text-orange-500 hover:text-orange-600"
-                      onClick={() => onEdit(role)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <DeleteConfirmDialog onConfirm={() => onDelete(role.id)}>
+                    <HasPermission perm={"PUT /roles/{id}"}>
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="text-red-500 hover:text-red-600"
+                        className="text-orange-500 hover:text-orange-600"
+                        onClick={() => onEdit(role)}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Edit className="h-4 w-4" />
                       </Button>
-                    </DeleteConfirmDialog>
+                    </HasPermission>
+
+                    <HasPermission perm={"DELETE /roles/{id}"}>
+                      <DeleteConfirmDialog onConfirm={() => onDelete(role.id)}>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </DeleteConfirmDialog>
+                    </HasPermission>
                   </div>
                 </TableCell>
               </TableRow>

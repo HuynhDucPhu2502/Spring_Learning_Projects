@@ -19,6 +19,7 @@ import { RoleTable } from "@/pages/admin/access-control-page/role-page/RoleTable
 import { RoleForm } from "@/pages/admin/access-control-page/role-page/RoleForm.tsx";
 import { getAllPermissionsNoPaging } from "@/services/permissionApi";
 import type { DefaultPermissionResponseDto } from "@/types/permission";
+import HasPermission from "@/components/custom/HasPermission";
 
 const RoleManagerPage = () => {
   // Data
@@ -170,13 +171,15 @@ const RoleManagerPage = () => {
 
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Danh sách chức vụ</h2>
-        <Button
-          className="bg-blue-600 hover:bg-blue-700"
-          onClick={handleOpenCreateForm}
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Thêm chức vụ
-        </Button>
+        <HasPermission perm={"POST /roles"}>
+          <Button
+            className="bg-blue-600 hover:bg-blue-700"
+            onClick={handleOpenCreateForm}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Thêm chức vụ
+          </Button>
+        </HasPermission>
       </div>
 
       <RoleTable
