@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAppDispatch, useAppSelector } from "@/features/hooks";
 import { logout } from "@/features/slices/auth/authThunk";
 import { Link } from "react-router-dom";
+import { Badge } from "../ui/badge";
 
 interface UserMenuProps {
   blackTheme?: boolean;
@@ -72,8 +73,9 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
               {user?.name || "User"}
             </p>
             <p className="truncate text-sm text-gray-600">
-              {user?.email || "user@example.com"}
+              {user?.email || "user@gmail.com"}
             </p>
+            <Badge>{user?.role || "User"}</Badge>
           </div>
         </div>
 

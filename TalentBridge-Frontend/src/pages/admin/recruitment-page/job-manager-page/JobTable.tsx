@@ -14,6 +14,7 @@ import { EmptyState } from "@/components/custom/EmptyState";
 import { formatISO } from "@/utils/convertHelper.ts";
 import type { Job } from "@/types/job";
 import { levelColors } from "@/utils/tagColorMapper.ts";
+import HasPermission from "@/components/custom/HasPermission";
 
 interface JobTableProps {
   jobs: Job[];
@@ -131,18 +132,23 @@ export function JobTable({
                     className="flex items-center justify-center gap-2"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onEdit(job.id)}
-                    >
-                      <Edit className="h-4 w-4 text-orange-500" />
-                    </Button>
-                    <DeleteConfirmDialog
-                      onConfirm={() => onDelete(job.id)}
-                      title="Bạn có chắc muốn xóa công việc này?"
-                      description="Hành động này sẽ xóa công việc khỏi hệ thống và không thể hoàn tác."
-                    />
+                    <HasPermission perm={"PUT /jobs/{id}"}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onEdit(job.id)}
+                      >
+                        <Edit className="h-4 w-4 text-orange-500" />
+                      </Button>
+                    </HasPermission>
+
+                    <HasPermission perm={"DELETE /jobs/{id}"}>
+                      <DeleteConfirmDialog
+                        onConfirm={() => onDelete(job.id)}
+                        title="Bạn có chắc muốn xóa công việc này?"
+                        description="Hành động này sẽ xóa công việc khỏi hệ thống và không thể hoàn tác."
+                      />
+                    </HasPermission>
                   </div>
                 </TableCell>
               </TableRow>

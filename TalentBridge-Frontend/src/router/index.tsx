@@ -31,6 +31,7 @@ import UserManagerPage from "@/pages/admin/user-page";
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
 import UserUpsertPage from "@/pages/admin/user-page/user-upsert-page";
+import { ProtectedRoute } from "@/components/custom/ProtectedRoute";
 
 const router = createBrowserRouter([
   // =========================
@@ -68,7 +69,11 @@ const router = createBrowserRouter([
   // =========================
   {
     path: "admin",
-    element: <AdminPage />,
+    element: (
+      <ProtectedRoute to="/" requiredPermission={"GET /admin"}>
+        <AdminPage />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     children: [
       // AUTO NAVIGATION
@@ -78,7 +83,14 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
 
       // COMPANY MANAGER
-      { path: "company", element: <CompanyManagerPage /> },
+      {
+        path: "company",
+        element: (
+          <ProtectedRoute to="/admin" requiredPermission="GET /companies">
+            <CompanyManagerPage />
+          </ProtectedRoute>
+        ),
+      },
 
       // RECRUITMENT MANAGER
       {
@@ -89,8 +101,22 @@ const router = createBrowserRouter([
             index: true,
             element: <Navigate to={"/admin/recruitment/job-manager"} />,
           },
-          { path: "skill-manager", element: <SkillManagerPage /> },
-          { path: "job-manager", element: <JobManagerPage /> },
+          {
+            path: "skill-manager",
+            element: (
+              <ProtectedRoute to="/admin" requiredPermission="GET /skills">
+                <SkillManagerPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "job-manager",
+            element: (
+              <ProtectedRoute to="/admin" requiredPermission="GET /jobs">
+                <JobManagerPage />
+              </ProtectedRoute>
+            ),
+          },
           {
             path: "job-manager/upsert",
             element: <JobUpsertPage />,
@@ -99,10 +125,24 @@ const router = createBrowserRouter([
       },
 
       // RESUME MANAGER
-      { path: "resume", element: <ResumeManagerPage /> },
+      {
+        path: "resume",
+        element: (
+          <ProtectedRoute to="/admin" requiredPermission="GET /resumes">
+            <ResumeManagerPage />
+          </ProtectedRoute>
+        ),
+      },
 
       // USER MANAGER
-      { path: "user-manager", element: <UserManagerPage /> },
+      {
+        path: "user-manager",
+        element: (
+          <ProtectedRoute to="/admin" requiredPermission="GET /users">
+            <UserManagerPage />
+          </ProtectedRoute>
+        ),
+      },
       { path: "user-manager/upsert", element: <UserUpsertPage /> },
 
       // ACCESS CONTROL MANAGER
@@ -114,8 +154,25 @@ const router = createBrowserRouter([
             index: true,
             element: <Navigate to={"/admin/access-control/permission"} />,
           },
-          { path: "permission", element: <PermissionManagerPage /> },
-          { path: "role", element: <RoleManagerPage /> },
+          {
+            path: "permission",
+            element: (
+              <ProtectedRoute
+                to="/admin"
+                requiredPermission="GET /permissions/*"
+              >
+                <PermissionManagerPage />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "role",
+            element: (
+              <ProtectedRoute to="/admin" requiredPermission="GET /roles">
+                <RoleManagerPage />
+              </ProtectedRoute>
+            ),
+          },
         ],
       },
 

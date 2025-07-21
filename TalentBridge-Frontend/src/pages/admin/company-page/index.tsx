@@ -16,6 +16,7 @@ import { CompanySearchSection } from "./CompanySearchSection";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { CompanyTable } from "./CompanyTable";
+import HasPermission from "@/components/custom/HasPermission";
 
 export default function CompanyManagerPage() {
   // Data
@@ -33,11 +34,13 @@ export default function CompanyManagerPage() {
   const [totalPages, setTotalPages] = useState(1);
 
   // Show Details Form
-  const [hoveredCompany, setHoveredCompany] = useState<DefaultCompanyResponseDto | null>(null);
+  const [hoveredCompany, setHoveredCompany] =
+    useState<DefaultCompanyResponseDto | null>(null);
   const [showDetailsSidebar, setShowDetailsSidebar] = useState(false);
 
   // Form State
-  const [editingCompany, setEditingCompany] = useState<DefaultCompanyResponseDto | null>(null);
+  const [editingCompany, setEditingCompany] =
+    useState<DefaultCompanyResponseDto | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   // ============================
@@ -136,6 +139,8 @@ export default function CompanyManagerPage() {
       handleReset();
     } catch (err) {
       toast.error(getErrorMessage(err, "Thao tác thất bại."));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -166,13 +171,15 @@ export default function CompanyManagerPage() {
 
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Danh sách Công Ty</h2>
-        <Button
-          onClick={openCreateForm}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Thêm mới
-        </Button>
+        <HasPermission perm={"POST /companies"}>
+          <Button
+            onClick={openCreateForm}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Thêm mới
+          </Button>
+        </HasPermission>
       </div>
 
       <CompanyTable

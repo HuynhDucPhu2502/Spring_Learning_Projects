@@ -56,7 +56,7 @@ export function RoleTable({
         <TableBody>
           {isLoading ? (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={6}>
                 <div className="flex justify-center py-6">
                   <LoadingSpinner />
                 </div>
@@ -64,7 +64,7 @@ export function RoleTable({
             </TableRow>
           ) : roles.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={6}>
                 <EmptyState
                   title="Không tìm thấy kỹ năng nào"
                   description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm kỹ năng mới"

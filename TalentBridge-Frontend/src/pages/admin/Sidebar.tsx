@@ -50,6 +50,7 @@ const menuItems: MenuItem[] = [
     title: "Công ty",
     url: "/admin/company",
     icon: Building2,
+    permission: "GET /companies",
   },
   {
     title: "Tuyển dụng",
@@ -59,19 +60,23 @@ const menuItems: MenuItem[] = [
         title: "Quản lý việc làm",
         url: "/admin/recruitment/job-manager",
         icon: Briefcase,
+        permission: "GET /jobs",
       },
       {
         title: "Quản lý kỹ năng",
         url: "/admin/recruitment/skill-manager",
         icon: Settings,
+        permission: "GET /skills",
+      },
+      {
+        title: "Hồ sơ ứng tuyển",
+        url: "/admin/resume",
+        icon: FileText,
+        permission: "GET /resumes",
       },
     ],
   },
-  {
-    title: "Hồ sơ ứng tuyển",
-    url: "/admin/resume",
-    icon: FileText,
-  },
+
   {
     title: "Tài khoản",
     url: "/admin/user-manager",
@@ -86,11 +91,13 @@ const menuItems: MenuItem[] = [
         title: "Quyền hạn",
         url: "/admin/access-control/permission",
         icon: KeyRound,
+        permission: "GET /permissions/*",
       },
       {
         title: "Chức vụ",
         url: "/admin/access-control/role",
         icon: UserCog,
+        permission: "GET /roles",
       },
     ],
   },

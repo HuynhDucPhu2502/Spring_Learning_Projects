@@ -22,6 +22,7 @@ import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { SkillForm } from "./SkillForm";
 import { SkillSearchSection } from "./SkillSearchSection";
 import { SkillTable } from "./SkillTable";
+import HasPermission from "@/components/custom/HasPermission";
 
 const SkillManagerPage = () => {
   // Data
@@ -39,7 +40,8 @@ const SkillManagerPage = () => {
 
   // Form State
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingSkill, setEditingSkill] = useState<DefaultSkillResponseDto | null>(null);
+  const [editingSkill, setEditingSkill] =
+    useState<DefaultSkillResponseDto | null>(null);
 
   // ============================
   // HANDLE OPEN FORM
@@ -136,13 +138,15 @@ const SkillManagerPage = () => {
 
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Danh sách Kỹ năng</h2>
-        <Button
-          className="bg-blue-600 hover:bg-blue-700"
-          onClick={openCreateForm}
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Thêm kỹ năng
-        </Button>
+        <HasPermission perm={"POST /skills"}>
+          <Button
+            className="bg-blue-600 hover:bg-blue-700"
+            onClick={openCreateForm}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Thêm kỹ năng
+          </Button>
+        </HasPermission>
       </div>
 
       <SkillTable

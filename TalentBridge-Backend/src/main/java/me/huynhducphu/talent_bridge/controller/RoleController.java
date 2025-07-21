@@ -1,6 +1,8 @@
 package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -31,7 +34,13 @@ public class RoleController {
     private final RoleService roleService;
 
     @PostMapping
-    @ApiMessage(value = "Tạo chức vụ")
+    @ApiMessage(value = "Tạo Role")
+    @PreAuthorize("hasAuthority('POST /roles')")
+    @Operation(
+            summary = "Tạo Role",
+            description = "Yêu cầu quyền: <b>POST /roles</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<DefaultRoleResponseDto> saveRole(
             @Valid @RequestBody DefaultRoleRequestDto defaultRoleRequestDto
     ) {
@@ -41,7 +50,13 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    @ApiMessage(value = "Cập nhật chức vụ")
+    @ApiMessage(value = "Cập nhật Role")
+    @PreAuthorize("hasAuthority('PUT /roles/{id}')")
+    @Operation(
+            summary = "Câp nhật Role",
+            description = "Yêu cầu quyền: <b>PUT /roles/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<DefaultRoleResponseDto> updateRole(
             @PathVariable Long id,
             @Valid @RequestBody DefaultRoleRequestDto defaultRoleRequestDto
@@ -50,7 +65,13 @@ public class RoleController {
     }
 
     @GetMapping
-    @ApiMessage(value = "Lấy danh sách chức vụ")
+    @ApiMessage(value = "Lấy danh sách Role")
+    @PreAuthorize("hasAuthority('GET /roles')")
+    @Operation(
+            summary = "Lấy danh sách Role",
+            description = "Yêu cầu quyền: <b>GET /roles</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<PageResponseDto<DefaultRoleResponseDto>> findAllRoles(
             @Filter Specification<Role> spec,
             @PageableDefault(size = 5) Pageable pageable
@@ -69,7 +90,13 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiMessage(value = "Xóa role theo id")
+    @ApiMessage(value = "Xóa Role theo id")
+    @PreAuthorize("hasAuthority('DELETE /roles/{id}')")
+    @Operation(
+            summary = "Xóa Role theo id",
+            description = "Yêu cầu quyền: <b>DELETE /roles/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     public ResponseEntity<DefaultRoleResponseDto> deleteRoleById(@PathVariable Long id) {
         return ResponseEntity.ok(roleService.deleteRoleById(id));
     }

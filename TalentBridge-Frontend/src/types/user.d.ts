@@ -11,6 +11,8 @@ export interface UserSessionResponseDto {
   name: string;
   email: string;
   permissions: string[];
+  role: string;
+  companyId: string;
   logoUrl: string;
 }
 

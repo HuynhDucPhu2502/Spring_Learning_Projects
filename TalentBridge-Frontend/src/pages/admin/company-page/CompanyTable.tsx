@@ -13,6 +13,7 @@ import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialo
 import { EmptyState } from "@/components/custom/EmptyState";
 import { formatISO } from "@/utils/convertHelper.ts";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
+import HasPermission from "@/components/custom/HasPermission";
 
 interface CompanyTableProps {
   companies: DefaultCompanyResponseDto[];
@@ -125,23 +126,27 @@ export function CompanyTable({
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-orange-500 hover:text-orange-600"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onEdit(company);
-                        }}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
+                      <HasPermission perm={"PUT /companies/{id}"}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-orange-500 hover:text-orange-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit(company);
+                          }}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </HasPermission>
 
-                      <DeleteConfirmDialog
-                        onConfirm={() => onDelete(company.id)}
-                        title="Bạn có chắc muốn xóa công ty này?"
-                        description="Hành động này sẽ xóa công ty khỏi hệ thống và không thể hoàn tác."
-                      />
+                      <HasPermission perm={"DELETE /companies/{id}"}>
+                        <DeleteConfirmDialog
+                          onConfirm={() => onDelete(company.id)}
+                          title="Bạn có chắc muốn xóa công ty này?"
+                          description="Hành động này sẽ xóa công ty khỏi hệ thống và không thể hoàn tác."
+                        />
+                      </HasPermission>
                     </div>
                   </TableCell>
                 </TableRow>

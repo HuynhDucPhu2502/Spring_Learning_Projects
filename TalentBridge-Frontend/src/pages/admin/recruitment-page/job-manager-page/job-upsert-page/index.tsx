@@ -30,6 +30,7 @@ import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
 import { getJobById, saveJob, updateJobById } from "@/services/jobApi";
 import { formatISOToYMD } from "@/utils/convertHelper.ts";
+import { useAppSelector } from "@/features/hooks.ts";
 
 const levels = [
   { value: "INTERN", label: "Intern" },
@@ -39,6 +40,7 @@ const levels = [
 ];
 
 export default function JobUpsertPage() {
+  const { permissions } = useAppSelector((state) => state.auth.user);
   // ============================
   // Checking is edit or create
   // ============================
@@ -182,6 +184,13 @@ export default function JobUpsertPage() {
   const handleBack = () => {
     navigate("/admin/recruitment/job-manager");
   };
+
+  useEffect(() => {
+    if (isEdit && !permissions.includes("PUT /jobs/{id}"))
+      navigate("/admin/recruitment/job-manager");
+    else if (!isEdit && !permissions.includes("POST /jobs"))
+      navigate("/admin/recruitment/job-manager");
+  }, [isEdit, navigate, permissions]);
 
   return (
     <div className="space-y-6">

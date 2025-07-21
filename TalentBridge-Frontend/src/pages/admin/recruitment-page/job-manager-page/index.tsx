@@ -15,6 +15,7 @@ import Pagination from "@/components/custom/Pagination";
 
 import { JobDetailsSidebar } from "./JobDetailsSidebar";
 import { JobTable } from "./JobTable";
+import HasPermission from "@/components/custom/HasPermission";
 
 const JobManagerPage = () => {
   const navigate = useNavigate();
@@ -178,13 +179,15 @@ const JobManagerPage = () => {
       {/* Header Section */}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Danh sách công việc</h2>
-        <Button
-          className="bg-blue-600 hover:bg-blue-700"
-          onClick={() => navigate("/admin/recruitment/job-manager/upsert")}
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Thêm mới
-        </Button>
+        <HasPermission perm={"POST /jobs"}>
+          <Button
+            className="bg-blue-600 hover:bg-blue-700"
+            onClick={() => navigate("/admin/recruitment/job-manager/upsert")}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Thêm mới
+          </Button>
+        </HasPermission>
       </div>
 
       <JobTable

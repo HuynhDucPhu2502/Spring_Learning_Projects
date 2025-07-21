@@ -214,10 +214,10 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         if (user == null)
             throw new EntityNotFoundException("Không tìm thấy người dùng");
 
+        Role role = user.getRole();
         List<String> permissions = null;
         if (user.getRole() != null && user.getRole().getPermissions() != null)
-            permissions = user
-                    .getRole()
+            permissions = role
                     .getPermissions()
                     .stream()
                     .map(x -> x.getMethod() + " " + x.getApiPath())
@@ -227,8 +227,10 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                 user.getEmail(),
                 user.getName(),
                 user.getId(),
-                user.getLogoUrl(),
-                permissions
+                user.getCompany().getId().toString(),
+                role.getName(),
+                permissions,
+                user.getLogoUrl()
         );
     }
 

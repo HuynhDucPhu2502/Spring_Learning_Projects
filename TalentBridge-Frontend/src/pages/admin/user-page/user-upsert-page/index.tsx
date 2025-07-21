@@ -30,8 +30,11 @@ import type { CompanySummary } from "@/types/job";
 import CompanySelection from "../../../../components/custom/CompanySelection.tsx";
 import type { RoleSummary } from "@/types/role.js";
 import RoleSelection from "@/components/custom/RoleSelection.tsx";
+import { useAppSelector } from "@/features/hooks.ts";
 
 export default function UserUpsertPage() {
+  const { permissions } = useAppSelector((state) => state.auth.user);
+
   // ============================
   // Checking is edit or create
   // ============================
@@ -152,8 +155,8 @@ export default function UserUpsertPage() {
           gender: formData.gender,
           dob: new Date(formData.dob).toISOString(),
           address: formData.address,
-          company: company,
-          role: role,
+          company: company ?? { id: -1 },
+          role: role ?? { id: -1 },
         };
         await updateUser(updateData);
       } else {
@@ -202,6 +205,13 @@ export default function UserUpsertPage() {
   const handleBack = () => {
     navigate("/admin/user-manager");
   };
+
+  useEffect(() => {
+    if (isEdit && !permissions.includes("PUT /users"))
+      navigate("/admin/user-manager");
+    else if (!isEdit && !permissions.includes("POST /users"))
+      navigate("/admin/user-manager");
+  }, [isEdit, navigate, permissions]);
 
   return (
     <div className="space-y-6">

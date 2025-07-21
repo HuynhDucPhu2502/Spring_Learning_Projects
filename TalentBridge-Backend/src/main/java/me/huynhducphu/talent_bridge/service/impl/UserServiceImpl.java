@@ -99,15 +99,19 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
         user.setAddress(userUpdateRequestDto.getAddress());
         user.setGender(userUpdateRequestDto.getGender());
 
-        if (userUpdateRequestDto.getCompany() != null)
-            handleSetCompany(user, userUpdateRequestDto.getCompany().getId());
+        if (userUpdateRequestDto.getCompany() != null) {
+            Long companyId = userUpdateRequestDto.getCompany().getId();
+            if (companyId == -1) user.setCompany(null);
+            else handleSetCompany(user, companyId);
+        }
 
-        if (userUpdateRequestDto.getRole() != null)
-            handleSetRole(user, userUpdateRequestDto.getRole().getId());
-
+        if (userUpdateRequestDto.getRole() != null) {
+            Long roleId = userUpdateRequestDto.getRole().getId();
+            if (roleId == -1) user.setRole(null);
+            else handleSetRole(user, roleId);
+        }
 
         User savedUser = userRepository.save(user);
-
         return mapToResponseDto(savedUser);
     }
 

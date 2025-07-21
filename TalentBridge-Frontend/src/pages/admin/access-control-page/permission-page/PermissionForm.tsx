@@ -29,7 +29,15 @@ const METHOD_COLORS: Record<string, string> = {
   DELETE: "bg-red-500",
 };
 
-const MODULES = ["USER", "AUTH", "COMPANY", "SKILL", "JOB", "RESUME"];
+const MODULES = [
+  "USER",
+  "AUTH",
+  "COMPANY",
+  "SKILL",
+  "JOB",
+  "RESUME",
+  "ACCESS-CONTROLLER",
+];
 const METHODS = ["GET", "POST", "PUT", "DELETE"];
 
 interface PermissionFormProps {

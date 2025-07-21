@@ -13,7 +13,7 @@ type AuthState = {
 };
 
 const initialValue: AuthState = {
-  user: { id: "", name: "", email: "", logoUrl: "", permissions: [] },
+  user: { id: "", name: "", email: "", logoUrl: "", permissions: [], role: "" },
   isLogin: false,
   isLoading: false,
   error: null,

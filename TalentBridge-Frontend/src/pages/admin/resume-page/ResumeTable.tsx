@@ -20,6 +20,7 @@ import {
 } from "@radix-ui/react-tooltip";
 import { Badge } from "@/components/ui/badge";
 import { getResumeStatusColor } from "@/utils/tagColorMapper.ts";
+import HasPermission from "@/components/custom/HasPermission";
 
 interface ResumeTableProps {
   resumes: ResumeForDisplayResponseDto[];
@@ -121,25 +122,27 @@ export function ResumeTable({
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center justify-center">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="text-orange-500 hover:text-orange-600"
-                            onClick={() => onViewResumePDF(resume)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Xem hồ sơ ứng viên</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
+                  <HasPermission perm={"GET /resumes/user/{id}"}>
+                    <div className="flex items-center justify-center">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="text-orange-500 hover:text-orange-600"
+                              onClick={() => onViewResumePDF(resume)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Xem hồ sơ ứng viên</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </HasPermission>
                 </TableCell>
               </TableRow>
             ))

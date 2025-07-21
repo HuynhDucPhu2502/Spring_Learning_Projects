@@ -97,8 +97,8 @@ const RoleSelection = ({
         {selectedRole && (
           <div className="mb-3 flex min-h-[100px] items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-orange-100">
-                <Shield className="h-8 w-8 text-orange-600" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-blue-100">
+                <Shield className="h-8 w-8 text-blue-600" />
               </div>
               <div>
                 <span className="font-semibold text-gray-900">
@@ -184,8 +184,8 @@ const RoleSelection = ({
                     onClick={() => onAddRole(role)}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
-                        <Shield className="h-5 w-5 text-orange-600" />
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
+                        <Shield className="h-5 w-5 text-blue-600" />
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold break-all whitespace-normal">

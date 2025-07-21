@@ -13,6 +13,7 @@ import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialo
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper.ts";
+import HasPermission from "@/components/custom/HasPermission";
 
 interface SkillTableProps {
   skills: DefaultSkillResponseDto[];
@@ -83,23 +84,28 @@ export function SkillTable({
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-center gap-2">
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="text-orange-500 hover:text-orange-600"
-                      onClick={() => onEdit(skill)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <DeleteConfirmDialog onConfirm={() => onDelete(skill.id)}>
+                    <HasPermission perm={"PUT /skills"}>
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="text-red-500 hover:text-red-600"
+                        className="text-orange-500 hover:text-orange-600"
+                        onClick={() => onEdit(skill)}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Edit className="h-4 w-4" />
                       </Button>
-                    </DeleteConfirmDialog>
+                    </HasPermission>
+
+                    <HasPermission perm={"DELETE /skills/{id}"}>
+                      <DeleteConfirmDialog onConfirm={() => onDelete(skill.id)}>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="text-red-500 hover:text-red-600"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </DeleteConfirmDialog>
+                    </HasPermission>
                   </div>
                 </TableCell>
               </TableRow>

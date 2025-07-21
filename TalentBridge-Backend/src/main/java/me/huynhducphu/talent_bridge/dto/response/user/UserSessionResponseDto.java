@@ -16,6 +16,8 @@ public class UserSessionResponseDto {
     private String email;
     private String name;
     private Long id;
-    private String logoUrl;
+    private String companyId;
+    private String role;
     private List<String> permissions;
+    private String logoUrl;
 }
