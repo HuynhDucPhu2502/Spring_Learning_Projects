@@ -7,6 +7,7 @@ import {
 import type { UserLoginRequestDto } from "@/types/user.d.ts";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "sonner";
 
 // ===========================================
 // ASYNC THUNK
@@ -19,9 +20,10 @@ export const login = createAsyncThunk(
       return res.data.data;
     } catch (err: unknown) {
       const message = getErrorMessage(err, "Đăng nhập thất bại");
+      toast.error(message);
       return thunkAPI.rejectWithValue(message);
     }
-  }
+  },
 );
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
@@ -43,7 +45,7 @@ export const getAccount = createAsyncThunk(
       const message = getErrorMessage(err, "Lấy thông tin tài khoản thất bại");
       return thunkAPI.rejectWithValue(message);
     }
-  }
+  },
 );
 
 export const refreshToken = createAsyncThunk(
@@ -56,7 +58,7 @@ export const refreshToken = createAsyncThunk(
       const message = getErrorMessage(err, "Làm mới phiên đăng nhập thất bại");
       return thunkAPI.rejectWithValue(message);
     }
-  }
+  },
 );
 
 export const getErrorMessage = (err: unknown, message: string): string => {

@@ -47,8 +47,8 @@ export interface UserCreateRequestDto {
   dob: string;
   address: string;
   gender: "MALE" | "FEMALE" | "OTHER";
-  company: CompanyIdForUser;
-  role: RoleIdForUser;
+  company: CompanyIdForUser | null;
+  role: RoleIdForUser | null;
 }
 
 export interface UserUpdateRequestDto {
@@ -57,8 +57,8 @@ export interface UserUpdateRequestDto {
   gender: "MALE" | "FEMALE" | "OTHER";
   dob: string;
   address: string;
-  company: CompanyIdForUser;
-  role: RoleIdForUser;
+  company: CompanyIdForUser | null;
+  role: RoleIdForUser | null;
 }
 
 export interface SessionMetaRequest {
@@ -109,12 +109,14 @@ export interface SelfUserUpdatePasswordRequestDto {
 export interface CompanyForUser {
   id: number;
   name: string;
+  address: string;
   logoUrl: string;
 }
 
 export interface RoleForUser {
   id: number;
   name: string;
+  description: string;
 }
 
 export interface CompanyIdForUser {

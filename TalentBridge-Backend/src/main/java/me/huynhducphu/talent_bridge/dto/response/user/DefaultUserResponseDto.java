@@ -34,6 +34,7 @@ public class DefaultUserResponseDto {
     public static class CompanyInformationDto {
         private Long id;
         private String name;
+        private String address;
         private String logoUrl;
     }
 
@@ -43,6 +44,7 @@ public class DefaultUserResponseDto {
     public static class RoleInformationDto {
         private Long id;
         private String name;
+        private String description;
     }
 
 

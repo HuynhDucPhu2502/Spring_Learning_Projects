@@ -18,6 +18,12 @@ export interface DefaultRoleResponseDto {
   permissions: PermissionForRole[];
 }
 
+export interface RoleSummary {
+  id: number;
+  name: string;
+  description: string;
+}
+
 // =============================
 // SECOND INTERFACE
 // =============================

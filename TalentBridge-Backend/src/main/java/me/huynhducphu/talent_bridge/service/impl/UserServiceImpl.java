@@ -50,9 +50,9 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
             throw new DataIntegrityViolationException("Email đã tồn tại");
 
         User user = new User(
+                userCreateRequestDto.getEmail().trim(),
                 userCreateRequestDto.getName(),
-                userCreateRequestDto.getEmail(),
-                passwordEncoder.encode(userCreateRequestDto.getPassword()),
+                passwordEncoder.encode(userCreateRequestDto.getPassword().trim()),
                 userCreateRequestDto.getDob(),
                 userCreateRequestDto.getAddress(),
                 userCreateRequestDto.getGender()
@@ -196,6 +196,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
             company = new DefaultUserResponseDto.CompanyInformationDto(
                     user.getCompany().getId(),
                     user.getCompany().getName(),
+                    user.getCompany().getAddress(),
                     user.getCompany().getCompanyLogo().getLogoUrl()
             );
 
@@ -203,7 +204,8 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
         if (user.getRole() != null)
             role = new DefaultUserResponseDto.RoleInformationDto(
                     user.getRole().getId(),
-                    user.getRole().getName()
+                    user.getRole().getName(),
+                    user.getRole().getDescription()
             );
 
         return new DefaultUserResponseDto(

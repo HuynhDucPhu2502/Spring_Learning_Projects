@@ -18,7 +18,7 @@ import type { DefaultUserResponseDto } from "@/types/user";
 interface UserTableProps {
   users: DefaultUserResponseDto[];
   isLoading: boolean;
-  onEdit: (skill: DefaultUserResponseDto) => void;
+  onEdit: (id: number) => void;
   onDelete: (id: number) => void;
 }
 
@@ -92,7 +92,7 @@ export function UserTable({
                       size="icon"
                       variant="ghost"
                       className="text-orange-500 hover:text-orange-600"
-                      onClick={() => onEdit(user)}
+                      onClick={() => onEdit(user.id)}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>

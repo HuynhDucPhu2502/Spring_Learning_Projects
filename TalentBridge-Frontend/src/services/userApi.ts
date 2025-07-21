@@ -8,6 +8,8 @@ import type {
   DefaultUserResponseDto,
   SelfUserUpdatePasswordRequestDto,
   SelfUserUpdateProfileRequestDto,
+  UserCreateRequestDto,
+  UserUpdateRequestDto,
 } from "@/types/user";
 
 export const getUserList = ({
@@ -25,6 +27,18 @@ export const getUserList = ({
   return axiosClient.get<ApiResponse<PageResponseDto<DefaultUserResponseDto>>>(
     `/users?${params.toString()}`,
   );
+};
+
+export const saveUser = (data: UserCreateRequestDto) => {
+  return axiosClient.post<ApiResponse<DefaultUserResponseDto>>("/users", data);
+};
+
+export const updateUser = (data: UserUpdateRequestDto) => {
+  return axiosClient.put<ApiResponse<DefaultUserResponseDto>>("/users", data);
+};
+
+export const getUserById = (id: number) => {
+  return axiosClient.get<ApiResponse<DefaultUserResponseDto>>(`/users/${id}`);
 };
 
 export const deleteUserById = (id: number) => {

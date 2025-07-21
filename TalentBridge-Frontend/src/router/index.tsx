@@ -30,6 +30,7 @@ import UserManagerPage from "@/pages/admin/user-page";
 
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
+import UserUpsertPage from "@/pages/admin/user-page/user-upsert-page";
 
 const router = createBrowserRouter([
   // =========================
@@ -70,9 +71,16 @@ const router = createBrowserRouter([
     element: <AdminPage />,
     errorElement: <ErrorPage />,
     children: [
+      // AUTO NAVIGATION
       { index: true, element: <Navigate to={"/admin/dashboard"} /> },
+
+      // DASHBOARD
       { path: "dashboard", element: <DashboardPage /> },
+
+      // COMPANY MANAGER
       { path: "company", element: <CompanyManagerPage /> },
+
+      // RECRUITMENT MANAGER
       {
         path: "recruitment",
         element: <RecruitmentManagerPage />,
@@ -84,13 +92,20 @@ const router = createBrowserRouter([
           { path: "skill-manager", element: <SkillManagerPage /> },
           { path: "job-manager", element: <JobManagerPage /> },
           {
-            path: "/admin/recruitment/job-manager/upsert",
+            path: "job-manager/upsert",
             element: <JobUpsertPage />,
           },
         ],
       },
+
+      // RESUME MANAGER
       { path: "resume", element: <ResumeManagerPage /> },
+
+      // USER MANAGER
       { path: "user-manager", element: <UserManagerPage /> },
+      { path: "user-manager/upsert", element: <UserUpsertPage /> },
+
+      // ACCESS CONTROL MANAGER
       {
         path: "access-control",
         element: <AccessControlPage />,
@@ -104,6 +119,7 @@ const router = createBrowserRouter([
         ],
       },
 
+      // NOT FOUND
       { path: "*", element: <ErrorPage /> },
     ],
   },

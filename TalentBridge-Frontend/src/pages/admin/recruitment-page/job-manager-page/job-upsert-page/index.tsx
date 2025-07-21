@@ -23,9 +23,9 @@ import {
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import RichTextEditor from "@/components/custom/RichText/index-editor";
-import SkillSelection from "./SkillSelection";
+import SkillSelection from "../../../../../components/custom/SkillSelection.tsx";
 import type { CompanySummary, JobUpsertDto, SkillSummary } from "@/types/job";
-import CompanySelection from "./CompanySelection.tsx";
+import CompanySelection from "../../../../../components/custom/CompanySelection.tsx";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
 import { getJobById, saveJob, updateJobById } from "@/services/jobApi";
@@ -117,6 +117,7 @@ export default function JobUpsertPage() {
     setSelectedSkills(updated);
     setFormData((form) => ({ ...form, skills: skillIds }));
   };
+
   // ============================
   // Company selection handler
   // ============================

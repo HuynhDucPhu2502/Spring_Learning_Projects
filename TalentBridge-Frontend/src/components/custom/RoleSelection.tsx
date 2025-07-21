@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,28 +11,27 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Search, Building2, X } from "lucide-react";
+import { Search, Shield, X } from "lucide-react";
 import { toast } from "sonner";
-import type { CompanySummary } from "@/types/job";
-import { getCompaniesList } from "@/services/companyApi";
+import { getRolesList } from "@/services/roleApi";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import Pagination from "@/components/custom/Pagination";
-import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { DialogDescription } from "@radix-ui/react-dialog";
+import type { RoleSummary } from "@/types/role";
 
-interface CompanySelectionProps {
-  selectedCompany: CompanySummary | undefined;
-  addCompany: (company: CompanySummary) => void;
-  removeCompany: () => void;
+interface RoleSelectionProps {
+  selectedRole: RoleSummary | undefined;
+  addRole: (role: RoleSummary) => void;
+  removeRole: () => void;
 }
 
-const CompanySelection = ({
-  selectedCompany,
-  addCompany,
-  removeCompany,
-}: CompanySelectionProps) => {
+const RoleSelection = ({
+  selectedRole,
+  addRole,
+  removeRole,
+}: RoleSelectionProps) => {
   // ============================
   // Modal State
   // ============================
@@ -48,79 +49,63 @@ const CompanySelection = ({
   // ============================
   // Fetching State
   // ============================
-  const [searchName, setsearchName] = useState("");
-  const [companies, setCompanies] = useState<CompanySummary[]>([]);
+  const [searchRoleName, setSearchRoleName] = useState("");
+  const [roles, setRoles] = useState<RoleSummary[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchCompanies = async (
+  const fetchRoles = async (
     page: number,
     size: number,
-    searchName: string,
+    searchRoleName: string,
   ) => {
     setIsLoading(true);
     try {
-      const filter = searchName ? `name ~ '*${searchName}*'` : null;
+      const filter = searchRoleName ? `name ~ '*${searchRoleName}*'` : null;
 
-      const res = await getCompaniesList({ page, size, filter });
+      const res = await getRolesList({ page, size, filter });
       const data = res.data.data;
 
-      const mapped: CompanySummary[] = data.content.map((company: DefaultCompanyResponseDto) => ({
-        id: company.id,
-        name: company.name,
-        address: company.address,
-        logoUrl: company.logoUrl,
-      }));
-
-      setCompanies(mapped);
+      setRoles(data.content);
       setTotalElements(data.totalElements);
       setTotalPages(data.totalPages);
-      setIsLoading(false);
     } catch (err) {
-      toast.error(getErrorMessage(err, "Không thể lấy danh sách công ty."));
+      toast.error(getErrorMessage(err, "Không thể lấy danh sách vai trò."));
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCompanies(currentPage, itemsPerPage, searchName);
-  }, [currentPage, itemsPerPage, searchName]);
+    fetchRoles(currentPage, itemsPerPage, searchRoleName);
+  }, [currentPage, itemsPerPage, searchRoleName]);
 
   // ============================
-  // Handle Add Company
+  // Handle Add Role
   // ============================
-  const onAddCompany = (company: CompanySummary) => {
-    addCompany(company);
+  const onAddRole = (role: RoleSummary) => {
+    addRole(role);
     closeModal();
   };
 
   return (
     <div className="space-y-2">
       <Label>
-        Công ty <span className="text-red-500">*</span>
+        Vai trò <span className="text-red-500">*</span>
       </Label>
 
       <div className="rounded-md border bg-gray-50/50 p-3">
-        {selectedCompany && (
+        {selectedRole && (
           <div className="mb-3 flex min-h-[100px] items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
             <div className="flex items-center gap-3">
-              {selectedCompany.logoUrl ? (
-                <img
-                  src={selectedCompany.logoUrl}
-                  alt={`${selectedCompany.name} logo`}
-                  className="h-16 w-16 rounded-lg border object-contain"
-                />
-              ) : (
-                <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-blue-100">
-                  <Building2 className="h-10 w-10 text-blue-600" />
-                </div>
-              )}
+              <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-orange-100">
+                <Shield className="h-8 w-8 text-orange-600" />
+              </div>
               <div>
                 <span className="font-semibold text-gray-900">
-                  {selectedCompany.name}
+                  {selectedRole.name}
                 </span>
                 <p className="text-xs text-gray-500">
-                  {selectedCompany.address}
+                  {selectedRole.description}
                 </p>
               </div>
             </div>
@@ -128,18 +113,18 @@ const CompanySelection = ({
               variant="ghost"
               size="sm"
               className="h-8 w-8 rounded-full p-0 hover:bg-red-50 hover:text-red-600"
-              onClick={removeCompany}
+              onClick={removeRole}
             >
               <X className="h-4 w-4" />
             </Button>
           </div>
         )}
 
-        {!selectedCompany && (
+        {!selectedRole && (
           <div className="mb-3 flex min-h-[100px] w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300">
             <div>
-              <Building2 className="mx-auto mb-2 h-8 w-8 text-gray-400" />
-              <p className="text-sm text-gray-500">Chưa chọn kỹ năng</p>
+              <Shield className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+              <p className="text-sm text-gray-500">Chưa chọn vai trò</p>
             </div>
           </div>
         )}
@@ -149,27 +134,27 @@ const CompanySelection = ({
             <Button
               variant="outline"
               size="sm"
-              className="w-full border-dashed"
+              className="w-full border-dashed bg-transparent"
             >
-              <Building2 className="mr-2 h-4 w-4" />
-              {selectedCompany ? "Đổi công ty" : "Chọn công ty"}
+              <Shield className="mr-2 h-4 w-4" />
+              {selectedRole ? "Đổi vai trò" : "Chọn vai trò"}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Building2 className="h-5 w-5" />
-                Chọn công ty
+                <Shield className="h-5 w-5" />
+                Chọn vai trò
               </DialogTitle>
-              <DialogDescription>company selection panel</DialogDescription>
+              <DialogDescription>role selection panel</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="relative">
                 <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                 <Input
-                  placeholder="Tìm kiếm công ty..."
-                  value={searchName}
-                  onChange={(e) => setsearchName(e.target.value)}
+                  placeholder="Tìm kiếm vai trò..."
+                  value={searchRoleName}
+                  onChange={(e) => setSearchRoleName(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -180,42 +165,34 @@ const CompanySelection = ({
                   </div>
                 )}
 
-                {companies.length === 0 && !isLoading && (
+                {roles.length === 0 && !isLoading && (
                   <div className="py-8 text-center">
                     <EmptyState
-                      title="Không tìm thấy công ty nào"
-                      description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm công ty mới"
+                      title="Không tìm thấy vai trò nào"
+                      description="Thử thay đổi tiêu chí tìm kiếm hoặc thêm vai trò mới"
                       icon={
-                        <Building2 className="text-muted-foreground h-12 w-12" />
+                        <Shield className="text-muted-foreground h-12 w-12" />
                       }
                     />
                   </div>
                 )}
 
-                {companies.map((company) => (
+                {roles.map((role) => (
                   <div
-                    key={company.id}
+                    key={role.id}
                     className="group cursor-pointer rounded-lg border-2 p-4 transition-all duration-200 hover:shadow-md"
-                    onClick={() => onAddCompany(company)}
+                    onClick={() => onAddRole(role)}
                   >
                     <div className="flex items-center gap-3">
-                      {company.logoUrl ? (
-                        <img
-                          src={company.logoUrl}
-                          alt={`${company.name} logo`}
-                          className="h-10 w-10 rounded-lg border object-contain"
-                        />
-                      ) : (
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
-                          <Building2 className="h-5 w-5 text-blue-600" />
-                        </div>
-                      )}
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
+                        <Shield className="h-5 w-5 text-orange-600" />
+                      </div>
                       <div className="flex-1">
                         <h4 className="font-semibold break-all whitespace-normal">
-                          {company.name}
+                          {role.name}
                         </h4>
-                        <p className="break-all whitespace-normal">
-                          {company.address}
+                        <p className="text-sm break-all whitespace-normal text-gray-600">
+                          {role.description}
                         </p>
                       </div>
                     </div>
@@ -242,4 +219,4 @@ const CompanySelection = ({
   );
 };
 
-export default CompanySelection;
+export default RoleSelection;

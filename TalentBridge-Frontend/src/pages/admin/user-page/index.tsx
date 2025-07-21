@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Pagination from "@/components/custom/Pagination";
 import { UserTable } from "./UserTable";
-import { UserForm } from "./UserForm";
+import { useNavigate } from "react-router-dom";
 
 const UserManagerPage = () => {
+  const navigate = useNavigate();
+
   // ============================
   // Data
   // ============================
@@ -30,23 +32,6 @@ const UserManagerPage = () => {
   // ============================
   const [searchUserName, setSearchUserName] = useState("");
   const [searchEmail, setSearchEmail] = useState("");
-
-  // ============================
-  // Dialog State
-  // ============================
-  const [isDialogOpen, setisDialogOpen] = useState(false);
-  const [selectedUser, setSelectedUser] =
-    useState<DefaultUserResponseDto | null>(null);
-
-  const handleOpenCreateForm = () => {
-    setSelectedUser(null);
-    setisDialogOpen(true);
-  };
-
-  const handleOpenEditForm = (user: DefaultUserResponseDto) => {
-    setSelectedUser(user);
-    setisDialogOpen(true);
-  };
 
   // ============================
   // HANDLE FETCHING DATA
@@ -85,6 +70,17 @@ const UserManagerPage = () => {
     fetchUsers(1, itemsPerPage, searchUserName, searchEmail);
     setCurrentPage(1);
   }, [itemsPerPage, searchUserName, searchEmail]);
+
+  // ============================
+  // HANDLE NAVIGATE UPSERT PAGE
+  // ============================
+  const handleOpenCreatePage = () => {
+    navigate("upsert");
+  };
+
+  const handleOpenEditPage = (id: number) => {
+    navigate(`upsert?id=${id}`);
+  };
 
   // ============================
   // HANDLE RESET
@@ -126,7 +122,7 @@ const UserManagerPage = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Danh sách người dùng</h2>
         <Button
-          onClick={handleOpenCreateForm}
+          onClick={handleOpenCreatePage}
           className="bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="mr-2 h-4 w-4" />
@@ -137,7 +133,7 @@ const UserManagerPage = () => {
       <UserTable
         users={users}
         isLoading={isLoading}
-        onEdit={handleOpenEditForm}
+        onEdit={handleOpenEditPage}
         onDelete={handleDelete}
       />
 
@@ -149,14 +145,6 @@ const UserManagerPage = () => {
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
         showItemsPerPageSelect={true}
-      />
-
-      <UserForm
-        open={isDialogOpen}
-        onOpenChange={setisDialogOpen}
-        initialData={selectedUser}
-        onSubmit={() => {}}
-        onCloseForm={() => setSelectedUser(null)}
       />
     </div>
   );
