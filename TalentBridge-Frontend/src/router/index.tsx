@@ -19,7 +19,7 @@ import AdminPage from "@/pages/admin";
 import CompanyManagerPage from "@/pages/admin/company-page";
 import DashboardPage from "@/pages/admin/dashboard-page";
 import RecruitmentManagerPage from "@/pages/admin/recruitment-page";
-import SkillManagerAdminPage from "@/pages/admin/recruitment-page/skill-manage-page";
+import SkillManagerAdminPage from "@/pages/admin/recruitment-page/skill-manager-admin-page";
 import JobManagerPage from "@/pages/admin/recruitment-page/job-manager-page";
 import JobUpsertPage from "@/pages/admin/recruitment-page/job-manager-page/job-upsert-page";
 import ResumeManagerPage from "@/pages/admin/resume-page";
@@ -31,11 +31,12 @@ import UserUpsertPage from "@/pages/admin/user-page/user-upsert-page";
 
 // RECRUITER PAGE
 import RecruiterPage from "@/pages/recruiter";
-import SkillManagerRecruiterPage from "@/pages/recruiter/skill-manager-page";
+import SkillManagerRecruiterPage from "@/pages/recruiter/skill-manager-recruiter-page";
 
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
-import { ProtectedRoute } from "@/pages/common/ProtectedRoute.tsx";
+import { ProtectedRoute } from "@/pages/commons/ProtectedRoute.tsx";
+import ResumeManagerRecruiterPage from "@/pages/recruiter/resume-page";
 
 const router = createBrowserRouter([
   // =========================
@@ -193,13 +194,22 @@ const router = createBrowserRouter([
     element: <RecruiterPage />,
     children: [
       {
-        path: "skill-manager",
+        path: "skills",
         element: (
           <ProtectedRoute to="/recruiter" requiredPermission="GET /skills">
             <SkillManagerRecruiterPage />
           </ProtectedRoute>
         ),
       },
+      {
+        path: "resumes",
+        element: (
+          <ProtectedRoute to="/recruiter" requiredPermission="GET /resumes">
+            <ResumeManagerRecruiterPage />
+          </ProtectedRoute>
+        ),
+      },
+
       { path: "*", element: <ErrorPage /> },
     ],
   },

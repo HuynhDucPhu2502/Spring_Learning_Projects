@@ -21,19 +21,35 @@ public interface ResumeRepository extends
 
     boolean existsByUserIdAndJobId(Long userId, Long jobId);
 
-    default Page<Resume> findByUserId(
-            Long userId,
+    default Page<Resume> findByUserEmail(
+            String email,
             Specification<Resume> filterSpec,
             Pageable pageable
     ) {
         Specification<Resume> userSpec = (root, q, cb) ->
-                cb.equal(root.get("user").get("id"), userId);
+                cb.equal(root.get("user").get("email"), email);
 
         Specification<Resume> combined = userSpec.and(filterSpec);
 
         return findAll(combined, pageable);
     }
 
-    Optional<Resume> findByUserIdAndJobId(Long userId, Long jobId);
+    default Page<Resume> findByUserCompanyId(
+            Long id,
+            Specification<Resume> filterSpec,
+            Pageable pageable
+    ) {
+        Specification<Resume> userSpec = (root, q, cb) ->
+                cb.equal(root.get("user").get("company").get("id"), id);
+
+        Specification<Resume> combined = userSpec.and(filterSpec);
+
+        return findAll(combined, pageable);
+    }
+
+
+    Optional<Resume> findByUserEmailAndJobId(String email, Long jobId);
+
+    Optional<Resume> findByUserEmailAndId(String email, Long id);
 
 }

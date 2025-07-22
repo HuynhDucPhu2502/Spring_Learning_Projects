@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import { Clock } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAppSelector } from "@/features/hooks";
-import UserMenu from "@/pages/common/UserMenu.tsx";
+import UserMenu from "@/pages/commons/UserMenu.tsx";
 
 const routeTitles: Record<
   string,

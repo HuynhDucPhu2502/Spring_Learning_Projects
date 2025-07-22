@@ -16,7 +16,7 @@ interface PaginationProps {
   itemsPerPage: number;
   setItemsPerPage: (itemsPerPage: number) => void;
   showItemsPerPageSelect?: boolean;
-  theme?: string;
+  theme?: "blue" | "purple";
 }
 
 const Pagination = ({
@@ -108,7 +108,7 @@ const Pagination = ({
                 }}
                 className={
                   page === currentPage
-                    ? `bg-${theme}-600 text-white opacity-100`
+                    ? `${theme === "blue" ? "bg-blue-600" : "bg-purple-600"} text-white opacity-100`
                     : ""
                 }
               >

@@ -19,7 +19,7 @@ import { RoleTable } from "@/pages/admin/access-control-page/role-page/RoleTable
 import { RoleForm } from "@/pages/admin/access-control-page/role-page/RoleForm.tsx";
 import { getAllPermissionsNoPaging } from "@/services/permissionApi";
 import type { DefaultPermissionResponseDto } from "@/types/permission";
-import HasPermission from "@/pages/common/HasPermission.tsx";
+import HasPermission from "@/pages/commons/HasPermission.tsx";
 
 const RoleManagerPage = () => {
   // Data

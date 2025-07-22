@@ -21,7 +21,7 @@ interface SkillFormProps {
   onSubmit: (data: createSkillRequestDto, id?: number) => void;
   initialData: DefaultSkillResponseDto | null;
   onCloseForm: () => void;
-  theme?: string;
+  theme?: "blue" | "purple";
 }
 
 export function SkillForm({
@@ -85,7 +85,7 @@ export function SkillForm({
             </Button>
             <Button
               type="submit"
-              className={`bg-${theme}-600 hover:bg-${theme}-700`}
+              className={`${theme === "blue" ? "bg-blue-600 hover:bg-blue-700" : "bg-purple-600 hover:bg-purple-700"}`}
             >
               {initialData ? "Lưu thay đổi" : "Thêm"}
             </Button>

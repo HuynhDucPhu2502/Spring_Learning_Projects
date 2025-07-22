@@ -13,21 +13,22 @@ import me.huynhducphu.talent_bridge.model.Job;
 import me.huynhducphu.talent_bridge.model.Resume;
 import me.huynhducphu.talent_bridge.model.Skill;
 import me.huynhducphu.talent_bridge.model.User;
-import me.huynhducphu.talent_bridge.model.constant.ResumeStatus;
 import me.huynhducphu.talent_bridge.repository.JobRepository;
 import me.huynhducphu.talent_bridge.repository.ResumeRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
-import me.huynhducphu.talent_bridge.service.AuthService;
 import me.huynhducphu.talent_bridge.service.S3Service;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
+import java.util.List;
 
 /**
  * Admin 7/3/2025
@@ -40,14 +41,13 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
-    private final AuthService authService;
+
     private final S3Service s3Service;
 
     @Override
     public CreateResumeResponseDto saveResume(
             ResumeRequestDto resumeRequestDto,
             MultipartFile pdfFile) {
-
         Resume resume = new Resume(
                 resumeRequestDto.getEmail(),
                 resumeRequestDto.getStatus(),
@@ -94,24 +94,84 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
     }
 
     @Override
-    public Page<ResumeForDisplayResponseDto> findResumesByUserId(
-            Long userId,
+    public Page<ResumeForDisplayResponseDto> findAllResumes(
+            Specification<Resume> spec,
+            Pageable pageable
+    ) {
+        return resumeRepository
+                .findAll(spec, pageable)
+                .map(this::mapToResumeForDisplayResponseDto);
+    }
+
+    @Override
+    public Page<ResumeForDisplayResponseDto> findAllResumesForRecruiterCompany(
+            Specification<Resume> spec,
+            Pageable pageable
+    ) {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        if (user.getCompany() == null)
+            throw new EntityNotFoundException("Không tìm thấy công ty người dùng");
+
+        Page<ResumeForDisplayResponseDto> data = resumeRepository
+                .findByUserCompanyId(user.getCompany().getId(), spec, pageable)
+                .map(this::mapToResumeForDisplayResponseDto);
+
+        List<ResumeForDisplayResponseDto> filteredList =
+                data.getContent().stream()
+                        .filter(x ->
+                                x.getCompany().getId().equals(user.getCompany().getId())
+                        )
+                        .toList();
+
+        return new PageImpl<>(
+                filteredList,
+                data.getPageable(),
+                filteredList.size()
+        );
+    }
+
+    @Override
+    public Page<ResumeForDisplayResponseDto> findSelfResumes(
             Specification<Resume> spec,
             Pageable pageable) {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
         return resumeRepository
-                .findByUserId(userId, spec, pageable)
+                .findByUserEmail(email, spec, pageable)
                 .map(this::mapToResumeForDisplayResponseDto);
     }
 
 
-    @Override
-    public DefaultResumeResponseDto removeResumeByUserIdAndJobId(Long userId, Long jobId) {
-        Resume resume = resumeRepository
-                .findByUserIdAndJobId(userId, jobId)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
+//    @Override
+//    public ResumeForDisplayResponseDto findResumeById(Long id) {
+//        Resume resume = resumeRepository
+//                .findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
+//        return mapToResumeForDisplayResponseDto(resume);
+//    }
 
-        if (!authService.isCurrentUser(resume.getUser()))
-            throw new AccessDeniedException("Bạn không quyền truy câp");
+
+    @Override
+    public DefaultResumeResponseDto removeSelfResumeByJobId(Long jobId) {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        Resume resume = resumeRepository
+                .findByUserEmailAndJobId(email, jobId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
 
         DefaultResumeResponseDto res = mapToResponseDto(resume);
 
@@ -127,13 +187,15 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
     }
 
     @Override
-    public DefaultResumeResponseDto updateResumeFile(Long id, MultipartFile pdfFile) {
-        Resume resume = resumeRepository
-                .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
+    public DefaultResumeResponseDto updateSelfResumeFile(Long id, MultipartFile pdfFile) {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
 
-        if (!authService.isCurrentUser(resume.getUser()))
-            throw new AccessDeniedException("Bạn không quyền truy câp");
+        Resume resume = resumeRepository
+                .findByUserEmailAndId(email, id)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
 
         if (pdfFile != null && !pdfFile.isEmpty()) {
             resume.setVersion(resume.getVersion() + 1);
@@ -161,22 +223,39 @@ public class ResumeServiceImpl implements me.huynhducphu.talent_bridge.service.R
     }
 
     @Override
-    public Page<ResumeForDisplayResponseDto> findAllResumes(
-            Specification<Resume> spec,
-            Pageable pageable
-    ) {
-        return resumeRepository
-                .findAll(spec, pageable)
-                .map(this::mapToResumeForDisplayResponseDto);
-    }
-
-    @Override
     public DefaultResumeResponseDto updateResumeStatus(
             UpdateResumeStatusRequestDto updateResumeStatusRequestDto) {
         Resume resume = resumeRepository
                 .findById(updateResumeStatusRequestDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
-        
+
+        resume.setStatus(updateResumeStatusRequestDto.getStatus());
+        resumeRepository.save(resume);
+        return mapToResponseDto(resume);
+    }
+
+    @Override
+    public DefaultResumeResponseDto updateResumeStatusForRecruiterCompany(
+            UpdateResumeStatusRequestDto updateResumeStatusRequestDto) {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        if (user.getCompany() == null)
+            throw new EntityNotFoundException("Không tìm thấy công ty người dùng");
+
+        Resume resume = resumeRepository
+                .findById(updateResumeStatusRequestDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy resume"));
+
+        if (!resume.getUser().getCompany().getId().equals(user.getCompany().getId()))
+            throw new AccessDeniedException("Không có quyền truy cập");
+
         resume.setStatus(updateResumeStatusRequestDto.getStatus());
         resumeRepository.save(resume);
         return mapToResponseDto(resume);

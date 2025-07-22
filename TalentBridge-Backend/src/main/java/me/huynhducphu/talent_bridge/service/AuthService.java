@@ -29,8 +29,6 @@ public interface AuthService {
 
     void removeSession(String sessionId);
 
-    boolean isCurrentUser(User user);
-
     List<SessionMetaResponse> getAllSessionMetas(String refreshToken);
 
     UserSessionResponseDto getCurrentUser();

@@ -14,7 +14,7 @@ import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { formatISO } from "@/utils/convertHelper.ts";
 
 import type { DefaultUserResponseDto } from "@/types/user";
-import HasPermission from "@/pages/common/HasPermission.tsx";
+import HasPermission from "@/pages/commons/HasPermission.tsx";
 
 interface UserTableProps {
   users: DefaultUserResponseDto[];

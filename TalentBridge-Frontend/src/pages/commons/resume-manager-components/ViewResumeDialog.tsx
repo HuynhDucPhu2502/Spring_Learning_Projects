@@ -4,26 +4,26 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog.tsx";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select.tsx";
 import { BetweenVerticalStart } from "lucide-react";
 
 import type {
   ResumeForDisplayResponseDto,
   UpdateResumeStatusRequestDto,
 } from "@/types/resume";
-import PDFViewer from "@/components/custom/PDFViewer";
-import RichTextPreview from "@/components/custom/RichText/index-preview";
+import PDFViewer from "@/components/custom/PDFViewer.tsx";
+import RichTextPreview from "@/components/custom/RichText/index-preview.tsx";
 import { statusOptions } from "@/utils/tagColorMapper.ts";
 
 interface ViewResumeDialogProps {
@@ -32,6 +32,7 @@ interface ViewResumeDialogProps {
   onUpdate: (resume: UpdateResumeStatusRequestDto) => Promise<void>;
   resume: ResumeForDisplayResponseDto;
   onCloseForm: () => void;
+  theme?: "blue" | "purple";
 }
 
 export function ViewResumeDialog({
@@ -40,6 +41,7 @@ export function ViewResumeDialog({
   onUpdate,
   resume,
   onCloseForm,
+  theme = "blue",
 }: ViewResumeDialogProps) {
   const [status, setStatus] = useState(resume.status);
   const [openJobInfo, setOpenJobInfo] = useState(false);
@@ -83,8 +85,8 @@ export function ViewResumeDialog({
         <Button
           className={`w-fit hover:-translate-y-0.5 ${
             openJobInfo
-              ? "border border-gray-100 bg-blue-500 text-white hover:bg-blue-500"
-              : "border border-blue-500 bg-white text-blue-500 hover:bg-white"
+              ? `border border-gray-100 text-white ${theme === "blue" ? "bg-blue-500 hover:bg-blue-600" : "bg-purple-500 hover:bg-purple-600"}`
+              : `border bg-white hover:bg-white ${theme === "blue" ? "border-blue-500 text-blue-500" : "border-purple-500 text-purple-500"}`
           }`}
           onClick={() => setOpenJobInfo((v) => !v)}
         >
@@ -124,7 +126,7 @@ export function ViewResumeDialog({
                       {resume.job.skills.map((skill) => (
                         <Badge
                           key={skill}
-                          className="bg-blue-100 text-blue-700"
+                          className={`${theme === "blue" ? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"}`}
                         >
                           {skill}
                         </Badge>
@@ -158,7 +160,7 @@ export function ViewResumeDialog({
           </Select>
           <Button
             onClick={handleUpdate}
-            className="cursor-pointer bg-blue-500 hover:bg-blue-600"
+            className={`cursor-pointer ${theme === "blue" ? "bg-blue-500 hover:bg-blue-600" : "bg-purple-500 hover:bg-purple-600"}`}
             disabled={isLoading}
           >
             Cập nhật

@@ -1,35 +1,39 @@
 import { RotateCcw } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Button } from "@/components/ui/button.tsx";
 
 interface ResumeSearchSectionProps {
-  searchCompanyName: string;
-  setSearchCompanyName: (value: string) => void;
+  onReset: () => void;
   searchJobName: string;
   setSearchJobName: (value: string) => void;
-  onReset: () => void;
+  searchCompanyName?: string;
+  setSearchCompanyName?: (value: string) => void;
+  isRecruiter?: boolean;
 }
 
 export const ResumeSearchSection = ({
-  searchCompanyName,
-  setSearchCompanyName,
+  onReset,
   searchJobName,
   setSearchJobName,
-  onReset,
+  searchCompanyName,
+  setSearchCompanyName,
+  isRecruiter = false,
 }: ResumeSearchSectionProps) => {
   return (
     <div className="bg-card rounded-lg border p-4">
       <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3">
-        <div className="space-y-2">
-          <Label htmlFor="search-company-name">Tên công ty:</Label>
-          <Input
-            id="search-company-name"
-            placeholder="Nhập tên công ty..."
-            value={searchCompanyName}
-            onChange={(e) => setSearchCompanyName(e.target.value)}
-          />
-        </div>
+        {!isRecruiter && setSearchCompanyName && (
+          <div className="space-y-2">
+            <Label htmlFor="search-company-name">Tên công ty:</Label>
+            <Input
+              id="search-company-name"
+              placeholder="Nhập tên công ty..."
+              value={searchCompanyName}
+              onChange={(e) => setSearchCompanyName(e.target.value)}
+            />
+          </div>
+        )}
         <div className="space-y-2">
           <Label htmlFor="search-job-name">Tên công việc:</Label>
           <Input

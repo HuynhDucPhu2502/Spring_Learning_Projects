@@ -41,7 +41,7 @@ const menuItems: MenuItem[] = [
   },
   {
     title: "Kỹ năng",
-    url: "/recruiter/skill-manager",
+    url: "/recruiter/skills",
     icon: Settings,
     permission: "GET /skills",
   },

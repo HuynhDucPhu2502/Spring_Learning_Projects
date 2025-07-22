@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAppSelector } from "@/features/hooks";
-import UserMenu from "@/pages/common/UserMenu.tsx";
+import UserMenu from "@/pages/commons/UserMenu.tsx";
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

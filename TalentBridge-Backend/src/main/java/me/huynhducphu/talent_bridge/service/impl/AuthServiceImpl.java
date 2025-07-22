@@ -202,14 +202,6 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
         refreshTokenRedisService.deleteRefreshToken(sessionId);
     }
 
-    @Override
-    public boolean isCurrentUser(User user) {
-        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        String targetUserEmail = user.getEmail();
-
-        return currentUserEmail.equalsIgnoreCase(targetUserEmail);
-    }
-
     private UserSessionResponseDto mapToUserInformation(User user) {
         if (user == null)
             throw new EntityNotFoundException("Không tìm thấy người dùng");
@@ -258,6 +250,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
 
         // ================================================
         // HANDLE REFRESH TOKEN
+        // ================================================
         String refreshToken = buildJwt(refreshTokenExpiration, user);
         refreshTokenRedisService.saveRefreshToken(
                 refreshToken,

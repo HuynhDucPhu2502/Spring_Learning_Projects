@@ -7,7 +7,6 @@ import me.huynhducphu.talent_bridge.dto.response.resume.DefaultResumeResponseDto
 import me.huynhducphu.talent_bridge.dto.response.resume.GetResumeFileResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.ResumeForDisplayResponseDto;
 import me.huynhducphu.talent_bridge.model.Resume;
-import me.huynhducphu.talent_bridge.model.constant.ResumeStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,14 +20,18 @@ public interface ResumeService {
             ResumeRequestDto resumeRequestDto,
             MultipartFile pdfFile);
 
-    Page<ResumeForDisplayResponseDto> findResumesByUserId(
-            Long userId,
+    Page<ResumeForDisplayResponseDto> findAllResumesForRecruiterCompany(
+            Specification<Resume> spec,
+            Pageable pageable
+    );
+
+    Page<ResumeForDisplayResponseDto> findSelfResumes(
             Specification<Resume> spec,
             Pageable pageable);
 
-    DefaultResumeResponseDto removeResumeByUserIdAndJobId(Long userId, Long jobId);
+    DefaultResumeResponseDto removeSelfResumeByJobId(Long jobId);
 
-    DefaultResumeResponseDto updateResumeFile(Long id, MultipartFile pdfFile);
+    DefaultResumeResponseDto updateSelfResumeFile(Long id, MultipartFile pdfFile);
 
     GetResumeFileResponseDto getResumeFileUrl(Long id);
 
@@ -38,4 +41,7 @@ public interface ResumeService {
     );
 
     DefaultResumeResponseDto updateResumeStatus(UpdateResumeStatusRequestDto updateResumeStatusRequestDto);
+
+    DefaultResumeResponseDto updateResumeStatusForRecruiterCompany(
+            UpdateResumeStatusRequestDto updateResumeStatusRequestDto);
 }

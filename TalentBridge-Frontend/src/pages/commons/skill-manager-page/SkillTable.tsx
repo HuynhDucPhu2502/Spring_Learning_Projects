@@ -13,14 +13,14 @@ import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialo
 import { EmptyState } from "@/components/custom/EmptyState.tsx";
 import LoadingSpinner from "@/components/custom/LoadingSpinner.tsx";
 import { formatISO } from "@/utils/convertHelper.ts";
-import HasPermission from "@/pages/common/HasPermission.tsx";
+import HasPermission from "@/pages/commons/HasPermission.tsx";
 
 interface SkillTableProps {
   skills: DefaultSkillResponseDto[];
   isLoading: boolean;
   onEdit: (skill: DefaultSkillResponseDto) => void;
   onDelete: (id: number) => void;
-  theme?: string;
+  theme?: "blue" | "purple";
 }
 
 export function SkillTable({
@@ -31,9 +31,13 @@ export function SkillTable({
   theme = "blue",
 }: SkillTableProps) {
   return (
-    <div className={`overflow-hidden rounded-lg border border-${theme}-600`}>
+    <div
+      className={`overflow-hidden rounded-lg border ${theme === "blue" ? "border-blue-600" : "border-purple-600"}`}
+    >
       <Table>
-        <TableHeader className={`bg-${theme}-600 text-white`}>
+        <TableHeader
+          className={`${theme === "blue" ? "bg-blue-600" : "bg-purple-600"} text-white`}
+        >
           <TableRow>
             <TableHead className="text-center font-bold text-white">
               ID

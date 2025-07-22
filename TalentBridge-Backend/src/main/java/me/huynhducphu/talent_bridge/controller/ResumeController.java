@@ -52,72 +52,6 @@ public class ResumeController {
                 .body(resumeService.saveResume(resumeRequestDto, pdfFile));
     }
 
-    @GetMapping("/user/{userId}")
-    @ApiMessage(value = "Lấy resume theo người dùng")
-    @PreAuthorize("hasAuthority('GET /resumes/user/{id}')")
-    @Operation(
-            summary = "Lấy resume theo người dùng",
-            description = "Yêu cầu quyền: <b>GET /resumes/user/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    public ResponseEntity<?> findResumesByUserId(
-            @PathVariable Long userId,
-            @Filter Specification<Resume> spec,
-            @PageableDefault(size = 5) Pageable pageable) {
-        Page<ResumeForDisplayResponseDto> page = resumeService.findResumesByUserId(userId, spec, pageable);
-
-        PageResponseDto<ResumeForDisplayResponseDto> res = new PageResponseDto<>(
-                page.getContent(),
-                pageable.getPageNumber() + 1,
-                pageable.getPageSize(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-
-        return ResponseEntity.ok(res);
-    }
-
-    @DeleteMapping("/users/{userId}/jobs/{jobId}")
-    @ApiMessage(value = "Xóa resume theo user id và job id")
-    @PreAuthorize("hasAuthority('DELETE /resumes/users/{id}/jobs/{id}')")
-    @Operation(
-            summary = "Xóa resume theo user id và job id",
-            description = "Yêu cầu quyền: <b>DELETE /resumes/users/{id}/jobs/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    public ResponseEntity<?> removeResumeByUserIdAndJobId(
-            @PathVariable Long userId,
-            @PathVariable Long jobId
-    ) {
-        return ResponseEntity.ok(resumeService.removeResumeByUserIdAndJobId(userId, jobId));
-    }
-
-    @PutMapping("/file/{id}")
-    @ApiMessage(value = "Cập nhật file resume")
-    @PreAuthorize("hasAuthority('PUT /resumes/file/{id}')")
-    @Operation(
-            summary = "Cập nhật file resume",
-            description = "Yêu cầu quyền: <b>PUT /resumes/file/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    public ResponseEntity<?> updateResumeFile(
-            @PathVariable Long id,
-            @RequestPart("pdfFile") MultipartFile pdfFile) {
-        return ResponseEntity.ok(resumeService.updateResumeFile(id, pdfFile));
-    }
-
-    @GetMapping("/file/{id}")
-    @ApiMessage(value = "Lấy file resume")
-    @PreAuthorize("hasAuthority('GET /resumes/file/{id}')")
-    @Operation(
-            summary = "Lấy file resume",
-            description = "Yêu cầu quyền: <b>GET /resumes/file/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    public ResponseEntity<?> getResumeFileUrl(@PathVariable Long id) {
-        return ResponseEntity.ok(resumeService.getResumeFileUrl(id));
-    }
-
     @GetMapping
     @ApiMessage(value = "Lấy danh sách resume")
     @PreAuthorize("hasAuthority('GET /resumes')")
@@ -143,6 +77,107 @@ public class ResumeController {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/company")
+    @ApiMessage(value = "Lấy danh sách resume theo company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('GET /resumes/company')")
+    @Operation(
+            summary = "Lấy danh sách resume theo company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>GET /resumes/company</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> findAllResumesForRecruiterCompany(
+            @Filter Specification<Resume> spec,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        Page<ResumeForDisplayResponseDto> page = resumeService.findAllResumesForRecruiterCompany(spec, pageable);
+
+        PageResponseDto<ResumeForDisplayResponseDto> res = new PageResponseDto<>(
+                page.getContent(),
+                pageable.getPageNumber() + 1,
+                pageable.getPageSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/me")
+    @ApiMessage(value = "Lấy resume theo người dùng")
+    @PreAuthorize("hasAuthority('GET /resumes/me')")
+    @Operation(
+            summary = "Lấy resume của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>GET /resumes/me</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> findSelfResumes(
+            @Filter Specification<Resume> spec,
+            @PageableDefault(size = 5) Pageable pageable) {
+        Page<ResumeForDisplayResponseDto> page = resumeService.findSelfResumes(spec, pageable);
+
+        PageResponseDto<ResumeForDisplayResponseDto> res = new PageResponseDto<>(
+                page.getContent(),
+                pageable.getPageNumber() + 1,
+                pageable.getPageSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+
+        return ResponseEntity.ok(res);
+    }
+
+//    @GetMapping("/{id}")
+//    @ApiMessage(value = "Lấy resume theo id")
+//    @PreAuthorize("hasAuthority('GET /resumes/{id}')")
+//    @Operation(
+//            summary = "Lấy resume theo id",
+//            description = "Yêu cầu quyền: <b>GET /resumes/{id}</b>",
+//            security = @SecurityRequirement(name = "bearerAuth")
+//    )
+//    public ResponseEntity<?> findByResumeById(@PathVariable Long id) {
+//        return ResponseEntity.ok(resumeService.findResumeById(id));
+//    }
+
+    @DeleteMapping("/me/jobs/{jobId}")
+    @ApiMessage(value = "Xóa resume theo job id của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('DELETE /resumes/me/jobs/{jobId}')")
+    @Operation(
+            summary = "Xóa resume theo job id của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>DELETE /resumes/me/jobs/{jobId}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> removeSelfResumeByJobId(
+            @PathVariable Long jobId
+    ) {
+        return ResponseEntity.ok(resumeService.removeSelfResumeByJobId(jobId));
+    }
+
+    @PutMapping("/me/file/{id}")
+    @ApiMessage(value = "Cập nhật file resume")
+    @PreAuthorize("hasAuthority('PUT /resumes/me/file/{id}')")
+    @Operation(
+            summary = "Cập nhật file resume",
+            description = "Yêu cầu quyền: <b>PUT /resumes/me/file/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> updateSelfResumeFile(
+            @PathVariable Long id,
+            @RequestPart("pdfFile") MultipartFile pdfFile) {
+        return ResponseEntity.ok(resumeService.updateSelfResumeFile(id, pdfFile));
+    }
+
+    @GetMapping("/file/{id}")
+    @ApiMessage(value = "Lấy file resume")
+    @PreAuthorize("hasAuthority('GET /resumes/file/{id}')")
+    @Operation(
+            summary = "Lấy file resume",
+            description = "Yêu cầu quyền: <b>GET /resumes/file/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> getResumeFileUrl(@PathVariable Long id) {
+        return ResponseEntity.ok(resumeService.getResumeFileUrl(id));
+    }
+
     @PutMapping("/status")
     @ApiMessage("Cập nhật trạng thái resume")
     @PreAuthorize("hasAuthority('PUT /resumes/status')")
@@ -154,6 +189,19 @@ public class ResumeController {
     public ResponseEntity<?> updateResumeStatus(
             @RequestBody UpdateResumeStatusRequestDto updateResumeStatusRequestDto) {
         return ResponseEntity.ok(resumeService.updateResumeStatus(updateResumeStatusRequestDto));
+    }
+
+    @PutMapping("/company/status")
+    @ApiMessage("Cập nhật trạng thái resume theo company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('PUT /resumes/company/status')")
+    @Operation(
+            summary = "Cập nhật trạng thái resume theo company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>PUT /resumes/company/status</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> updateResumeStatusForRecruiterCompany(
+            @RequestBody UpdateResumeStatusRequestDto updateResumeStatusRequestDto) {
+        return ResponseEntity.ok(resumeService.updateResumeStatusForRecruiterCompany(updateResumeStatusRequestDto));
     }
 
 

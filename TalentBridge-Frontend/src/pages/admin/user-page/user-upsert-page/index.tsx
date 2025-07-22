@@ -27,9 +27,9 @@ import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
 import { getUserById, saveUser, updateUser } from "@/services/userApi";
 import type { CompanySummary } from "@/types/job";
-import CompanySelection from "../../../common/CompanySelection.tsx";
+import CompanySelection from "@/pages/commons/CompanySelection.tsx";
 import type { RoleSummary } from "@/types/role.js";
-import RoleSelection from "@/components/custom/RoleSelection.tsx";
+import RoleSelection from "@/pages/commons/RoleSelection.tsx";
 import { useAppSelector } from "@/features/hooks.ts";
 
 export default function UserUpsertPage() {

@@ -1,5 +1,5 @@
 import { Edit, Wrench } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Table,
   TableBody,
@@ -7,9 +7,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { EmptyState } from "@/components/custom/EmptyState";
-import LoadingSpinner from "@/components/custom/LoadingSpinner";
+} from "@/components/ui/table.tsx";
+import { EmptyState } from "@/components/custom/EmptyState.tsx";
+import LoadingSpinner from "@/components/custom/LoadingSpinner.tsx";
 import { formatISO } from "@/utils/convertHelper.ts";
 import type { ResumeForDisplayResponseDto } from "@/types/resume";
 import {
@@ -18,25 +18,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge.tsx";
 import { getResumeStatusColor } from "@/utils/tagColorMapper.ts";
-import HasPermission from "@/pages/common/HasPermission.tsx";
 
 interface ResumeTableProps {
   resumes: ResumeForDisplayResponseDto[];
   isLoading: boolean;
   onViewResumePDF: (resume: ResumeForDisplayResponseDto) => void;
+  theme?: "blue" | "purple";
 }
 
 export function ResumeTable({
   resumes,
   isLoading,
   onViewResumePDF,
+  theme = "blue",
 }: ResumeTableProps) {
   return (
-    <div className="overflow-hidden rounded-lg border border-blue-600">
+    <div className={`overflow-hidden rounded-lg border border-${theme}-600`}>
       <Table>
-        <TableHeader className="bg-blue-600 text-white">
+        <TableHeader
+          className={`${theme === "blue" ? "bg-blue-600" : "bg-purple-600"} text-white`}
+        >
           <TableRow>
             <TableHead className="text-center font-bold text-white">
               ID
@@ -122,27 +125,25 @@ export function ResumeTable({
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <HasPermission perm={"GET /resumes/user/{id}"}>
-                    <div className="flex items-center justify-center">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="text-orange-500 hover:text-orange-600"
-                              onClick={() => onViewResumePDF(resume)}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Xem hồ sơ ứng viên</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  </HasPermission>
+                  <div className="flex items-center justify-center">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="text-orange-500 hover:text-orange-600"
+                            onClick={() => onViewResumePDF(resume)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Xem hồ sơ ứng viên</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                 </TableCell>
               </TableRow>
             ))

@@ -22,10 +22,10 @@ import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { SkillForm } from "./SkillForm.tsx";
 import { SkillSearchSection } from "./SkillSearchSection.tsx";
 import { SkillTable } from "./SkillTable.tsx";
-import HasPermission from "@/pages/common/HasPermission.tsx";
+import HasPermission from "@/pages/commons/HasPermission.tsx";
 
 interface SkillManagerProps {
-  theme?: string;
+  theme?: "blue" | "purple";
 }
 
 const SkillManagerPage = ({ theme = "blue" }: SkillManagerProps) => {
@@ -144,7 +144,7 @@ const SkillManagerPage = ({ theme = "blue" }: SkillManagerProps) => {
         <h2 className="text-lg font-semibold">Danh sách Kỹ năng</h2>
         <HasPermission perm={"POST /skills"}>
           <Button
-            className={`bg-${theme}-600 hover:bg-${theme}-700`}
+            className={`${theme === "blue" ? "bg-blue-600 hover:bg-blue-700" : "bg-purple-600 hover:bg-purple-700"}`}
             onClick={openCreateForm}
           >
             <Plus className="mr-2 h-4 w-4" />

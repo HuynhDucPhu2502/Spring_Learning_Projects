@@ -5,13 +5,16 @@ import type {
 import { useEffect, useState } from "react";
 import { ResumeSearchSection } from "../../commons/resume-manager-components/ResumeSearchSection.tsx";
 import Pagination from "@/components/custom/Pagination";
-import { findAllResumes, updateResumeStatus } from "@/services/resumeApi";
+import {
+  findAllResumesForRecruiterCompany,
+  updateResumeStatusForRecruiterCompany
+} from "@/services/resumeApi";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
 import { ResumeTable } from "../../commons/resume-manager-components/ResumeTable.tsx";
 import { ViewResumeDialog } from "../../commons/resume-manager-components/ViewResumeDialog.tsx";
 
-const ResumeManagerPage = () => {
+const ResumeManagerRecruiterPage = () => {
   // ============================
   // Data
   // ============================
@@ -29,7 +32,6 @@ const ResumeManagerPage = () => {
   // ============================
   // Search State
   // ============================
-  const [searchCompanyName, setsearchCompanyName] = useState("");
   const [searchJobName, setSearchJobName] = useState("");
 
   // ============================
@@ -51,19 +53,18 @@ const ResumeManagerPage = () => {
     page: number,
     size: number,
     searchJobName: string,
-    searchCompanyName: string,
   ) => {
     setIsLoading(true);
     try {
       const filters: string[] = [];
 
       if (searchJobName) filters.push(`job.name ~ '*${searchJobName}*'`);
-      if (searchCompanyName)
-        filters.push(`job.company.name ~ '*${searchCompanyName}*'`);
 
       const filter = filters.length > 0 ? filters.join(" and ") : null;
 
-      const res = (await findAllResumes({ page, size, filter })).data.data;
+      const res = (
+        await findAllResumesForRecruiterCompany({ page, size, filter })
+      ).data.data;
       setResumes(res.content);
       setTotalElements(res.totalElements);
       setTotalPages(res.totalPages);
@@ -75,13 +76,13 @@ const ResumeManagerPage = () => {
   };
 
   useEffect(() => {
-    fetchResumes(currentPage, itemsPerPage, searchJobName, searchCompanyName);
-  }, [currentPage, itemsPerPage, searchJobName, searchCompanyName]);
+    fetchResumes(currentPage, itemsPerPage, searchJobName);
+  }, [currentPage, itemsPerPage, searchJobName]);
 
   useEffect(() => {
-    fetchResumes(1, itemsPerPage, searchJobName, searchCompanyName);
+    fetchResumes(1, itemsPerPage, searchJobName);
     setCurrentPage(1);
-  }, [itemsPerPage, searchJobName, searchCompanyName]);
+  }, [itemsPerPage, searchJobName]);
 
   // ============================
   // HANDLE UPDATE RESUME STATUS
@@ -91,13 +92,8 @@ const ResumeManagerPage = () => {
   ) => {
     setIsLoading(true);
     try {
-      await updateResumeStatus(resume);
-      await fetchResumes(
-        currentPage,
-        itemsPerPage,
-        searchJobName,
-        searchCompanyName,
-      );
+      await updateResumeStatusForRecruiterCompany(resume);
+      await fetchResumes(currentPage, itemsPerPage, searchJobName);
       toast.success("Cập nhật trạng thái hồ sơ thành công");
     } catch (err) {
       toast.error(getErrorMessage(err, "Cập nhật trạng thái hồ sơ thất bại"));
@@ -110,7 +106,6 @@ const ResumeManagerPage = () => {
   // HANDLE RESET
   // ============================
   const handleReset = () => {
-    setsearchCompanyName("");
     setSearchJobName("");
     setCurrentPage(1);
   };
@@ -118,11 +113,10 @@ const ResumeManagerPage = () => {
   return (
     <div className="space-y-6">
       <ResumeSearchSection
-        searchCompanyName={searchCompanyName}
-        setSearchCompanyName={setsearchCompanyName}
+        onReset={handleReset}
         searchJobName={searchJobName}
         setSearchJobName={setSearchJobName}
-        onReset={handleReset}
+        isRecruiter={true}
       />
 
       {/* Header Section */}
@@ -132,6 +126,7 @@ const ResumeManagerPage = () => {
         resumes={resumes}
         isLoading={isLoading}
         onViewResumePDF={handleViewResumeDialog}
+        theme={"purple"}
       />
 
       <Pagination
@@ -142,6 +137,7 @@ const ResumeManagerPage = () => {
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
         showItemsPerPageSelect={true}
+        theme={"purple"}
       />
 
       <ViewResumeDialog
@@ -150,9 +146,10 @@ const ResumeManagerPage = () => {
         onUpdate={handleUpdateResumeStatus}
         resume={selectedResume ?? ({} as ResumeForDisplayResponseDto)}
         onCloseForm={() => setSelectedResume(null)}
+        theme={"purple"}
       />
     </div>
   );
 };
 
-export default ResumeManagerPage;
+export default ResumeManagerRecruiterPage;
