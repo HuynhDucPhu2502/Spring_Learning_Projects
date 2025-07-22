@@ -2,9 +2,9 @@ import { FileText } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState, useCallback } from "react";
 import {
-  getResumsByUserId,
-  removeResumeByUserIdAndJobId,
-  updateResumeFileByResumeId,
+  findSelfResumes,
+  removeSelfResumeByJobId,
+  updateSelfResumeFile,
 } from "@/services/resumeApi";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { toast } from "sonner";
@@ -40,11 +40,10 @@ export default function UserResumePage() {
     setIsLoading(true);
     try {
       const res = (
-        await getResumsByUserId({
+        await findSelfResumes({
           page: currentPage,
           size: itemsPerPage,
-          userId: user.id,
-          filter: null,
+          filter: null
         })
       ).data.data;
 
@@ -68,7 +67,7 @@ export default function UserResumePage() {
   const handleDeleteResume = async (jobId: number) => {
     try {
       setIsLoading(true);
-      await removeResumeByUserIdAndJobId(parseInt(user?.id || ""), jobId);
+      await removeSelfResumeByJobId(jobId);
       toast.success("Rút đơn thành công");
       await fetchResumes();
     } catch (err) {
@@ -86,7 +85,7 @@ export default function UserResumePage() {
       setIsLoading(true);
       const formData = new FormData();
       formData.append("pdfFile", file);
-      await updateResumeFileByResumeId(resumeId, formData);
+      await updateSelfResumeFile(resumeId, formData);
       await fetchResumes();
     } catch (err) {
       toast.error(getErrorMessage(err, "Cập nhật hồ sơ thất bại"));
