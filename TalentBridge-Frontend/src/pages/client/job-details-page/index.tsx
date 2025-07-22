@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getJobById } from "@/services/jobApi";
+import { getJobById } from "@/services/jobApi.ts";
 import { toast } from "sonner";
-import { getErrorMessage } from "@/features/slices/auth/authThunk";
-import LoadingSpinner from "@/components/custom/LoadingSpinner";
+import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
+import LoadingSpinner from "@/components/custom/LoadingSpinner.tsx";
 import type { Job } from "@/types/job";
 import {
   Breadcrumb,
@@ -12,9 +12,10 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import JobSection from "./JobSection";
-import { ApplySection } from "./ApplySection";
+} from "@/components/ui/breadcrumb.tsx";
+import JobSection from "./JobSection.tsx";
+import { ApplySection } from "./ApplySection.tsx";
+import HasPermission from "@/pages/commons/HasPermission.tsx";
 
 type JobDetailsProp = {
   initialJob?: Job;
@@ -80,7 +81,9 @@ const JobDetailsClientPage = ({ initialJob }: JobDetailsProp) => {
         <JobSection job={job} />
       </div>
 
-      <ApplySection jobId={job.id} jobTitle={job.name} />
+      <HasPermission perm={"POST /resumes"}>
+        <ApplySection jobId={job.id} jobTitle={job.name} />
+      </HasPermission>
     </div>
   );
 };

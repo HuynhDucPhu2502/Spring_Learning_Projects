@@ -15,13 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
 public interface CompanyService {
     DefaultCompanyResponseDto saveCompany(DefaultCompanyRequestDto dto, MultipartFile logoFile);
 
-    DefaultCompanyResponseDto updateCompany(DefaultCompanyRequestDto dto, Long id, MultipartFile logoFile);
+    DefaultCompanyResponseDto updateCompany(DefaultCompanyRequestDto dto, Long id, MultipartFile logoFile, boolean isRecruiter);
 
     Page<DefaultCompanyResponseDto> findAllCompanies(Specification<Company> spec, Pageable pageable);
 
     Page<DefaultCompanyExtendedResponseDto> findAllCompaniesWithJobsCount(Specification<Company> spec, Pageable pageable);
 
     DefaultCompanyResponseDto findCompanyById(Long id);
+
+    DefaultCompanyResponseDto findSelfCompany();
 
     DefaultCompanyResponseDto deleteCompanyById(Long id);
 }

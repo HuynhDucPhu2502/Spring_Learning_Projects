@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCompanyById } from "@/services/companyApi";
-import { getJobByCompanyId } from "@/services/jobApi";
+import { getCompanyById } from "@/services/companyApi.ts";
+import { getJobByCompanyId } from "@/services/jobApi.ts";
 import { toast } from "sonner";
-import { getErrorMessage } from "@/features/slices/auth/authThunk";
-import LoadingSpinner from "@/components/custom/LoadingSpinner";
+import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
+import LoadingSpinner from "@/components/custom/LoadingSpinner.tsx";
 import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import type { Job } from "@/types/job";
-import JobsSection from "./JobsSection";
-import CompanySection from "./CompanySection";
+import JobsSection from "../../commons/company-details-components/JobsSection.tsx";
+import CompanySection from "../../commons/company-details-components/CompanySection.tsx";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,7 +16,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb.tsx";
 
 type CompanyDetailsProp = {
   initialCompany?: DefaultCompanyResponseDto;

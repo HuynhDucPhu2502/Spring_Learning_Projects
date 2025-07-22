@@ -140,7 +140,9 @@ export function JobTable({
                     className="flex items-center justify-center gap-2"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <HasPermission perm={"PUT /jobs/{id}"}>
+                    <HasPermission
+                      perm={["PUT /jobs/{id}", "PUT /jobs/company/{id}"]}
+                    >
                       <Button
                         variant="ghost"
                         size="icon"
@@ -150,7 +152,9 @@ export function JobTable({
                       </Button>
                     </HasPermission>
 
-                    <HasPermission perm={"DELETE /jobs/{id}"}>
+                    <HasPermission
+                      perm={["DELETE /jobs/{id}", "DELETE /jobs/company/{id}"]}
+                    >
                       <DeleteConfirmDialog
                         onConfirm={() => onDelete(job.id)}
                         title="Bạn có chắc muốn xóa công việc này?"

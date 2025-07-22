@@ -6,9 +6,9 @@ import RootPage from "@/pages/client";
 import AuthPage from "@/pages/client/auth-page";
 import HomePage from "@/pages/client/home-page";
 import CompanyClientPage from "@/pages/client/company-page";
-import CompanyDetailsClientPage from "@/pages/client/company-page/details";
+import CompanyDetailsClientPage from "@/pages/client/company-details-page";
 import JobClientPage from "@/pages/client/job-page";
-import JobDetailsClientPage from "@/pages/client/job-page/details";
+import JobDetailsClientPage from "@/pages/client/job-details-page";
 import UserPage from "@/pages/user";
 import UserInfoPage from "@/pages/user/user-info-page";
 import UserResumePage from "@/pages/user/user-resume-page";
@@ -34,11 +34,12 @@ import RecruiterPage from "@/pages/recruiter";
 import SkillManagerRecruiterPage from "@/pages/recruiter/skill-page";
 import ResumeManagerRecruiterPage from "@/pages/recruiter/resume-page";
 import JobManagerRecruiterPage from "@/pages/recruiter/job-page";
+import JobUpsertRecruiterPage from "@/pages/recruiter/job-upsert-page";
+import CompanyManagerRecruiterPage from "@/pages/recruiter/self-company-page";
 
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
 import { ProtectedRoute } from "@/pages/commons/ProtectedRoute.tsx";
-import JobUpsertRecruiterPage from "@/pages/recruiter/job-upsert-page";
 
 const router = createBrowserRouter([
   // =========================
@@ -64,7 +65,14 @@ const router = createBrowserRouter([
             element: <Navigate to={"info"} />,
           },
           { path: "info", element: <UserInfoPage /> },
-          { path: "resumes", element: <UserResumePage /> },
+          {
+            path: "resumes",
+            element: (
+              <ProtectedRoute to="/user" requiredPermission="GET /resumes">
+                <UserResumePage />
+              </ProtectedRoute>
+            ),
+          },
           { path: "sessions", element: <UserSessionPage /> },
         ],
       },
@@ -193,8 +201,16 @@ const router = createBrowserRouter([
   // =========================
   {
     path: "recruiter",
-    element: <RecruiterPage />,
+    element: (
+      <ProtectedRoute to="/" requiredPermission="GET /recruiter">
+        <RecruiterPage />
+      </ProtectedRoute>
+    ),
     children: [
+      // AUTO NAVIGATION
+      { index: true, element: <Navigate to={"/recruiter/company"} /> },
+
+      // SKILL MANAGER
       {
         path: "skills",
         element: (
@@ -203,6 +219,8 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+
+      // RESUME RECRUITER MANAGER
       {
         path: "resumes",
         element: (
@@ -214,6 +232,8 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+
+      // RESUME RECRUITER MANAGER
       {
         path: "jobs",
         element: (
@@ -228,6 +248,19 @@ const router = createBrowserRouter([
       {
         path: "jobs/upsert",
         element: <JobUpsertRecruiterPage />,
+      },
+
+      // COMPANY RECRUITER MANAGER
+      {
+        path: "company",
+        element: (
+          <ProtectedRoute
+            to="/recruiter"
+            requiredPermission="GET /companies/me"
+          >
+            <CompanyManagerRecruiterPage />
+          </ProtectedRoute>
+        ),
       },
 
       { path: "*", element: <ErrorPage /> },

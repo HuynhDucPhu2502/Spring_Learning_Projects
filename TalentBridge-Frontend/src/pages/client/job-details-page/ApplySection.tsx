@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import { Send, Upload, X, FileText } from "lucide-react";
 import {
   Dialog,
@@ -8,17 +8,17 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/dialog.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import { toast } from "sonner";
-import { useAppSelector } from "@/features/hooks";
-import PDFViewer from "@/components/custom/PDFViewer";
-import { getErrorMessage } from "@/features/slices/auth/authThunk";
+import { useAppSelector } from "@/features/hooks.ts";
+import PDFViewer from "@/components/custom/PDFViewer.tsx";
+import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import type { CreateResumeRequestDto } from "@/types/resume";
-import { saveResume } from "@/services/resumeApi";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { checkFileSizeAndFileType } from "@/utils/fileMetadata";
+import { saveResume } from "@/services/resumeApi.ts";
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
+import { checkFileSizeAndFileType } from "@/utils/fileMetadata.ts";
 
 interface ApplySectionProps {
   jobId: number;

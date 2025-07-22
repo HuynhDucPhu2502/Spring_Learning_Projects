@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge.tsx";
+import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import type { Job } from "@/types/job";
 import { formatISO, formatSalary } from "@/utils/convertHelper.ts";
 import { useNavigate } from "react-router-dom";

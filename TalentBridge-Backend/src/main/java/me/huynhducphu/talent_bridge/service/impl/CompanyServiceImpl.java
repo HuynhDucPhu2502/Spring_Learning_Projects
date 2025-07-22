@@ -7,6 +7,7 @@ import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyExtendedR
 import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyResponseDto;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.model.CompanyLogo;
+import me.huynhducphu.talent_bridge.model.User;
 import me.huynhducphu.talent_bridge.repository.CompanyLogoRepository;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
 import me.huynhducphu.talent_bridge.repository.JobRepository;
@@ -16,6 +17,7 @@ import me.huynhducphu.talent_bridge.service.S3Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,9 +60,30 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
     }
 
     @Override
-    public DefaultCompanyResponseDto updateCompany(DefaultCompanyRequestDto dto, Long id, MultipartFile logoFile) {
-        Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công ty"));
+    public DefaultCompanyResponseDto updateCompany(
+            DefaultCompanyRequestDto dto,
+            Long id,
+            MultipartFile logoFile,
+            boolean isRecruiter
+    ) {
+        Company company;
+
+        if (isRecruiter) {
+            String email = SecurityContextHolder
+                    .getContext()
+                    .getAuthentication()
+                    .getName();
+
+            User user = userRepository
+                    .findByEmail(email)
+                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+            if (user.getCompany() == null)
+                throw new EntityNotFoundException("Không tìm thấy công ty người dùng");
+            
+            company = user.getCompany();
+        } else
+            company = companyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công ty"));
 
         company.setName(dto.getName());
         company.setDescription(dto.getDescription());
@@ -99,6 +122,23 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         return companyRepository.findById(id)
                 .map(this::mapToResponseDto)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công ty"));
+    }
+
+    @Override
+    public DefaultCompanyResponseDto findSelfCompany() {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        if (user.getCompany() == null)
+            throw new EntityNotFoundException("Không tìm thấy công ty người dùng");
+
+        return mapToResponseDto(user.getCompany());
     }
 
     @Override

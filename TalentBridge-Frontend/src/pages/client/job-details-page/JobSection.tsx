@@ -10,8 +10,8 @@ import {
   Clock,
   Briefcase,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import RichTextPreview from "@/components/custom/RichText/index-preview";
+import { Badge } from "@/components/ui/badge.tsx";
+import RichTextPreview from "@/components/custom/RichText/index-preview.tsx";
 import { formatISO, formatSalary } from "@/utils/convertHelper.ts";
 import { levelColors, levelLabels } from "@/utils/tagColorMapper.ts";
 

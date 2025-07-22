@@ -1,14 +1,19 @@
 import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { Building2, MapPin, CalendarDays } from "lucide-react";
-import RichTextPreview from "@/components/custom/RichText/index-preview";
+import RichTextPreview from "@/components/custom/RichText/index-preview.tsx";
 import { formatISO } from "@/utils/convertHelper.ts";
 
 type CompanySectionProps = {
   company: DefaultCompanyResponseDto;
   jobsCount: number;
+  isRecruiter?: boolean;
 };
 
-const CompanySection = ({ company, jobsCount }: CompanySectionProps) => {
+const CompanySection = ({
+  company,
+  jobsCount,
+  isRecruiter = false,
+}: CompanySectionProps) => {
   return (
     <>
       <div
@@ -24,7 +29,9 @@ const CompanySection = ({ company, jobsCount }: CompanySectionProps) => {
               />
             </div>
           ) : (
-            <div className="flex h-20 w-20 items-center justify-center rounded-full border text-orange-600">
+            <div
+              className={`flex h-20 w-20 items-center justify-center rounded-full border ${isRecruiter ? "text-purple-600" : "text-orange-600"}`}
+            >
               <Building2 className="h-8 w-8" />
             </div>
           )}

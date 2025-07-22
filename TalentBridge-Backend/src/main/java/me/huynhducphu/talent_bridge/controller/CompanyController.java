@@ -62,7 +62,24 @@ public class CompanyController {
             @RequestPart(value = "logoFile", required = false) MultipartFile logoFile,
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(companyService.updateCompany(defaultCompanyRequestDto, id, logoFile));
+        return ResponseEntity.ok(companyService.updateCompany(defaultCompanyRequestDto, id, logoFile, false));
+    }
+
+    @PutMapping(value = "/me")
+    @ApiMessage(value = "Cập nhật Company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('PUT /companies/me')")
+    @Operation(
+            summary = "Cập nhật Company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>PUT /companies/me</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> updateSelfCompany(
+            @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
+            @RequestPart(value = "logoFile", required = false) MultipartFile logoFile
+    ) {
+        return ResponseEntity.ok(companyService.updateCompany(
+                defaultCompanyRequestDto, null, logoFile, true
+        ));
     }
 
     @GetMapping
@@ -127,6 +144,20 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.findCompanyById(id));
     }
 
+    @GetMapping("/me")
+    @ApiMessage(value = "Lấy Company theo người dùng hiện tại")
+    @PreAuthorize("hasAuthority('GET /companies/me')")
+    @Operation(
+            summary = "Lấy Company theo người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>GET /companies/me</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> findSelfCompany() {
+        return ResponseEntity.ok(
+                companyService.findSelfCompany()
+        );
+    }
+
     @DeleteMapping("/{id}")
     @ApiMessage(value = "Xóa company theo id")
     @PreAuthorize("hasAuthority('DELETE /companies/{id}')")
@@ -143,4 +174,6 @@ public class CompanyController {
                 )
         );
     }
+
+
 }
