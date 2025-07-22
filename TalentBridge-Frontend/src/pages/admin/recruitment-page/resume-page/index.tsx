@@ -3,13 +3,13 @@ import type {
   UpdateResumeStatusRequestDto,
 } from "@/types/resume";
 import { useEffect, useState } from "react";
-import { ResumeSearchSection } from "../../commons/resume-manager-components/ResumeSearchSection.tsx";
-import Pagination from "@/components/custom/Pagination";
-import { findAllResumes, updateResumeStatus } from "@/services/resumeApi";
-import { getErrorMessage } from "@/features/slices/auth/authThunk";
+import { ResumeSearchSection } from "../../../commons/resume-manager-components/ResumeSearchSection.tsx";
+import Pagination from "@/components/custom/Pagination.tsx";
+import { findAllResumes, updateResumeStatus } from "@/services/resumeApi.ts";
+import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { toast } from "sonner";
-import { ResumeTable } from "../../commons/resume-manager-components/ResumeTable.tsx";
-import { ViewResumeDialog } from "../../commons/resume-manager-components/ViewResumeDialog.tsx";
+import { ResumeTable } from "../../../commons/resume-manager-components/ResumeTable.tsx";
+import { ViewResumeDialog } from "../../../commons/resume-manager-components/ViewResumeDialog.tsx";
 
 const ResumeManagerPage = () => {
   // ============================

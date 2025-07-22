@@ -1,18 +1,18 @@
 import { ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input.tsx";
+import { Label } from "@/components/ui/label.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select.tsx";
 
 interface JobSearchSectionProps {
   searchName: string;
-  searchCompanyName: string;
+  searchCompanyName?: string;
   searchLevel: string;
   searchLocation: string;
   isExpanded: boolean;
@@ -20,7 +20,7 @@ interface JobSearchSectionProps {
   onExpandToggle: () => void;
   onChange: {
     name: (val: string) => void;
-    company: (val: string) => void;
+    company?: (val: string) => void;
     level: (val: string) => void;
     location: (val: string) => void;
   };
@@ -73,15 +73,18 @@ export function JobSearchSection({
         <>
           <div className="my-4" />
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="space-y-2">
-              <Label htmlFor="search-company">Công ty:</Label>
-              <Input
-                id="search-company"
-                placeholder="Tên công ty..."
-                value={searchCompanyName}
-                onChange={(e) => onChange.company(e.target.value)}
-              />
-            </div>
+            {typeof onChange.company === "function" && (
+              <div className="space-y-2">
+                <Label htmlFor="search-company">Công ty:</Label>
+                <Input
+                  id="search-company"
+                  placeholder="Tên công ty..."
+                  value={searchCompanyName ?? ""}
+                  onChange={(e) => onChange.company?.(e.target.value)}
+                />
+              </div>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="search-level">Level:</Label>
               <Select value={searchLevel} onValueChange={onChange.level}>

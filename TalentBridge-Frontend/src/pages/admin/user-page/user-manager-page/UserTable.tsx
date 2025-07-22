@@ -1,5 +1,5 @@
 import { Edit, KeyRound, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Table,
   TableBody,
@@ -7,10 +7,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
-import { EmptyState } from "@/components/custom/EmptyState";
-import LoadingSpinner from "@/components/custom/LoadingSpinner";
+} from "@/components/ui/table.tsx";
+import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog.tsx";
+import { EmptyState } from "@/components/custom/EmptyState.tsx";
+import LoadingSpinner from "@/components/custom/LoadingSpinner.tsx";
 import { formatISO } from "@/utils/convertHelper.ts";
 
 import type { DefaultUserResponseDto } from "@/types/user";

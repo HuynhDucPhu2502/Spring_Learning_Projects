@@ -19,24 +19,26 @@ import AdminPage from "@/pages/admin";
 import CompanyManagerPage from "@/pages/admin/company-page";
 import DashboardPage from "@/pages/admin/dashboard-page";
 import RecruitmentManagerPage from "@/pages/admin/recruitment-page";
-import SkillManagerAdminPage from "@/pages/admin/recruitment-page/skill-manager-admin-page";
-import JobManagerPage from "@/pages/admin/recruitment-page/job-manager-page";
-import JobUpsertPage from "@/pages/admin/recruitment-page/job-manager-page/job-upsert-page";
-import ResumeManagerPage from "@/pages/admin/resume-page";
+import SkillManagerAdminPage from "@/pages/admin/recruitment-page/skill-page";
+import JobManagerPage from "@/pages/admin/recruitment-page/job-page";
+import JobUpsertPage from "@/pages/admin/recruitment-page/job-upsert-page";
+import ResumeManagerPage from "@/pages/admin/recruitment-page/resume-page";
 import AccessControlPage from "@/pages/admin/access-control-page";
 import PermissionManagerPage from "@/pages/admin/access-control-page/permission-page";
 import RoleManagerPage from "@/pages/admin/access-control-page/role-page";
-import UserManagerPage from "@/pages/admin/user-page";
+import UserManagerPage from "@/pages/admin/user-page/user-manager-page";
 import UserUpsertPage from "@/pages/admin/user-page/user-upsert-page";
 
 // RECRUITER PAGE
 import RecruiterPage from "@/pages/recruiter";
-import SkillManagerRecruiterPage from "@/pages/recruiter/skill-manager-recruiter-page";
+import SkillManagerRecruiterPage from "@/pages/recruiter/skill-page";
+import ResumeManagerRecruiterPage from "@/pages/recruiter/resume-page";
+import JobManagerRecruiterPage from "@/pages/recruiter/job-page";
 
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
 import { ProtectedRoute } from "@/pages/commons/ProtectedRoute.tsx";
-import ResumeManagerRecruiterPage from "@/pages/recruiter/resume-page";
+import JobUpsertRecruiterPage from "@/pages/recruiter/job-upsert-page";
 
 const router = createBrowserRouter([
   // =========================
@@ -204,10 +206,28 @@ const router = createBrowserRouter([
       {
         path: "resumes",
         element: (
-          <ProtectedRoute to="/recruiter" requiredPermission="GET /resumes">
+          <ProtectedRoute
+            to="/recruiter"
+            requiredPermission="GET /resumes/company"
+          >
             <ResumeManagerRecruiterPage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "jobs",
+        element: (
+          <ProtectedRoute
+            to="/recruiter"
+            requiredPermission="GET /jobs/company"
+          >
+            <JobManagerRecruiterPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "jobs/upsert",
+        element: <JobUpsertRecruiterPage />,
       },
 
       { path: "*", element: <ErrorPage /> },

@@ -1,13 +1,13 @@
-import { getErrorMessage } from "@/features/slices/auth/authThunk";
-import { deleteUserById, getUserList } from "@/services/userApi";
+import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
+import { deleteUserById, getUserList } from "@/services/userApi.ts";
 import type { DefaultUserResponseDto } from "@/types/user";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { UserSearchSection } from "./UserSeachSection";
-import { Button } from "@/components/ui/button";
+import { UserSearchSection } from "./UserSeachSection.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import { Plus } from "lucide-react";
-import Pagination from "@/components/custom/Pagination";
-import { UserTable } from "./UserTable";
+import Pagination from "@/components/custom/Pagination.tsx";
+import { UserTable } from "./UserTable.tsx";
 import { useNavigate } from "react-router-dom";
 import HasPermission from "@/pages/commons/HasPermission.tsx";
 

@@ -15,13 +15,17 @@ import java.util.List;
 public interface JobService {
     Page<JobResponseDto> findAllJobs(Specification<Job> spec, Pageable pageable);
 
+    Page<JobResponseDto> findAllJobsForRecruiterCompany(Specification<Job> spec, Pageable pageable);
+
     JobResponseDto findJobById(Long id);
 
-    JobResponseDto saveJob(JobRequestDto jobRequestDto);
+    JobResponseDto saveJob(JobRequestDto jobRequestDto, boolean isRecruiter);
 
-    JobResponseDto updateJobById(Long id, JobRequestDto jobRequestDto);
+    JobResponseDto updateJobById(Long id, JobRequestDto jobRequestDto, boolean isRecruiter);
 
     JobResponseDto deleteJobById(Long id);
+
+    JobResponseDto deleteJobByIdForRecruiterCompany(Long id);
 
     List<JobResponseDto> findJobByCompanyId(Long id);
 }

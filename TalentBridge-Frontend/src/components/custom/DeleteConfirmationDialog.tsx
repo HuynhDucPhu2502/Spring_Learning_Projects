@@ -18,11 +18,13 @@ interface DeleteConfirmDialogProps {
   description?: string;
   title?: string;
   children?: ReactNode;
+  styledDescription?: ReactNode;
 }
 
 export const DeleteConfirmDialog = ({
   onConfirm,
   description = "Hành động này không thể hoàn tác.",
+  styledDescription,
   title = "Bạn có chắc chắn muốn xóa?",
   children,
 }: DeleteConfirmDialogProps) => {
@@ -46,7 +48,9 @@ export const DeleteConfirmDialog = ({
       >
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          <AlertDialogDescription>
+            {styledDescription ? styledDescription : description}
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Hủy</AlertDialogCancel>

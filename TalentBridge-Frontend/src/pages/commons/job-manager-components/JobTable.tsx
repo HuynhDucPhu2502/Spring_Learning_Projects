@@ -5,12 +5,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+} from "@/components/ui/table.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
 import { Edit, Briefcase } from "lucide-react";
-import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
-import { EmptyState } from "@/components/custom/EmptyState";
+import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog.tsx";
+import { EmptyState } from "@/components/custom/EmptyState.tsx";
 import { formatISO } from "@/utils/convertHelper.ts";
 import type { Job } from "@/types/job";
 import { levelColors } from "@/utils/tagColorMapper.ts";
@@ -22,6 +22,7 @@ interface JobTableProps {
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
   onView: (job: Job) => void;
+  theme?: string;
 }
 
 export function JobTable({
@@ -30,6 +31,7 @@ export function JobTable({
   onEdit,
   onDelete,
   onView,
+  theme = "blue",
 }: JobTableProps) {
   const getStatusBadge = (active: boolean) => {
     const status = active ? "Active" : "Inactive";
@@ -46,9 +48,13 @@ export function JobTable({
   };
 
   return (
-    <div className="overflow-hidden rounded-lg border border-blue-600">
+    <div
+      className={`overflow-hidden rounded-lg border ${theme === "blue" ? "border-blue-600" : "border-purple-600"}`}
+    >
       <Table>
-        <TableHeader className="bg-blue-600 text-white">
+        <TableHeader
+          className={`text-white ${theme === "blue" ? "bg-blue-600" : "bg-purple-600"}`}
+        >
           <TableRow>
             <TableHead className="text-center font-bold text-white">
               ID
@@ -81,7 +87,9 @@ export function JobTable({
             <TableRow>
               <TableCell colSpan={8}>
                 <div className="flex items-center justify-center py-8">
-                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
+                  <div
+                    className={`h-8 w-8 animate-spin rounded-full border-b-2 ${theme === "blue" ? "border-blue-600" : "border-purple-600"}`}
+                  ></div>
                 </div>
               </TableCell>
             </TableRow>
@@ -106,7 +114,7 @@ export function JobTable({
               <TableRow
                 key={job.id}
                 onClick={() => onView(job)}
-                className="cursor-pointer transition-colors duration-200 hover:bg-blue-500/10"
+                className="cursor-pointer transition-colors duration-200"
               >
                 <TableCell className="text-center text-sm">{job.id}</TableCell>
                 <TableCell className="text-center text-sm">
@@ -146,7 +154,16 @@ export function JobTable({
                       <DeleteConfirmDialog
                         onConfirm={() => onDelete(job.id)}
                         title="Bạn có chắc muốn xóa công việc này?"
-                        description="Hành động này sẽ xóa công việc khỏi hệ thống và không thể hoàn tác."
+                        styledDescription={
+                          <p>
+                            Hành động này sẽ
+                            <span className="text-red-500">
+                              {" "}
+                              xóa CÔNG VIỆC và HỒ SƠ ỨNG VIÊN
+                            </span>{" "}
+                            đã nộp cho công việc này.
+                          </p>
+                        }
                       />
                     </HasPermission>
                   </div>

@@ -1,20 +1,18 @@
-"use client";
-
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
 import { Plus } from "lucide-react";
 import type { Job } from "@/types/job";
-import { JobSearchSection } from "./JobSearchSection";
+import { JobSearchSection } from "../../../commons/job-manager-components/JobSearchSection.tsx";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { deleteJobById, getJobsList } from "@/services/jobApi";
 import Pagination from "@/components/custom/Pagination";
 
-import { JobDetailsSidebar } from "./JobDetailsSidebar";
-import { JobTable } from "./JobTable";
+import { JobDetailsSidebar } from "../../../commons/job-manager-components/JobDetailsSidebar.tsx";
+import { JobTable } from "../../../commons/job-manager-components/JobTable.tsx";
 import HasPermission from "@/pages/commons/HasPermission.tsx";
 
 const JobManagerPage = () => {

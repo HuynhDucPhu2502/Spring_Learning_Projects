@@ -11,6 +11,7 @@ import me.huynhducphu.talent_bridge.repository.CompanyLogoRepository;
 import me.huynhducphu.talent_bridge.repository.CompanyRepository;
 import me.huynhducphu.talent_bridge.repository.JobRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
+import me.huynhducphu.talent_bridge.service.JobService;
 import me.huynhducphu.talent_bridge.service.S3Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,9 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
     private final CompanyLogoRepository companyLogoRepository;
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
+
     private final S3Service s3Service;
+    private final JobService jobService;
 
     @Override
     public DefaultCompanyResponseDto saveCompany(DefaultCompanyRequestDto dto, MultipartFile logoFile) {
@@ -110,6 +113,10 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
             s3Service.deleteFileByUrl(logoUrl);
             companyLogoRepository.delete(company.getCompanyLogo());
         }
+
+        if (company.getJobs() != null)
+            company.getJobs().forEach(job -> jobService.deleteJobById(job.getId()));
+
 
         companyRepository.delete(company);
         return mapToResponseDto(company);

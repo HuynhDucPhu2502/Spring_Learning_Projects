@@ -40,7 +40,7 @@ public interface ResumeRepository extends
             Pageable pageable
     ) {
         Specification<Resume> userSpec = (root, q, cb) ->
-                cb.equal(root.get("user").get("company").get("id"), id);
+                cb.equal(root.get("job").get("company").get("id"), id);
 
         Specification<Resume> combined = userSpec.and(filterSpec);
 

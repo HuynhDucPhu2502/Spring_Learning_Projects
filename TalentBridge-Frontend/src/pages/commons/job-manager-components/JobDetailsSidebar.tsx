@@ -10,13 +10,13 @@ import {
   Users,
   Building2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog";
+import { Button } from "@/components/ui/button.tsx";
+import { Badge } from "@/components/ui/badge.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
+import { DeleteConfirmDialog } from "@/components/custom/DeleteConfirmationDialog.tsx";
 import { formatISO } from "@/utils/convertHelper.ts";
 import type { Job } from "@/types/job";
-import RichTextPreview from "@/components/custom/RichText/index-preview";
+import RichTextPreview from "@/components/custom/RichText/index-preview.tsx";
 
 interface JobDetailsSidebarProps {
   job: Job | null;
@@ -218,7 +218,16 @@ export function JobDetailsSidebar({
                 <DeleteConfirmDialog
                   onConfirm={() => onDelete?.(job.id)}
                   title="Bạn có chắc muốn xóa công việc này?"
-                  description="Hành động này sẽ xóa công việc khỏi hệ thống và không thể hoàn tác."
+                  styledDescription={
+                    <p>
+                      Hành động này sẽ
+                      <span className="text-red-500">
+                        {" "}
+                        xóa CÔNG VIỆC và HỒ SƠ ỨNG VIÊN
+                      </span>{" "}
+                      đã nộp cho công việc này.
+                    </p>
+                  }
                 >
                   <Button variant="destructive" className="flex-1">
                     <Trash2 className="mr-2 h-4 w-4" />

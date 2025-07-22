@@ -1,17 +1,17 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+} from "@/components/ui/select.tsx";
+import { Switch } from "@/components/ui/switch.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,16 +19,16 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb.tsx";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import RichTextEditor from "@/components/custom/RichText/index-editor";
+import RichTextEditor from "@/components/custom/RichText/index-editor.tsx";
 import SkillSelection from "@/pages/commons/SkillSelection.tsx";
 import type { CompanySummary, JobUpsertDto, SkillSummary } from "@/types/job";
 import CompanySelection from "@/pages/commons/CompanySelection.tsx";
-import { getErrorMessage } from "@/features/slices/auth/authThunk";
+import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { toast } from "sonner";
-import { getJobById, saveJob, updateJobById } from "@/services/jobApi";
+import { getJobById, saveJob, updateJobById } from "@/services/jobApi.ts";
 import { formatISOToYMD } from "@/utils/convertHelper.ts";
 import { useAppSelector } from "@/features/hooks.ts";
 

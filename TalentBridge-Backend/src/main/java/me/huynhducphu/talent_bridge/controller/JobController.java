@@ -40,7 +40,19 @@ public class JobController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<?> saveJob(@Valid @RequestBody JobRequestDto jobRequestDto) {
-        return ResponseEntity.ok(jobService.saveJob(jobRequestDto));
+        return ResponseEntity.ok(jobService.saveJob(jobRequestDto, false));
+    }
+
+    @PostMapping("/company")
+    @ApiMessage(value = "Tạo Job thuộc company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('POST /jobs/company')")
+    @Operation(
+            summary = "Tạo Job thuộc company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>POST /jobs/company</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> saveJobForRecruiterPage(@Valid @RequestBody JobRequestDto jobRequestDto) {
+        return ResponseEntity.ok(jobService.saveJob(jobRequestDto, true));
     }
 
     @GetMapping("/{id}")
@@ -67,7 +79,22 @@ public class JobController {
             @PathVariable Long id,
             @Valid @RequestBody JobRequestDto jobRequestDto
     ) {
-        return ResponseEntity.ok(jobService.updateJobById(id, jobRequestDto));
+        return ResponseEntity.ok(jobService.updateJobById(id, jobRequestDto, false));
+    }
+
+    @PutMapping("/company/{id}")
+    @ApiMessage(value = "Cập nhật Job theo id thuộc company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('PUT /jobs/company/{id}')")
+    @Operation(
+            summary = "Cập nhật Job theo id thuộc company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>PUT /jobs/company/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> updateJobByIdForRecruiterCompany(
+            @PathVariable Long id,
+            @Valid @RequestBody JobRequestDto jobRequestDto
+    ) {
+        return ResponseEntity.ok(jobService.updateJobById(id, jobRequestDto, true));
     }
 
     @GetMapping
@@ -83,6 +110,31 @@ public class JobController {
             @PageableDefault(size = 5) Pageable pageable
     ) {
         Page<JobResponseDto> page = jobService.findAllJobs(spec, pageable);
+
+        PageResponseDto<JobResponseDto> res = new PageResponseDto<>(
+                page.getContent(),
+                pageable.getPageNumber() + 1,
+                pageable.getPageSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/company")
+    @ApiMessage(value = "Lấy danh sách Job thuộc company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('GET /jobs/company')")
+    @Operation(
+            summary = "Lấy danh sách Job theo company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>GET /jobs/company</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> findAllJobsForRecruiterCompany(
+            @Filter Specification<Job> spec,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        Page<JobResponseDto> page = jobService.findAllJobsForRecruiterCompany(spec, pageable);
 
         PageResponseDto<JobResponseDto> res = new PageResponseDto<>(
                 page.getContent(),
@@ -118,6 +170,18 @@ public class JobController {
     )
     public ResponseEntity<?> deleteJobById(@PathVariable Long id) {
         return ResponseEntity.ok(jobService.deleteJobById(id));
+    }
+
+    @DeleteMapping("/company/{id}")
+    @ApiMessage(value = "Xóa Job theo id thuộc company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('DELETE /jobs/company/{id}')")
+    @Operation(
+            summary = "Xóa Job theo id thuộc company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>DELETE jobs/company/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> deleteJobByIdForRecruiterCompany(@PathVariable Long id) {
+        return ResponseEntity.ok(jobService.deleteJobByIdForRecruiterCompany(id));
     }
 
 

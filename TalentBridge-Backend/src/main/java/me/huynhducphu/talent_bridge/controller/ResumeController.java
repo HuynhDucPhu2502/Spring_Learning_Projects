@@ -78,7 +78,7 @@ public class ResumeController {
     }
 
     @GetMapping("/company")
-    @ApiMessage(value = "Lấy danh sách resume theo company của người dùng hiện tại")
+    @ApiMessage(value = "Lấy danh sách resume thuộc company của người dùng hiện tại")
     @PreAuthorize("hasAuthority('GET /resumes/company')")
     @Operation(
             summary = "Lấy danh sách resume theo company của người dùng hiện tại",
@@ -192,7 +192,7 @@ public class ResumeController {
     }
 
     @PutMapping("/company/status")
-    @ApiMessage("Cập nhật trạng thái resume theo company của người dùng hiện tại")
+    @ApiMessage("Cập nhật trạng thái resume thuộc company của người dùng hiện tại")
     @PreAuthorize("hasAuthority('PUT /resumes/company/status')")
     @Operation(
             summary = "Cập nhật trạng thái resume theo company của người dùng hiện tại",

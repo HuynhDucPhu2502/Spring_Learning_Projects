@@ -4,16 +4,14 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.job.JobRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.job.JobResponseDto;
-import me.huynhducphu.talent_bridge.model.Company;
-import me.huynhducphu.talent_bridge.model.CompanyLogo;
-import me.huynhducphu.talent_bridge.model.Job;
-import me.huynhducphu.talent_bridge.model.Skill;
-import me.huynhducphu.talent_bridge.repository.CompanyRepository;
-import me.huynhducphu.talent_bridge.repository.JobRepository;
-import me.huynhducphu.talent_bridge.repository.SkillRepository;
+import me.huynhducphu.talent_bridge.model.*;
+import me.huynhducphu.talent_bridge.repository.*;
+import me.huynhducphu.talent_bridge.service.S3Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +29,34 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
     private final JobRepository jobRepository;
     private final SkillRepository skillRepository;
     private final CompanyRepository companyRepository;
+    private final UserRepository userRepository;
+    private final ResumeRepository resumeRepository;
+    private final S3Service s3Service;
 
     @Override
     public Page<JobResponseDto> findAllJobs(Specification<Job> spec, Pageable pageable) {
         return jobRepository.findAll(spec, pageable)
+                .map(this::mapToResponseDto);
+    }
+
+    @Override
+    public Page<JobResponseDto> findAllJobsForRecruiterCompany(
+            Specification<Job> spec, Pageable pageable
+    ) {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        if (user.getCompany() == null)
+            throw new EntityNotFoundException("Không tìm thấy công ty người dùng");
+
+        return jobRepository
+                .findByCompanyId(user.getCompany().getId(), spec, pageable)
                 .map(this::mapToResponseDto);
     }
 
@@ -47,7 +69,7 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
     }
 
     @Override
-    public JobResponseDto saveJob(JobRequestDto jobRequestDto) {
+    public JobResponseDto saveJob(JobRequestDto jobRequestDto, boolean isRecruiter) {
 
         Job job = new Job(
                 jobRequestDto.getName(),
@@ -61,14 +83,32 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
                 jobRequestDto.getActive()
         );
 
-        Company company = null;
-        if (jobRequestDto.getCompany() != null)
-            company = companyRepository
-                    .findById(jobRequestDto.getCompany().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Công ty không tồn tại"));
+        if (isRecruiter) {
+            String email = SecurityContextHolder
+                    .getContext()
+                    .getAuthentication()
+                    .getName();
+
+            User user = userRepository
+                    .findByEmail(email)
+                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+            if (user.getCompany() == null)
+                throw new EntityNotFoundException("Không tìm thấy công ty người dùng");
+
+            job.setCompany(user.getCompany());
+        } else {
+            Company company = null;
+            if (jobRequestDto.getCompany() != null)
+                company = companyRepository
+                        .findById(jobRequestDto.getCompany().getId())
+                        .orElseThrow(() -> new EntityNotFoundException("Công ty không tồn tại"));
+
+            job.setCompany(company);
+        }
 
 
-        List<Skill> skills = null;
+        List<Skill> skills;
         if (jobRequestDto.getSkills() != null) {
             List<Long> skillIds = jobRequestDto
                     .getSkills()
@@ -81,11 +121,10 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
             if (skills.size() != skillIds.size()) {
                 throw new EntityNotFoundException("Kỹ năng không tồn tại");
             }
+
+            job.setSkills(skills);
         }
 
-
-        job.setCompany(company);
-        job.setSkills(skills);
 
         Job savedJob = jobRepository.saveAndFlush(job);
 
@@ -93,7 +132,7 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
     }
 
     @Override
-    public JobResponseDto updateJobById(Long id, JobRequestDto jobRequestDto) {
+    public JobResponseDto updateJobById(Long id, JobRequestDto jobRequestDto, boolean isRecruiter) {
 
         Job job = jobRepository
                 .findById(id)
@@ -109,8 +148,21 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
         job.setEndDate(jobRequestDto.getEndDate());
         job.setActive(jobRequestDto.getActive());
 
-        if (jobRequestDto.getCompany() != null
-                && !Objects.equals(jobRequestDto.getCompany().getId(), job.getCompany().getId())) {
+        if (isRecruiter) {
+            String email = SecurityContextHolder
+                    .getContext()
+                    .getAuthentication()
+                    .getName();
+
+            User user = userRepository
+                    .findByEmail(email)
+                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+            if (!user.getCompany().getId().equals(job.getCompany().getId()))
+                throw new AccessDeniedException("Không có quyền truy cập");
+        } else if (
+                jobRequestDto.getCompany() != null && !Objects.equals(jobRequestDto.getCompany().getId(), job.getCompany().getId())
+        ) {
             Company company = companyRepository
                     .findById(jobRequestDto.getCompany().getId())
                     .orElseThrow(() -> new EntityNotFoundException("Công ty không tồn tại"));
@@ -153,7 +205,36 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công việc"));
 
-        if (job.getSkills() != null) job.getSkills().clear();
+        cleanupJobResumesAndSkills(job);
+
+        Job updatedJob = jobRepository.saveAndFlush(job);
+        jobRepository.delete(updatedJob);
+
+        return mapToResponseDto(job);
+    }
+
+    @Override
+    public JobResponseDto deleteJobByIdForRecruiterCompany(Long id) {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy người dùng"));
+
+        if (user.getCompany() == null)
+            throw new EntityNotFoundException("Không tìm thấy công ty người dùng");
+
+        Job job = jobRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy công việc"));
+
+        if (!user.getCompany().getId().equals(job.getCompany().getId()))
+            throw new EntityNotFoundException("Không có quyền truy cập");
+
+        cleanupJobResumesAndSkills(job);
 
         Job updatedJob = jobRepository.saveAndFlush(job);
         jobRepository.delete(updatedJob);
@@ -214,5 +295,16 @@ public class JobServiceImpl implements me.huynhducphu.talent_bridge.service.JobS
         );
     }
 
+    private void cleanupJobResumesAndSkills(Job job) {
+        if (job.getSkills() != null) job.getSkills().clear();
+        if (job.getResumes() != null) {
+            List<Resume> resumes = job.getResumes();
+            resumes.forEach(resume -> {
+                if (resume.getFileKey() != null)
+                    s3Service.deleteFileByKey(resume.getFileKey());
+            });
+            resumeRepository.deleteAll(resumes);
+        }
+    }
 
 }

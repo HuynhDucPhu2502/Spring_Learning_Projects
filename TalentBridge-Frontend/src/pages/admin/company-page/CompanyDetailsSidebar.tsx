@@ -165,7 +165,16 @@ export function CompanyDetailsSidebar({
                 <DeleteConfirmDialog
                   onConfirm={() => onDelete?.(company.id)}
                   title="Bạn có chắc muốn xóa công ty này?"
-                  description="Hành động này sẽ xóa công ty khỏi hệ thống và không thể hoàn tác."
+                  styledDescription={
+                    <p>
+                      Hành động này sẽ
+                      <span className="text-red-500">
+                        {" "}
+                        xóa CÔNG TY, CÔNG VIỆC và HỒ SƠ ỨNG VIÊN
+                      </span>{" "}
+                      đã nộp cho công việc này.
+                    </p>
+                  }
                 >
                   <Button variant="destructive" className="flex-1">
                     <Trash2 className="mr-2 h-4 w-4" />
