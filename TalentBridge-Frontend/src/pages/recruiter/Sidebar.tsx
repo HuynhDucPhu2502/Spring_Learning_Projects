@@ -5,10 +5,12 @@ import {
   FileText,
   MonitorIcon as MonitorCog,
   type LucideIcon,
+  Home,
 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -31,13 +33,13 @@ const menuItems: MenuItem[] = [
     title: "Công ty tôi",
     url: "/recruiter/company",
     icon: Building2,
-    permission: "GET /companies",
+    permission: "GET /companies/me",
   },
   {
-    title: "Việc làm",
+    title: "Công việc",
     url: "/recruiter/jobs",
     icon: Briefcase,
-    permission: "GET /jobs",
+    permission: "GET /jobs/company",
   },
   {
     title: "Kỹ năng",
@@ -49,7 +51,7 @@ const menuItems: MenuItem[] = [
     title: "Hồ sơ ứng tuyển",
     url: "/recruiter/resumes",
     icon: FileText,
-    permission: "GET /resumes",
+    permission: "GET /resumes/company",
   },
 ];
 
@@ -125,6 +127,22 @@ export function RecruiterSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="border-t border-purple-100 px-3 py-4">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="w-full justify-start rounded-md py-2 text-sm font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-700"
+            >
+              <Link to="/" className="flex w-full items-center gap-3">
+                <Home className="h-4 w-4" />
+                <span>Quay về trang chủ</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

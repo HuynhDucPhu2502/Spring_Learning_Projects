@@ -168,7 +168,6 @@ export default function CompanyManagerPage() {
         setSearchAddress={setSearchAddress}
         onReset={handleReset}
       />
-
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Danh sách Công Ty</h2>
         <HasPermission perm={"POST /companies"}>
@@ -181,7 +180,6 @@ export default function CompanyManagerPage() {
           </Button>
         </HasPermission>
       </div>
-
       <CompanyTable
         companies={companies}
         isLoading={isLoading}
@@ -190,7 +188,6 @@ export default function CompanyManagerPage() {
         onEdit={openEditForm}
         onDelete={handleDeleteCompany}
       />
-
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
@@ -200,7 +197,6 @@ export default function CompanyManagerPage() {
         setItemsPerPage={setItemsPerPage}
         showItemsPerPageSelect={true}
       />
-
       <CompanyForm
         open={isFormOpen}
         onOpenChange={setIsFormOpen}

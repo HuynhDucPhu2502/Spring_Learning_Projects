@@ -13,10 +13,12 @@ import {
   ShieldCheck,
   KeyRound,
   UserCog,
+  Home,
 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -76,7 +78,6 @@ const menuItems: MenuItem[] = [
       },
     ],
   },
-
   {
     title: "Tài khoản",
     url: "/admin/user-manager",
@@ -132,7 +133,6 @@ export function AdminSidebar() {
   // ======================================================================================================
   // Hàm kiểm tra trạng thái kích hoạt (active) của menu trong sidebar
   // ======================================================================================================
-
   /**
    * Kiểm tra xem menu item cấp 1 (menu cha) có đang được kích hoạt không.
    * - Nếu là menu không có con: so sánh trực tiếp với pathname.
@@ -163,9 +163,9 @@ export function AdminSidebar() {
   );
 
   // ======================================================================================================
-
   // Tự động mở rộng (expand) menu cha khi truy cập trực tiếp vào route của một menu con.
   // Giúp sidebar luôn hiển thị đúng trạng thái các menu cha đang mở, tương ứng với URL hiện tại.
+  //======================================================================================================
   useEffect(() => {
     menuItems.forEach((item) => {
       if (
@@ -207,7 +207,6 @@ export function AdminSidebar() {
                   const isActive = isItemActive(item);
                   const isExpanded = expandedItems.includes(item.title);
                   const hasChildren = item.children && item.children.length > 0;
-
                   const filteredChildren = item.children?.filter(
                     (child) =>
                       !child.permission ||
@@ -240,7 +239,6 @@ export function AdminSidebar() {
                               )}
                             />
                           </div>
-
                           {/* Menu cấp 2 */}
                           {isExpanded && (
                             <div className="mt-1 ml-6 space-y-1 border-l border-gray-200 pl-3">
@@ -273,7 +271,6 @@ export function AdminSidebar() {
                           )}
                         </>
                       )}
-
                       {/*Trường hợp có Menu cấp 1 không có con*/}
                       {!hasChildren && (
                         <>
@@ -310,6 +307,22 @@ export function AdminSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="border-t border-blue-100 px-3 py-4">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="w-full justify-start rounded-md py-2 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+            >
+              <Link to="/" className="flex w-full items-center gap-3">
+                <Home className="h-4 w-4" />
+                <span>Quay về trang chủ</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

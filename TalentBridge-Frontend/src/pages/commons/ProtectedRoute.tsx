@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "@/features/hooks.ts";
 import type { ReactNode } from "react";
+import { toast } from "sonner";
 interface ProtectedRouteProps {
   requiredPermission: string | string[];
   children: ReactNode;
@@ -24,6 +25,7 @@ export function ProtectedRoute({
     permissions.some((p) => user.permissions.includes(p));
 
   if (!hasPermission) {
+    toast.error("Không có quyền truy cập");
     return <Navigate to={to} replace />;
   }
 

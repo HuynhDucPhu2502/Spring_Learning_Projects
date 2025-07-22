@@ -18,9 +18,9 @@ export const getCompaniesList = ({
 
   if (filter) params.append("filter", filter);
 
-  return axiosClient.get<ApiResponse<PageResponseDto<DefaultCompanyResponseDto>>>(
-    `/companies?${params.toString()}`,
-  );
+  return axiosClient.get<
+    ApiResponse<PageResponseDto<DefaultCompanyResponseDto>>
+  >(`/companies?${params.toString()}`);
 };
 
 export const getCompaniesListWithJobsCount = ({
@@ -35,13 +35,21 @@ export const getCompaniesListWithJobsCount = ({
 
   if (filter) params.append("filter", filter);
 
-  return axiosClient.get<ApiResponse<PageResponseDto<DefaultCompanyResponseDto>>>(
-    `/companies/with-jobs-count?${params.toString()}`,
-  );
+  return axiosClient.get<
+    ApiResponse<PageResponseDto<DefaultCompanyResponseDto>>
+  >(`/companies/with-jobs-count?${params.toString()}`);
 };
 
 export const getCompanyById = (id: number) => {
-  return axiosClient.get<ApiResponse<DefaultCompanyResponseDto>>(`/companies/${id}`);
+  return axiosClient.get<ApiResponse<DefaultCompanyResponseDto>>(
+    `/companies/${id}`,
+  );
+};
+
+export const findSelfCompany = () => {
+  return axiosClient.get<ApiResponse<DefaultCompanyResponseDto>>(
+    `/companies/me`,
+  );
 };
 
 export const deleteCompanyById = (id: number) => {
@@ -60,6 +68,14 @@ export const addCompany = (formData: FormData) => {
 
 export const updateCompanyById = (formData: FormData, id: number) => {
   return axiosClient.put(`/companies/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const updateSelfCompany = (formData: FormData) => {
+  return axiosClient.put(`/companies/me`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

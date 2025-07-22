@@ -10,15 +10,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import RichTextEditor from "@/components/custom/RichText/index-editor";
-import type { DefaultCompanyResponseDto, CreateAndUpdateRequestDto } from "@/types/company.d.ts";
+import type {
+  DefaultCompanyResponseDto,
+  CreateAndUpdateRequestDto,
+} from "@/types/company.d.ts";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface CompanyFormProps {
   onSubmit: (formData: FormData, id?: number) => void;
   initialData: DefaultCompanyResponseDto | null;
-  onCloseForm: () => void;
+  onCloseForm?: () => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  isRecruiter?: boolean;
 }
 
 export function CompanyForm({
@@ -27,6 +31,7 @@ export function CompanyForm({
   onSubmit,
   initialData,
   onCloseForm,
+  isRecruiter = false,
 }: CompanyFormProps) {
   const [formData, setFormData] = useState<CreateAndUpdateRequestDto>({
     name: "",
@@ -53,6 +58,8 @@ export function CompanyForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // DATA PREPARATION
     const data = new FormData();
     data.append(
       "company",
@@ -61,8 +68,12 @@ export function CompanyForm({
     if (logoFile) {
       data.append("logoFile", logoFile);
     }
+
+    // SUBMIT
     onSubmit(data, initialData?.id);
-    handleReset();
+
+    // HANDLE AFTER SUBMIT
+    if (!isRecruiter) handleReset();
     onOpenChange(false);
     onCloseForm?.();
   };
