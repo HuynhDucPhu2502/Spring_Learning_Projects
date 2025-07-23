@@ -7,7 +7,6 @@ import me.huynhducphu.talent_bridge.dto.response.auth.AuthResult;
 import me.huynhducphu.talent_bridge.dto.response.auth.SessionMetaResponse;
 import me.huynhducphu.talent_bridge.dto.response.user.UserDetailsResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.UserSessionResponseDto;
-import me.huynhducphu.talent_bridge.model.User;
 import org.springframework.http.ResponseCookie;
 
 import java.util.List;

@@ -13,10 +13,9 @@ import { getSessionMeta } from "@/utils/sessionHelper";
 import axios from "axios";
 
 export const registerApi = (data: UserRegisterRequestDto) => {
-  return axiosClient.post<ApiResponse<UserSessionResponseDto>>(
-    "/auth/register",
-    data,
-  );
+  return axios.post("http://localhost:8080/auth/register", data, {
+    withCredentials: true,
+  });
 };
 
 export const loginApi = (data: UserLoginRequestDto) => {

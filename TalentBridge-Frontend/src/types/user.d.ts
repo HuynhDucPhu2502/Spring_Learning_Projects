@@ -91,6 +91,7 @@ export interface UserRegisterRequestDto {
   dob: string;
   address: string;
   gender: "MALE" | "FEMALE" | "OTHER";
+  isRecruiter: boolean;
 }
 
 export interface SelfUserUpdateProfileRequestDto {

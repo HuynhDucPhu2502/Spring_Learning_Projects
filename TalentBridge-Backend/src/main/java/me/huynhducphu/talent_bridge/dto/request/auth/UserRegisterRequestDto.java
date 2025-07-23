@@ -36,4 +36,6 @@ public class UserRegisterRequestDto {
 
     private Gender gender;
 
+    private boolean recruiter;
+
 }

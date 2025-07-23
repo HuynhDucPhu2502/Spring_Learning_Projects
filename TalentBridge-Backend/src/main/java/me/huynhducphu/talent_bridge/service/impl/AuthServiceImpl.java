@@ -57,7 +57,9 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     public Long refreshTokenExpiration;
 
     @Override
-    public UserSessionResponseDto handleRegister(UserRegisterRequestDto userRegisterRequestDto) {
+    public UserSessionResponseDto handleRegister(
+            UserRegisterRequestDto userRegisterRequestDto
+    ) {
         User user = new User(
                 userRegisterRequestDto.getEmail(),
                 userRegisterRequestDto.getName(),
@@ -67,10 +69,15 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                 userRegisterRequestDto.getGender()
         );
 
-        Role role = roleRepository
-                .findByName("USER")
-                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy chức vụ USER, đăng ký thất bại"));
-
+        Role role;
+        if (userRegisterRequestDto.isRecruiter())
+            role = roleRepository
+                    .findByName("RECRUITER")
+                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy chức vụ USER, đăng ký thất bại"));
+        else
+            role = roleRepository
+                    .findByName("USER")
+                    .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy chức vụ USER, đăng ký thất bại"));
         user.setRole(role);
 
         User savedUser = userRepository.saveAndFlush(user);
@@ -215,11 +222,13 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                     .map(x -> x.getMethod() + " " + x.getApiPath())
                     .toList();
 
+        String companyId = (user.getCompany() == null) ? null : user.getCompany().getId().toString();
+
         return new UserSessionResponseDto(
                 user.getEmail(),
                 user.getName(),
                 user.getId(),
-                user.getCompany().getId().toString(),
+                companyId,
                 role.getName(),
                 permissions,
                 user.getLogoUrl()

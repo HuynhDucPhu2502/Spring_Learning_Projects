@@ -68,7 +68,7 @@ const router = createBrowserRouter([
           {
             path: "resumes",
             element: (
-              <ProtectedRoute to="/user" requiredPermission="GET /resumes">
+              <ProtectedRoute to="/user" requiredPermission="POST /resumes">
                 <UserResumePage />
               </ProtectedRoute>
             ),

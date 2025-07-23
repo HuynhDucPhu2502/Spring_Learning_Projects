@@ -20,7 +20,11 @@ public class DataValidator implements CommandLineRunner {
     }
 
     private void checkRoleTable() {
-        if (!roleRepository.existsByName("ADMIN") || !roleRepository.existsByName("USER"))
+        if (
+                !roleRepository.existsByName("ADMIN")
+                        || !roleRepository.existsByName("USER")
+                        || !roleRepository.existsByName("RECRUITER")
+        )
             throw new IllegalStateException("Dữ liệu bảng Role không hợp lệ");
     }
 }
