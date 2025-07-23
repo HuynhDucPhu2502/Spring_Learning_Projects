@@ -17,6 +17,7 @@ import me.huynhducphu.talent_bridge.repository.RoleRepository;
 import me.huynhducphu.talent_bridge.repository.UserRepository;
 import me.huynhducphu.talent_bridge.service.RefreshTokenRedisService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -60,6 +61,9 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     public UserSessionResponseDto handleRegister(
             UserRegisterRequestDto userRegisterRequestDto
     ) {
+        if (userRepository.existsByEmail(userRegisterRequestDto.getEmail()))
+            throw new DataIntegrityViolationException("Email đã tồn tại");
+        
         User user = new User(
                 userRegisterRequestDto.getEmail(),
                 userRegisterRequestDto.getName(),
