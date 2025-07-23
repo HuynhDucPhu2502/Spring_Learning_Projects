@@ -1,5 +1,5 @@
 import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
-import { Building2, ChevronRight, MapPin, Star } from "lucide-react";
+import { Building2, MapPin } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { getFirstLineFromHtml } from "@/utils/convertHelper.ts";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
@@ -63,11 +63,6 @@ const CompanyGrid = ({ isLoading, companies }: CompanyGridProps) => {
                   </div>
                 </div>
               </div>
-
-              <div className="ml-3 flex flex-shrink-0 items-center justify-center gap-1">
-                <Star className="h-3.5 w-3.5 fill-orange-400 text-orange-400" />
-                <span className="text-sm font-medium text-gray-900">4.8</span>
-              </div>
             </div>
 
             {/* Description */}
@@ -75,15 +70,8 @@ const CompanyGrid = ({ isLoading, companies }: CompanyGridProps) => {
               {getFirstLineFromHtml(company.description) || company.name}
             </p>
 
-            {/* Footer */}
-            <div className="flex items-center justify-end gap-4">
-              <span className="font-medium text-orange-600">
-                {company.jobsCount || 0} việc làm
-              </span>
-              <div className="flex items-center gap-1 text-blue-600">
-                <span className="font-medium">123 đánh giá</span>
-                <ChevronRight className="h-4 w-4" />
-              </div>
+            <div className="font-medium text-orange-600">
+              {company.jobsCount || 0} việc làm
             </div>
           </CardContent>
         </Card>

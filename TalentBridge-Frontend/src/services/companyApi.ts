@@ -5,6 +5,10 @@ import type {
   PaginationParams,
 } from "@/types/apiResponse.d.ts";
 import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
+import type {
+  MemberRecruiterRequestDto,
+  RecruiterInfoResponseDto,
+} from "@/types/user";
 
 export const getCompaniesList = ({
   page = 0,
@@ -66,6 +70,14 @@ export const addCompany = (formData: FormData) => {
   });
 };
 
+export const saveSelfCompany = (formData: FormData) => {
+  return axiosClient.post("/companies/me", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 export const updateCompanyById = (formData: FormData, id: number) => {
   return axiosClient.put(`/companies/${id}`, formData, {
     headers: {
@@ -80,4 +92,18 @@ export const updateSelfCompany = (formData: FormData) => {
       "Content-Type": "multipart/form-data",
     },
   });
+};
+
+export const findAllRecruitersBySelfCompany = () => {
+  return axiosClient.get<ApiResponse<RecruiterInfoResponseDto[]>>(
+    `/companies/me/users`,
+  );
+};
+
+export const addMemberToCompany = (data: MemberRecruiterRequestDto) => {
+  return axiosClient.post(`/companies/me/users`, data);
+};
+
+export const removeMemberFromCompany = (data: MemberRecruiterRequestDto) => {
+  return axiosClient.put(`/companies/me/users`, data);
 };

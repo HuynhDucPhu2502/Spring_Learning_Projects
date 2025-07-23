@@ -37,7 +37,7 @@ export function PermissionTable({
             <TableHead className="text-center font-bold text-white">
               ID
             </TableHead>
-            <TableHead className="text-center font-bold text-white">
+            <TableHead className="w-[300px] text-center font-bold text-white">
               Tên quyền hạn
             </TableHead>
             <TableHead className="text-center font-bold text-white">
@@ -85,7 +85,9 @@ export function PermissionTable({
             permissions.map((permission) => (
               <TableRow key={permission.id}>
                 <TableCell className="text-center">{permission.id}</TableCell>
-                <TableCell className="text-center">{permission.name}</TableCell>
+                <TableCell className="w-[300px] text-center break-all whitespace-normal">
+                  {permission.name}
+                </TableCell>
                 <TableCell className="text-center">
                   {permission.apiPath}
                 </TableCell>

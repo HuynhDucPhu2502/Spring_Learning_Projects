@@ -13,6 +13,11 @@ const routeTitles: Record<
     subtitle: "Thông tin và cài đặt công ty",
     icon: "🏢",
   },
+  "/recruiter/members": {
+    title: "Đội ngũ tuyển dụng",
+    subtitle: "Thông tin nhà tuyển dụng thuộc công ty bạn",
+    icon: "👤",
+  },
   "/recruiter/jobs": {
     title: "Việc làm",
     subtitle: "Quản lý tin tuyển dụng",

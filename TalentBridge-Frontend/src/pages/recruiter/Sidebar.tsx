@@ -6,6 +6,7 @@ import {
   MonitorIcon as MonitorCog,
   type LucideIcon,
   Home,
+  UserRound,
 } from "lucide-react";
 import {
   Sidebar,
@@ -34,6 +35,12 @@ const menuItems: MenuItem[] = [
     url: "/recruiter/company",
     icon: Building2,
     permission: "GET /companies/me",
+  },
+  {
+    title: "Đội ngũ tuyển dụng",
+    url: "/recruiter/members",
+    icon: UserRound,
+    permission: "GET /companies/me/users",
   },
   {
     title: "Công việc",

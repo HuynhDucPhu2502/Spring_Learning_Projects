@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.company.DefaultCompanyRequestDto;
+import me.huynhducphu.talent_bridge.dto.request.user.RecruiterRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
 import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyExtendedResponseDto;
@@ -46,7 +47,24 @@ public class CompanyController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(companyService.saveCompany(defaultCompanyRequestDto, logoFile));
+                .body(companyService.saveCompany(defaultCompanyRequestDto, logoFile, false));
+    }
+
+    @PostMapping("/me")
+    @ApiMessage(value = "Tạo Company cho người dùng hiện tại")
+    @PreAuthorize("hasAuthority('POST /companies/me')")
+    @Operation(
+            summary = "Tạo Company cho người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>POST /companies/me</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> saveSelfCompany(
+            @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
+            @RequestPart(value = "logoFile", required = false) MultipartFile logoFile
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(companyService.saveCompany(defaultCompanyRequestDto, logoFile, true));
     }
 
     @PutMapping(value = "/{id}")
@@ -157,6 +175,51 @@ public class CompanyController {
                 companyService.findSelfCompany()
         );
     }
+
+    @GetMapping("/me/users")
+    @ApiMessage(value = "Lấy danh sách users recruiter của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('GET /companies/me/users')")
+    @Operation(
+            summary = "Lấy danh sách users recruiter của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>GET /companies/me/users</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> findAllRecruitersBySelfCompany() {
+        return ResponseEntity.ok(
+                companyService.findAllRecruitersBySelfCompany()
+        );
+    }
+
+    @PostMapping("/me/users")
+    @ApiMessage(value = "Thêm người dùng khác vào company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('POST /companies/me/users')")
+    @Operation(
+            summary = "Thêm người dùng khác vào company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>POST /companies/me/users</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<Void> addMemberToCompany(
+            @Valid @RequestBody RecruiterRequestDto recruiterRequestDto
+    ) {
+        companyService.addMemberToCompany(recruiterRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/me/users")
+    @ApiMessage(value = "Loại bỏ người dùng khác khỏi company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('PUT /companies/me/users')")
+    @Operation(
+            summary = "Loại bỏ người dùng khác khỏi company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>PUT /companies/me/users</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<Void> removeMemberFromCompany(
+            @Valid @RequestBody RecruiterRequestDto recruiterRequestDto
+    ) {
+        companyService.removeMemberFromCompany(recruiterRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
 
     @DeleteMapping("/{id}")
     @ApiMessage(value = "Xóa company theo id")

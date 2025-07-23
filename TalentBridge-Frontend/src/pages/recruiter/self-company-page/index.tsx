@@ -75,6 +75,7 @@ const CompanyManagerRecruiterPage = () => {
       <CompanySection company={company} jobsCount={0} isRecruiter={true} />
 
       <CompanyForm
+        isLoading={isLoading}
         initialData={company}
         open={isFormOpen}
         onOpenChange={setIsFormOpen}

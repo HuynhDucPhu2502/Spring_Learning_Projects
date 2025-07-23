@@ -39,6 +39,10 @@ public class Company extends BaseEntity {
     @ToString.Exclude
     private List<Job> jobs;
 
+    @OneToOne
+    @JoinColumn(name = "owner_id", unique = true)
+    private User owner;
+
     public Company(String name, String description, String address) {
         this.name = name;
         this.description = description;

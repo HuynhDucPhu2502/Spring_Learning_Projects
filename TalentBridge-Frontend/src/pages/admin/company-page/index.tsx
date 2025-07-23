@@ -198,6 +198,7 @@ export default function CompanyManagerPage() {
         showItemsPerPageSelect={true}
       />
       <CompanyForm
+        isLoading={isLoading}
         open={isFormOpen}
         onOpenChange={setIsFormOpen}
         onSubmit={handleAddOrUpdateCompany}

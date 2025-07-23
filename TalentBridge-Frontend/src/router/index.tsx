@@ -40,6 +40,7 @@ import CompanyManagerRecruiterPage from "@/pages/recruiter/self-company-page";
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
 import { ProtectedRoute } from "@/pages/commons/ProtectedRoute.tsx";
+import MemberManagePage from "@/pages/recruiter/member-page";
 
 const router = createBrowserRouter([
   // =========================
@@ -259,6 +260,19 @@ const router = createBrowserRouter([
             requiredPermission="GET /companies/me"
           >
             <CompanyManagerRecruiterPage />
+          </ProtectedRoute>
+        ),
+      },
+
+      // MEMBER MANAGER
+      {
+        path: "members",
+        element: (
+          <ProtectedRoute
+            to="/recruiter"
+            requiredPermission="GET /companies/me/users"
+          >
+            <MemberManagePage />
           </ProtectedRoute>
         ),
       },

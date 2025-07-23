@@ -15,7 +15,7 @@ export default function RegisterForm() {
     dob: "",
     address: "",
     gender: "OTHER",
-    isRecruiter: false,
+    recruiter: false,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -154,11 +154,11 @@ export default function RegisterForm() {
                   </label>
                   <select
                     name="role"
-                    value={form.isRecruiter ? "recruiter" : "candidate"}
+                    value={form.recruiter ? "recruiter" : "candidate"}
                     onChange={(e) => {
                       setForm((prev) => ({
                         ...prev,
-                        isRecruiter: e.target.value === "recruiter",
+                        recruiter: e.target.value === "recruiter",
                       }));
                     }}
                     className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 transition-all duration-200 outline-none focus:border-transparent focus:ring-2 focus:ring-orange-500"

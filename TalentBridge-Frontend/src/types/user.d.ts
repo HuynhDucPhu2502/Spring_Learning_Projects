@@ -91,7 +91,7 @@ export interface UserRegisterRequestDto {
   dob: string;
   address: string;
   gender: "MALE" | "FEMALE" | "OTHER";
-  isRecruiter: boolean;
+  recruiter: boolean;
 }
 
 export interface SelfUserUpdateProfileRequestDto {
@@ -104,6 +104,17 @@ export interface SelfUserUpdateProfileRequestDto {
 export interface SelfUserUpdatePasswordRequestDto {
   oldPassword: string;
   newPassword: string;
+}
+
+export interface RecruiterInfoResponseDto {
+  id: number;
+  name: string;
+  email: string;
+  owner: boolean;
+}
+
+export interface MemberRecruiterRequestDto {
+  email: string;
 }
 
 // =============================

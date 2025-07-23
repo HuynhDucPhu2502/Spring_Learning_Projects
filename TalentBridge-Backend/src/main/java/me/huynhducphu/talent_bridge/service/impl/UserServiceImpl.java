@@ -201,7 +201,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
                     user.getCompany().getId(),
                     user.getCompany().getName(),
                     user.getCompany().getAddress(),
-                    user.getCompany().getCompanyLogo().getLogoUrl()
+                    (user.getCompany().getCompanyLogo() == null ? "" : user.getCompany().getCompanyLogo().getLogoUrl())
             );
 
         DefaultUserResponseDto.RoleInformationDto role = null;

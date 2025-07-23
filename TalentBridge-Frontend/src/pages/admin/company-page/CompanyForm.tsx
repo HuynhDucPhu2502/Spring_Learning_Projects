@@ -17,12 +17,13 @@ import type {
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface CompanyFormProps {
-  onSubmit: (formData: FormData, id?: number) => void;
+  onSubmit: (formData: FormData, id?: number) => Promise<unknown>;
   initialData: DefaultCompanyResponseDto | null;
   onCloseForm?: () => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isRecruiter?: boolean;
+  isLoading: boolean;
 }
 
 export function CompanyForm({
@@ -32,6 +33,7 @@ export function CompanyForm({
   initialData,
   onCloseForm,
   isRecruiter = false,
+  isLoading,
 }: CompanyFormProps) {
   const [formData, setFormData] = useState<CreateAndUpdateRequestDto>({
     name: "",
@@ -56,7 +58,7 @@ export function CompanyForm({
     setLogoFile(null);
   }, [initialData]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // DATA PREPARATION
@@ -70,7 +72,7 @@ export function CompanyForm({
     }
 
     // SUBMIT
-    onSubmit(data, initialData?.id);
+    await onSubmit(data, initialData?.id);
 
     // HANDLE AFTER SUBMIT
     if (!isRecruiter) handleReset();
@@ -180,11 +182,16 @@ export function CompanyForm({
             <Button
               type="button"
               variant="outline"
+              disabled={isLoading}
               onClick={() => onOpenChange(false)}
             >
               Hủy
             </Button>
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              disabled={isLoading}
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               {initialData ? "Lưu thay đổi" : "Thêm"}
             </Button>
           </div>

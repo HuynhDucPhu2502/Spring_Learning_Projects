@@ -63,7 +63,9 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     ) {
         if (userRepository.existsByEmail(userRegisterRequestDto.getEmail()))
             throw new DataIntegrityViolationException("Email đã tồn tại");
-        
+
+        System.out.println(userRegisterRequestDto.isRecruiter());
+
         User user = new User(
                 userRegisterRequestDto.getEmail(),
                 userRegisterRequestDto.getName(),
