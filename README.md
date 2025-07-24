@@ -10,18 +10,16 @@ TalentBridge là nền tảng tuyển dụng thế hệ mới – nơi kết n�
 
 ### 1. **USER (Ứng viên)**
 
-- Tìm kiếm và khám phá chi tiết thông tin công ty, các vị trí tuyển dụng hot nhất.
+- Tìm kiếm và khám phá chi tiết thông tin công ty, các vị trí tuyển dụng.
 - Quản lý hồ sơ cá nhân toàn diện: cập nhật thông tin, đổi avatar, bảo mật tài khoản.
 - Chủ động tạo, chỉnh sửa, xoá, tải lên CV – và có thể nộp/rút CV mọi lúc, mọi nơi.
 - Đăng ký nhận email job alert siêu cá nhân hoá, tự động gợi ý công việc đúng ngành/nghề, kỹ năng mong muốn.
-- Theo dõi trạng thái hồ sơ ứng tuyển (chờ duyệt, phỏng vấn, kết quả…), nhận thông báo lịch phỏng vấn, nhắc nhở cập nhật hồ sơ.
 
 ### 2. **RECRUITER (Nhà tuyển dụng)**
 
 - Tự do đăng tin tuyển dụng, quản lý vị trí, chỉnh sửa hoặc ngừng tuyển bất kỳ lúc nào.
 - Quản trị thông tin công ty: cập nhật profile, hình ảnh, nội dung giới thiệu.
 - Quản lý & lọc ứng viên: duyệt CV, từ chối/nổi bật hồ sơ, xuất báo cáo hiệu quả.
-- Chủ động mời ứng viên tiềm năng apply/phỏng vấn, xây dựng “nguồn” nhân lực riêng.
 - Mời thêm đồng nghiệp vào đội ngũ, phân quyền từng người theo chức năng tuyển dụng (quản lý tin đăng, duyệt hồ sơ…).
 
 ### 3. **ADMIN (Quản trị viên)**
@@ -29,7 +27,6 @@ TalentBridge là nền tảng tuyển dụng thế hệ mới – nơi kết n�
 - Quản lý toàn bộ hệ thống: duyệt, chỉnh sửa, khóa/xóa mọi loại tài khoản.
 - Tạo, chỉnh sửa và phân quyền vai trò cực kỳ chi tiết cho từng tài khoản, nhóm người dùng.
 - Theo dõi hoạt động, log hệ thống, xử lý vi phạm, quản lý nội dung, cấu hình và hỗ trợ kỹ thuật toàn diện.
-- Quản lý báo cáo, thống kê và kiểm soát chất lượng nền tảng.
 
 ---
 
