@@ -65,7 +65,12 @@ TalentBridge kết hợp sức mạnh của **Spring Boot** và **React**, hư�
 
 ## ⚙️ Cấu hình backend (`application.properties`)
 
-> **Tạo file `src/main/resources/application.properties` với nội dung sau, tuỳ chỉnh các biến theo môi trường của bạn.**
+> **Chạy file InitDataScript.sql (Dùng HeidiSQL hoặc cái khác) để init data cơ bản**
+- Tạo các table cơ bản 
+- Tạo role ADMIN, RECRUITER, USER 
+- Tạo User ADMIN với mật khẩu 123456 
+
+> **Config các service Backend dùng tại `application.properties` với nội dung sau, tuỳ chỉnh các biến theo môi trường của bạn**
 
 ```properties
 spring.application.name=TalentBridge-Backend
@@ -112,7 +117,5 @@ spring.mail.password=
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 ```
-
-**Lưu ý:** Không public file này lên Github nếu đã điền thông tin thật!
 
 ---
