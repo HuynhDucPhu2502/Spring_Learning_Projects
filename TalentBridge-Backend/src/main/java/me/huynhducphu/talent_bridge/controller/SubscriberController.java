@@ -26,7 +26,7 @@ public class SubscriberController {
 
     @PostMapping("/me")
     @ApiMessage(value = "Tạo subscriber cho người dùng hiện tại")
-    @PreAuthorize("hasAuthority('POST /me')")
+    @PreAuthorize("hasAuthority('POST /subscribers/me')")
     @Operation(
             summary = "Tạo subscriber cho người dùng hiện tại",
             description = "Yêu cầu quyền: <b>POST /subscribers/me</b>",
@@ -40,7 +40,7 @@ public class SubscriberController {
 
     @GetMapping("/me")
     @ApiMessage(value = "Lấy subscriber cho người dùng hiện tại")
-    @PreAuthorize("hasAuthority('GET /me')")
+    @PreAuthorize("hasAuthority('GET /subscribers/me')")
     @Operation(
             summary = "Lấy subscriber cho người dùng hiện tại",
             description = "Yêu cầu quyền: <b>GET /subscribers/me</b>",
@@ -52,7 +52,7 @@ public class SubscriberController {
 
     @PutMapping("/me")
     @ApiMessage(value = "Cập nhật subscriber cho người dùng hiện tại")
-    @PreAuthorize("hasAuthority('PUT /me')")
+    @PreAuthorize("hasAuthority('PUT /subscribers/me')")
     @Operation(
             summary = "Cập nhật subscriber cho người dùng hiện tại",
             description = "Yêu cầu quyền: <b>PUT /subscribers/me</b>",
@@ -66,7 +66,7 @@ public class SubscriberController {
 
     @DeleteMapping("/me")
     @ApiMessage(value = "Xóa subscriber cho người dùng hiện tại")
-    @PreAuthorize("hasAuthority('DELETE /me')")
+    @PreAuthorize("hasAuthority('DELETE /subscribers/me')")
     @Operation(
             summary = "Xóa subscriber cho người dùng hiện tại",
             description = "Yêu cầu quyền: <b>DELETE /subscribers/me</b>",
