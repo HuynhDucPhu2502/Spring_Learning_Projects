@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { CompanyForm } from "./CompanyForm";
 import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import {
-  addCompany,
+  saveCompany,
   deleteCompanyById,
-  getCompaniesList,
+  findAllCompanies,
   updateCompanyById,
 } from "@/services/companyApi";
 import Pagination from "@/components/custom/Pagination";
@@ -89,7 +89,7 @@ export default function CompanyManagerPage() {
 
       const filter = filters.length > 0 ? filters.join(" and ") : null;
 
-      const res = (await getCompaniesList({ page, size, filter })).data.data;
+      const res = (await findAllCompanies({ page, size, filter })).data.data;
       setCompanies(res.content);
       setTotalElements(res.totalElements);
       setTotalPages(res.totalPages);
@@ -132,7 +132,7 @@ export default function CompanyManagerPage() {
         await updateCompanyById(formData, id);
         toast.success("Cập nhật công ty thành công.");
       } else {
-        await addCompany(formData);
+        await saveCompany(formData);
         toast.success("Thêm công ty thành công.");
       }
       setIsLoading(false);

@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Search, Wrench, X } from "lucide-react";
 import { toast } from "sonner";
-import { getSkillsList } from "@/services/skillApi.ts";
+import { findAllSkills } from "@/services/skillApi.ts";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import type { SkillSummary } from "@/types/job";
 import type { DefaultSkillResponseDto } from "@/types/skill.d.ts";
@@ -62,7 +62,7 @@ const SkillSelection = ({
     try {
       setIsLoading(true);
       const filter = searchName ? `name ~ '*${searchName}*'` : null;
-      const res = await getSkillsList({
+      const res = await findAllSkills({
         page: currentPage,
         size: itemsPerPage,
         filter,

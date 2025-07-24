@@ -3,7 +3,7 @@ import type { Job } from "@/types/job";
 import JobGrid from "./JobGrid";
 import { JobSearchSection } from "./JobSearchSection";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
-import { getJobsList } from "@/services/jobApi";
+import { findAllJobs } from "@/services/jobApi";
 import { toast } from "sonner";
 import Pagination from "@/components/custom/Pagination";
 
@@ -56,7 +56,7 @@ export default function JobClientPage() {
 
       const filter = filters.length > 0 ? filters.join(" and ") : null;
 
-      const res = (await getJobsList({ page, size, filter })).data.data;
+      const res = (await findAllJobs({ page, size, filter })).data.data;
       setJobs(res.content);
       setTotalElements(res.totalElements);
       setTotalPages(res.totalPages);

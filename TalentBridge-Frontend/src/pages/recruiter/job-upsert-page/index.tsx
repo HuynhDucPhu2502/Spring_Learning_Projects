@@ -33,7 +33,7 @@ import type { JobUpsertDto, SkillSummary } from "@/types/job";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { toast } from "sonner";
 import {
-  getJobById,
+  findJobById,
   saveJobForRecruiterPage,
   updateJobByIdForRecruiterCompany,
 } from "@/services/jobApi.ts";
@@ -82,7 +82,7 @@ export default function JobUpsertRecruiterPage() {
       const fetchData = async () => {
         setIsLoading(true);
         try {
-          const res = await getJobById(parseInt(id));
+          const res = await findJobById(parseInt(id));
           const job = res.data.data;
           job.startDate = formatISOToYMD(job.startDate);
           job.endDate = formatISOToYMD(job.endDate);

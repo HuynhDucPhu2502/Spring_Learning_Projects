@@ -10,7 +10,23 @@ import type {
   RecruiterInfoResponseDto,
 } from "@/types/user";
 
-export const getCompaniesList = ({
+export const saveCompany = (formData: FormData) => {
+  return axiosClient.post("/companies", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const saveSelfCompany = (formData: FormData) => {
+  return axiosClient.post("/companies/me", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const findAllCompanies = ({
   page = 0,
   size = 5,
   filter,
@@ -27,7 +43,7 @@ export const getCompaniesList = ({
   >(`/companies?${params.toString()}`);
 };
 
-export const getCompaniesListWithJobsCount = ({
+export const findAllCompaniesWithJobsCount = ({
   page = 0,
   size = 5,
   filter,
@@ -44,7 +60,7 @@ export const getCompaniesListWithJobsCount = ({
   >(`/companies/with-jobs-count?${params.toString()}`);
 };
 
-export const getCompanyById = (id: number) => {
+export const findCompanyById = (id: number) => {
   return axiosClient.get<ApiResponse<DefaultCompanyResponseDto>>(
     `/companies/${id}`,
   );
@@ -56,26 +72,10 @@ export const findSelfCompany = () => {
   );
 };
 
-export const deleteCompanyById = (id: number) => {
-  if (!id) return null;
-
-  return axiosClient.delete(`/companies/${id}`);
-};
-
-export const addCompany = (formData: FormData) => {
-  return axiosClient.post("/companies", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-};
-
-export const saveSelfCompany = (formData: FormData) => {
-  return axiosClient.post("/companies/me", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+export const findAllRecruitersBySelfCompany = () => {
+  return axiosClient.get<ApiResponse<RecruiterInfoResponseDto[]>>(
+    `/companies/me/users`,
+  );
 };
 
 export const updateCompanyById = (formData: FormData, id: number) => {
@@ -94,10 +94,10 @@ export const updateSelfCompany = (formData: FormData) => {
   });
 };
 
-export const findAllRecruitersBySelfCompany = () => {
-  return axiosClient.get<ApiResponse<RecruiterInfoResponseDto[]>>(
-    `/companies/me/users`,
-  );
+export const deleteCompanyById = (id: number) => {
+  if (!id) return null;
+
+  return axiosClient.delete(`/companies/${id}`);
 };
 
 export const addMemberToCompany = (data: MemberRecruiterRequestDto) => {

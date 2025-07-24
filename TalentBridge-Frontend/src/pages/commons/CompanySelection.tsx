@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { Search, Building2, X } from "lucide-react";
 import { toast } from "sonner";
 import type { CompanySummary } from "@/types/job";
-import { getCompaniesList } from "@/services/companyApi.ts";
+import { findAllCompanies } from "@/services/companyApi.ts";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import Pagination from "@/components/custom/Pagination.tsx";
 import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
@@ -61,7 +61,7 @@ const CompanySelection = ({
     try {
       const filter = searchName ? `name ~ '*${searchName}*'` : null;
 
-      const res = await getCompaniesList({ page, size, filter });
+      const res = await findAllCompanies({ page, size, filter });
       const data = res.data.data;
 
       const mapped: CompanySummary[] = data.content.map(

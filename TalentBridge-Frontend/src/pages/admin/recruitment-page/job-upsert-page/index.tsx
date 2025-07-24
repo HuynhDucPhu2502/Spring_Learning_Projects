@@ -28,7 +28,7 @@ import type { CompanySummary, JobUpsertDto, SkillSummary } from "@/types/job";
 import CompanySelection from "@/pages/commons/CompanySelection.tsx";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { toast } from "sonner";
-import { getJobById, saveJob, updateJobById } from "@/services/jobApi.ts";
+import { findJobById, saveJob, updateJobById } from "@/services/jobApi.ts";
 import { formatISOToYMD } from "@/utils/convertHelper.ts";
 import { useAppSelector } from "@/features/hooks.ts";
 
@@ -78,7 +78,7 @@ export default function JobUpsertPage() {
       const fetchData = async () => {
         setIsLoading(true);
         try {
-          const res = await getJobById(parseInt(id));
+          const res = await findJobById(parseInt(id));
           const job = res.data.data;
           job.startDate = formatISOToYMD(job.startDate);
           job.endDate = formatISOToYMD(job.endDate);

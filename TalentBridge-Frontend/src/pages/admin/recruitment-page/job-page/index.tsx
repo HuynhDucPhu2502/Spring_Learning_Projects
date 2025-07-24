@@ -8,7 +8,7 @@ import { JobSearchSection } from "../../../commons/job-manager-components/JobSea
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
-import { deleteJobById, getJobsList } from "@/services/jobApi";
+import { deleteJobById, findAllJobs } from "@/services/jobApi";
 import Pagination from "@/components/custom/Pagination";
 
 import { JobDetailsSidebar } from "../../../commons/job-manager-components/JobDetailsSidebar.tsx";
@@ -82,7 +82,7 @@ const JobManagerPage = () => {
 
       const filter = filters.length > 0 ? filters.join(" and ") : null;
 
-      const res = (await getJobsList({ page, size, filter })).data.data;
+      const res = (await findAllJobs({ page, size, filter })).data.data;
       setJobs(res.content);
       setTotalElements(res.totalElements);
       setTotalPages(res.totalPages);

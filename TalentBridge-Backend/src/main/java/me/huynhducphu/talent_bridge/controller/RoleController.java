@@ -10,7 +10,6 @@ import me.huynhducphu.talent_bridge.annotation.ApiMessage;
 import me.huynhducphu.talent_bridge.dto.request.role.DefaultRoleRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.role.DefaultRoleResponseDto;
-import me.huynhducphu.talent_bridge.model.Permission;
 import me.huynhducphu.talent_bridge.model.Role;
 import me.huynhducphu.talent_bridge.service.RoleService;
 import org.springframework.data.domain.Page;
@@ -49,21 +48,6 @@ public class RoleController {
                 .body(roleService.saveRole(defaultRoleRequestDto));
     }
 
-    @PutMapping("/{id}")
-    @ApiMessage(value = "Cập nhật Role")
-    @PreAuthorize("hasAuthority('PUT /roles/{id}')")
-    @Operation(
-            summary = "Câp nhật Role",
-            description = "Yêu cầu quyền: <b>PUT /roles/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    public ResponseEntity<DefaultRoleResponseDto> updateRole(
-            @PathVariable Long id,
-            @Valid @RequestBody DefaultRoleRequestDto defaultRoleRequestDto
-    ) {
-        return ResponseEntity.ok(roleService.updateRole(id, defaultRoleRequestDto));
-    }
-
     @GetMapping
     @ApiMessage(value = "Lấy danh sách Role")
     @PreAuthorize("hasAuthority('GET /roles')")
@@ -87,6 +71,21 @@ public class RoleController {
         );
 
         return ResponseEntity.ok(res);
+    }
+
+    @PutMapping("/{id}")
+    @ApiMessage(value = "Cập nhật Role")
+    @PreAuthorize("hasAuthority('PUT /roles/{id}')")
+    @Operation(
+            summary = "Câp nhật Role",
+            description = "Yêu cầu quyền: <b>PUT /roles/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<DefaultRoleResponseDto> updateRoleById(
+            @PathVariable Long id,
+            @Valid @RequestBody DefaultRoleRequestDto defaultRoleRequestDto
+    ) {
+        return ResponseEntity.ok(roleService.updateRole(id, defaultRoleRequestDto));
     }
 
     @DeleteMapping("/{id}")

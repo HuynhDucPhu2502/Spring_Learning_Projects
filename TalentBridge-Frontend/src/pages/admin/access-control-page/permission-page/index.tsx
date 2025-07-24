@@ -1,7 +1,7 @@
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import {
   deletePermissionById,
-  getPermissionList,
+  findAllPermissions,
   savePermission,
   updatePermissionById,
 } from "@/services/permissionApi";
@@ -71,7 +71,7 @@ const PermissionManagerPage = () => {
 
       const filter = filters.length > 0 ? filters.join(" and ") : null;
 
-      const res = (await getPermissionList({ page, size, filter })).data.data;
+      const res = (await findAllPermissions({ page, size, filter })).data.data;
       setPermissions(res.content);
       setTotalElements(res.totalElements);
       setTotalPages(res.totalPages);

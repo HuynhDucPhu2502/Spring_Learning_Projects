@@ -14,7 +14,7 @@ export const saveSkill = (data: createSkillRequestDto) => {
   return axiosClient.post<ApiResponse<DefaultSkillResponseDto>>("/skills", data);
 };
 
-export const getSkillsList = ({
+export const findAllSkills = ({
   page = 0,
   size = 5,
   filter,

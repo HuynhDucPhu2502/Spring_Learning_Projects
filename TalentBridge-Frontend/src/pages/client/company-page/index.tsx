@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
-import { getCompaniesListWithJobsCount } from "@/services/companyApi";
+import { findAllCompaniesWithJobsCount } from "@/services/companyApi";
 import Pagination from "@/components/custom/Pagination";
 import CompanyGrid from "./CompanyGrid";
 import { CompanySearchSection } from "./CompanySearchSection";
@@ -41,7 +41,7 @@ export default function CompanyClientPage() {
 
       const filter = filters.length > 0 ? filters.join(" and ") : null;
 
-      const res = (await getCompaniesListWithJobsCount({ page, size, filter }))
+      const res = (await findAllCompaniesWithJobsCount({ page, size, filter }))
         .data.data;
       setCompanies(res.content);
       setTotalElements(res.totalElements);

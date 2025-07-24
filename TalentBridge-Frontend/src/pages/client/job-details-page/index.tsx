@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getJobById } from "@/services/jobApi.ts";
+import { findJobById } from "@/services/jobApi.ts";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import LoadingSpinner from "@/components/custom/LoadingSpinner.tsx";
@@ -36,7 +36,7 @@ const JobDetailsClientPage = ({ initialJob }: JobDetailsProp) => {
     const fetchJob = async () => {
       setIsLoading(true);
       try {
-        const res = (await getJobById(Number.parseInt(id))).data.data;
+        const res = (await findJobById(Number.parseInt(id))).data.data;
         setJob(res);
       } catch (err) {
         toast.error(getErrorMessage(err, "Không thể lấy thông tin công việc"));

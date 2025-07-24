@@ -9,7 +9,14 @@ import type {
   DefaultPermissionResponseDto,
 } from "@/types/permission.d.ts";
 
-export const getPermissionList = ({
+export const savePermission = (data: DefaultPermissionRequestDto) => {
+  return axiosClient.post<ApiResponse<DefaultPermissionRequestDto>>(
+    "/permissions",
+    data,
+  );
+};
+
+export const findAllPermissions = ({
   page = 0,
   size = 5,
   filter,
@@ -26,16 +33,9 @@ export const getPermissionList = ({
   >(`/permissions?${params.toString()}`);
 };
 
-export const getAllPermissionsNoPaging = () => {
+export const findAllPermissionsNoPaging = () => {
   return axiosClient.get<ApiResponse<DefaultPermissionResponseDto[]>>(
     "/permissions/all",
-  );
-};
-
-export const savePermission = (data: DefaultPermissionRequestDto) => {
-  return axiosClient.post<ApiResponse<DefaultPermissionRequestDto>>(
-    "/permissions",
-    data,
   );
 };
 

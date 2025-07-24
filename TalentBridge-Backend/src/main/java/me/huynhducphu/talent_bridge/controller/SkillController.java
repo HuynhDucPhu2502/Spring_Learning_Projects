@@ -70,6 +70,7 @@ public class SkillController {
         return ResponseEntity.ok(res);
     }
 
+    // NON USE
     @GetMapping("/{id}")
     @ApiMessage(value = "Lấy Skill theo id")
     @PreAuthorize("hasAuthority('GET /skills/{id}') OR isAnonymous()")

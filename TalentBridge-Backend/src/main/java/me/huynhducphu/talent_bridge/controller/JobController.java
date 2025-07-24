@@ -55,6 +55,31 @@ public class JobController {
         return ResponseEntity.ok(jobService.saveJob(jobRequestDto, true));
     }
 
+    @GetMapping
+    @ApiMessage(value = "Lấy danh sách Job")
+    @PreAuthorize("hasAuthority('GET /jobs') OR isAnonymous()")
+    @Operation(
+            summary = "Lấy danh sách Job",
+            description = "Yêu cầu quyền: <b>GET /jobs</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> findAllJobs(
+            @Filter Specification<Job> spec,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        Page<JobResponseDto> page = jobService.findAllJobs(spec, pageable);
+
+        PageResponseDto<JobResponseDto> res = new PageResponseDto<>(
+                page.getContent(),
+                pageable.getPageNumber() + 1,
+                pageable.getPageSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+
+        return ResponseEntity.ok(res);
+    }
+
     @GetMapping("/{id}")
     @ApiMessage(value = "Lấy Job theo id")
     @PreAuthorize("hasAuthority('GET /jobs/{id}') OR isAnonymous()")
@@ -65,6 +90,43 @@ public class JobController {
     )
     public ResponseEntity<?> findJobById(@PathVariable Long id) {
         return ResponseEntity.ok(jobService.findJobById(id));
+    }
+
+    @GetMapping("/companies/{id}")
+    @ApiMessage(value = "Lấy Job theo Company")
+    @PreAuthorize("hasAuthority('GET /jobs/companies/{id}') OR isAnonymous()")
+    @Operation(
+            summary = "Lấy Job theo Company",
+            description = "Yêu cầu quyền: <b>GET /jobs/companies/{id}</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> findJobByCompanyId(@PathVariable Long id) {
+        return ResponseEntity.ok(jobService.findJobByCompanyId(id));
+    }
+
+    @GetMapping("/company")
+    @ApiMessage(value = "Lấy danh sách Job thuộc company của người dùng hiện tại")
+    @PreAuthorize("hasAuthority('GET /jobs/company')")
+    @Operation(
+            summary = "Lấy danh sách Job theo company của người dùng hiện tại",
+            description = "Yêu cầu quyền: <b>GET /jobs/company</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<?> findAllJobsForRecruiterCompany(
+            @Filter Specification<Job> spec,
+            @PageableDefault(size = 5) Pageable pageable
+    ) {
+        Page<JobResponseDto> page = jobService.findAllJobsForRecruiterCompany(spec, pageable);
+
+        PageResponseDto<JobResponseDto> res = new PageResponseDto<>(
+                page.getContent(),
+                pageable.getPageNumber() + 1,
+                pageable.getPageSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+
+        return ResponseEntity.ok(res);
     }
 
     @PutMapping("/{id}")
@@ -95,68 +157,6 @@ public class JobController {
             @Valid @RequestBody JobRequestDto jobRequestDto
     ) {
         return ResponseEntity.ok(jobService.updateJobById(id, jobRequestDto, true));
-    }
-
-    @GetMapping
-    @ApiMessage(value = "Lấy danh sách Job")
-    @PreAuthorize("hasAuthority('GET /jobs') OR isAnonymous()")
-    @Operation(
-            summary = "Lấy danh sách Job",
-            description = "Yêu cầu quyền: <b>GET /jobs</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    public ResponseEntity<?> findAllJobs(
-            @Filter Specification<Job> spec,
-            @PageableDefault(size = 5) Pageable pageable
-    ) {
-        Page<JobResponseDto> page = jobService.findAllJobs(spec, pageable);
-
-        PageResponseDto<JobResponseDto> res = new PageResponseDto<>(
-                page.getContent(),
-                pageable.getPageNumber() + 1,
-                pageable.getPageSize(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-
-        return ResponseEntity.ok(res);
-    }
-
-    @GetMapping("/company")
-    @ApiMessage(value = "Lấy danh sách Job thuộc company của người dùng hiện tại")
-    @PreAuthorize("hasAuthority('GET /jobs/company')")
-    @Operation(
-            summary = "Lấy danh sách Job theo company của người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>GET /jobs/company</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    public ResponseEntity<?> findAllJobsForRecruiterCompany(
-            @Filter Specification<Job> spec,
-            @PageableDefault(size = 5) Pageable pageable
-    ) {
-        Page<JobResponseDto> page = jobService.findAllJobsForRecruiterCompany(spec, pageable);
-
-        PageResponseDto<JobResponseDto> res = new PageResponseDto<>(
-                page.getContent(),
-                pageable.getPageNumber() + 1,
-                pageable.getPageSize(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
-
-        return ResponseEntity.ok(res);
-    }
-
-    @GetMapping("/companies/{id}")
-    @ApiMessage(value = "Lấy Job theo Company")
-    @PreAuthorize("hasAuthority('GET /jobs/companies/{id}') OR isAnonymous()")
-    @Operation(
-            summary = "Lấy Job theo Company",
-            description = "Yêu cầu quyền: <b>GET /jobs/companies/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    public ResponseEntity<?> findJobByCompanyId(@PathVariable Long id) {
-        return ResponseEntity.ok(jobService.findJobByCompanyId(id));
     }
 
 

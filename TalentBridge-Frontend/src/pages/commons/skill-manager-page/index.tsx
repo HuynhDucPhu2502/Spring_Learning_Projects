@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 import {
   deleteSkillById,
-  getSkillsList,
+  findAllSkills,
   saveSkill,
   updateSkill,
 } from "@/services/skillApi.ts";
@@ -71,7 +71,7 @@ const SkillManagerPage = ({ theme = "blue" }: SkillManagerProps) => {
     setIsLoading(true);
     try {
       const filter = searchName ? `name ~ '*${searchName}*'` : null;
-      const res = (await getSkillsList({ page, size, filter })).data.data;
+      const res = (await findAllSkills({ page, size, filter })).data.data;
 
       setSkills(res.content);
       setTotalElements(res.totalElements);

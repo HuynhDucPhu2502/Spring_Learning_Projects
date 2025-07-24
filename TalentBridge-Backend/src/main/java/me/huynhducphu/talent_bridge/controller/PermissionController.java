@@ -11,7 +11,6 @@ import me.huynhducphu.talent_bridge.dto.request.permission.DefaultPermissionRequ
 import me.huynhducphu.talent_bridge.dto.response.PageResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.permission.DefaultPermissionResponseDto;
 import me.huynhducphu.talent_bridge.model.Permission;
-import me.huynhducphu.talent_bridge.repository.PermissionRepository;
 import me.huynhducphu.talent_bridge.service.PermissionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +34,20 @@ import java.util.List;
 public class PermissionController {
 
     private final PermissionService permissionService;
+
+    @PostMapping
+    @ApiMessage(value = "Tạo quyền hạn")
+    @Operation(
+            summary = "Tạo quyền hạn",
+            description = "Yêu cầu quyền: <b>'GET /permissions/*</b>",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public DefaultPermissionResponseDto savePermission(
+            @Valid @RequestBody DefaultPermissionRequestDto defaultPermissionRequestDto
+    ) {
+        return permissionService.savePermission(defaultPermissionRequestDto);
+    }
+
 
     @GetMapping
     @ApiMessage("Lấy danh sách quyền hạn")
@@ -77,20 +90,6 @@ public class PermissionController {
         return ResponseEntity.ok(list);
     }
 
-
-    @PostMapping
-    @ApiMessage(value = "Tạo quyền hạn")
-    @Operation(
-            summary = "Tạo quyền hạn",
-            description = "Yêu cầu quyền: <b>'GET /permissions/*</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    public DefaultPermissionResponseDto savePermission(
-            @Valid @RequestBody DefaultPermissionRequestDto defaultPermissionRequestDto
-    ) {
-        return permissionService.savePermission(defaultPermissionRequestDto);
-    }
-
     @PutMapping("/{id}")
     @ApiMessage(value = "Cập nhật quyền hạn")
     @Operation(
@@ -98,7 +97,7 @@ public class PermissionController {
             description = "Yêu cầu quyền: <b>'GET /permissions/*</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public DefaultPermissionResponseDto updatePermission(
+    public DefaultPermissionResponseDto updatePermissionById(
             @Valid @RequestBody DefaultPermissionRequestDto defaultPermissionRequestDto,
             @PathVariable Long id
     ) {
@@ -112,7 +111,7 @@ public class PermissionController {
             description = "Yêu cầu quyền: <b>'GET /permissions/*</b>",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public DefaultPermissionResponseDto deletePermission(
+    public DefaultPermissionResponseDto deletePermissionById(
             @PathVariable Long id
     ) {
         return permissionService.deletePermission(id);

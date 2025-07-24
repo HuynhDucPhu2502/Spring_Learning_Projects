@@ -1,7 +1,7 @@
 import { EmptyState } from "@/components/custom/EmptyState";
 import LoadingSpinner from "@/components/custom/LoadingSpinner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk";
-import { getCompaniesList } from "@/services/companyApi";
+import { findAllCompanies } from "@/services/companyApi";
 import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
 import { Building2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ const TopCompaniesSection = () => {
   const fetchCompanies = async () => {
     setIsLoading(true);
     try {
-      const res = (await getCompaniesList({ page: 0, size: 5, filter: null }))
+      const res = (await findAllCompanies({ page: 0, size: 5, filter: null }))
         .data.data;
       setCompanies(res.content);
     } catch (err) {

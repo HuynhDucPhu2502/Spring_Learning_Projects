@@ -14,18 +14,7 @@ export const saveJobForRecruiterPage = (data: JobUpsertDto) => {
   return axiosClient.post("/jobs/company", data);
 };
 
-export const updateJobById = (id: number, data: JobUpsertDto) => {
-  return axiosClient.put(`/jobs/${id}`, data);
-};
-
-export const updateJobByIdForRecruiterCompany = (
-  id: number,
-  data: JobUpsertDto,
-) => {
-  return axiosClient.put(`/jobs/company/${id}`, data);
-};
-
-export const getJobsList = ({
+export const findAllJobs = ({
   page = 0,
   size = 5,
   filter,
@@ -40,6 +29,14 @@ export const getJobsList = ({
   return axiosClient.get<ApiResponse<PageResponseDto<Job>>>(
     `/jobs?${params.toString()}`,
   );
+};
+
+export const findJobById = (id: number) => {
+  return axiosClient.get<ApiResponse<Job>>(`/jobs/${id}`);
+};
+
+export const findJobByCompanyId = (id: number) => {
+  return axiosClient.get<ApiResponse<Job[]>>(`/jobs/companies/${id}`);
 };
 
 export const findAllJobsForRecruiterCompany = ({
@@ -59,12 +56,15 @@ export const findAllJobsForRecruiterCompany = ({
   );
 };
 
-export const getJobById = (id: number) => {
-  return axiosClient.get<ApiResponse<Job>>(`/jobs/${id}`);
+export const updateJobById = (id: number, data: JobUpsertDto) => {
+  return axiosClient.put(`/jobs/${id}`, data);
 };
 
-export const getJobByCompanyId = (id: number) => {
-  return axiosClient.get<ApiResponse<Job[]>>(`/jobs/companies/${id}`);
+export const updateJobByIdForRecruiterCompany = (
+  id: number,
+  data: JobUpsertDto,
+) => {
+  return axiosClient.put(`/jobs/company/${id}`, data);
 };
 
 export const deleteJobById = (id: number) => {

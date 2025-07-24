@@ -9,7 +9,7 @@ import { Plus } from "lucide-react";
 import Pagination from "@/components/custom/Pagination.tsx";
 import {
   deleteRoleById,
-  getRolesList,
+  findAllRoles,
   saveRole,
   updateRoleById,
 } from "@/services/roleApi.ts";
@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import { RoleTable } from "@/pages/admin/access-control-page/role-page/RoleTable.tsx";
 import { RoleForm } from "@/pages/admin/access-control-page/role-page/RoleForm.tsx";
-import { getAllPermissionsNoPaging } from "@/services/permissionApi";
+import { findAllPermissionsNoPaging } from "@/services/permissionApi";
 import type { DefaultPermissionResponseDto } from "@/types/permission";
 import HasPermission from "@/pages/commons/HasPermission.tsx";
 
@@ -72,7 +72,7 @@ const RoleManagerPage = () => {
 
       const filter = filters.length > 0 ? filters.join(" and ") : null;
 
-      const res = (await getRolesList({ page, size, filter })).data.data;
+      const res = (await findAllRoles({ page, size, filter })).data.data;
       setRoles(res.content);
       setTotalElements(res.totalElements);
       setTotalPages(res.totalPages);
@@ -97,7 +97,7 @@ const RoleManagerPage = () => {
       setIsLoading(true);
 
       try {
-        const res = (await getAllPermissionsNoPaging()).data;
+        const res = (await findAllPermissionsNoPaging()).data;
         setPermissions(res.data);
       } catch (err) {
         toast.error(getErrorMessage(err, "Không thể lấy danh sách công ty."));

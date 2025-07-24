@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCompanyById } from "@/services/companyApi.ts";
-import { getJobByCompanyId } from "@/services/jobApi.ts";
+import { findCompanyById } from "@/services/companyApi.ts";
+import { findJobByCompanyId } from "@/services/jobApi.ts";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import LoadingSpinner from "@/components/custom/LoadingSpinner.tsx";
@@ -38,8 +38,8 @@ const CompanyDetailsClientPage = ({ initialCompany }: CompanyDetailsProp) => {
     const fetchCompany = async () => {
       setIsLoading(true);
       try {
-        const res = (await getCompanyById(parseInt(id))).data.data;
-        const jobRes = (await getJobByCompanyId(parseInt(id))).data.data;
+        const res = (await findCompanyById(parseInt(id))).data.data;
+        const jobRes = (await findJobByCompanyId(parseInt(id))).data.data;
         setCompany(res);
         setJobs(jobRes || []);
       } catch (err) {

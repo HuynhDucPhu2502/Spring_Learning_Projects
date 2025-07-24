@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Search, Shield, X } from "lucide-react";
 import { toast } from "sonner";
-import { getRolesList } from "@/services/roleApi.ts";
+import { findAllRoles } from "@/services/roleApi.ts";
 import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import Pagination from "@/components/custom/Pagination.tsx";
 import { EmptyState } from "@/components/custom/EmptyState.tsx";
@@ -62,7 +62,7 @@ const RoleSelection = ({
     try {
       const filter = searchRoleName ? `name ~ '*${searchRoleName}*'` : null;
 
-      const res = await getRolesList({ page, size, filter });
+      const res = await findAllRoles({ page, size, filter });
       const data = res.data.data;
 
       setRoles(data.content);
