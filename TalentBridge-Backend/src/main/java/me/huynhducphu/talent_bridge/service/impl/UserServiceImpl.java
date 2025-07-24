@@ -126,6 +126,9 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
         user.setRole(null);
         user.setCompany(null);
 
+        Company company = companyRepository.findByOwnerEmail(user.getEmail());
+        if (company != null) company.setOwner(null);
+
         List<Resume> resumes = user.getResumes();
         resumes.forEach(x -> s3Service.deleteFileByKey(x.getFileKey()));
 

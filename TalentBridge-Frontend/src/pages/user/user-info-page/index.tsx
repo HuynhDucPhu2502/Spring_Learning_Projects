@@ -46,6 +46,9 @@ const UserInfoPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
+  // Force reload avatar
+  const [avatarVersion, setAvatarVersion] = useState(Date.now());
+
   // Form State
   const [isOpenProfileEditForm, setisOpenProfileEditForm] = useState(false);
   const [isOpenPasswordChangeForm, setisOpenPasswordChangeForm] =
@@ -60,6 +63,9 @@ const UserInfoPage = () => {
     try {
       const res = await getUserDetails();
       setUserDetails(res.data.data);
+
+      // Nếu upload avatar xong, force reload
+      setAvatarVersion(Date.now());
     } catch (err) {
       toast.error(
         getErrorMessage(
@@ -119,7 +125,9 @@ const UserInfoPage = () => {
       else toast.error("File ảnh không được trống");
 
       await selfUserAvatarUpdateApi(data);
+      // Sau khi upload, refetch và tăng version để reload ảnh
       await fetchUserDetails();
+      setAvatarVersion(Date.now());
       toast.success("Cập nhật ảnh đại diện thành công");
       setisOpenAvatarUploadForm(false);
     } catch (err) {
@@ -244,7 +252,11 @@ const UserInfoPage = () => {
               <div className="group relative inline-block">
                 <Avatar className="h-32 w-32 border-4 border-gray-200">
                   <AvatarImage
-                    src={userDetails.logoUrl || "/placeholder.svg"}
+                    src={
+                      userDetails.logoUrl
+                        ? `${userDetails.logoUrl}?v=${avatarVersion}`
+                        : "/placeholder.svg"
+                    }
                     alt={userDetails.name}
                   />
                   <AvatarFallback className="bg-blue-500 text-2xl font-bold text-white">
@@ -435,7 +447,11 @@ const UserInfoPage = () => {
       {/* Avatar Upload Dialog */}
       {isOpenAvatarUploadForm && userDetails && (
         <AvatarUploadForm
-          currentAvatarUrl={userDetails.logoUrl}
+          currentAvatarUrl={
+            userDetails.logoUrl
+              ? `${userDetails.logoUrl}?v=${avatarVersion}`
+              : "/placeholder.svg"
+          }
           userName={userDetails.name}
           onSubmit={handleAvatarUpload}
           onCancel={() => setisOpenAvatarUploadForm(false)}
