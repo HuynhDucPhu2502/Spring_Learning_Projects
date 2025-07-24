@@ -35,5 +35,7 @@ public interface JobRepository extends
         return findAll(combined, pageable);
     }
 
+    List<Job> findDistinctTop3BySkills_NameInOrderByCreatedAtDesc(List<String> skillNames);
+
 
 }

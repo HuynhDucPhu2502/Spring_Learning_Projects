@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công việc phù hợp cho bạn</title>
+    <style>
+        /* Reset styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: #fdf6f0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(255, 107, 53, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 25px 20px;
+        }
+
+        .job-card {
+            border: 2px solid #ffe8d1;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #ffffff 0%, #fffbf7 100%);
+        }
+
+        .job-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.12);
+            border-color: #ff6b35;
+        }
+
+        .job-header {
+            background: linear-gradient(135deg, #ff8c42 0%, #ffab73 100%);
+            color: white;
+            padding: 18px 20px;
+            position: relative;
+        }
+
+        .job-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b35, #ff8c42, #ffab73);
+        }
+
+        .job-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
+            word-wrap: break-word;
+        }
+
+        .company-name {
+            font-size: 15px;
+            opacity: 0.95;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .job-body {
+            padding: 18px 20px;
+        }
+
+        .job-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .job-detail {
+            background: linear-gradient(135deg, #fff4e6 0%, #ffe8d1 100%);
+            color: #cc4125;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #ffab73;
+            box-shadow: 0 1px 3px rgba(255, 107, 53, 0.1);
+            white-space: nowrap;
+            flex-shrink: 0;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .job-description {
+            color: #666;
+            margin-bottom: 18px;
+            line-height: 1.6;
+            font-size: 14px;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .job-description p {
+            margin: 0;
+        }
+
+        .job-description strong {
+            color: #cc4125;
+        }
+
+        .apply-button {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: #ffffff !important;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(255, 107, 53, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .apply-button:hover {
+            background: linear-gradient(135deg, #e55a2b 0%, #e67e3a 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+            color: #ffffff !important;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            margin-top: 30px;
+            padding: 25px 20px;
+            background: linear-gradient(135deg, #fff4e6 0%, #ffe8d1 100%);
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #ffab73;
+        }
+
+        .cta-section h3 {
+            color: #cc4125;
+            font-size: 18px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            color: #e55a2b;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: #ffffff !important;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(135deg, #e55a2b 0%, #e67e3a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35);
+            color: #ffffff !important;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #cc4125 0%, #b8371f 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .footer p:last-child {
+            margin-bottom: 0;
+        }
+
+        .footer a {
+            color: #ffab73;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #ffd4b3;
+            text-decoration: underline;
+        }
+
+        /* Skills Section with Horizontal Scroll */
+        .skills-section {
+            margin-bottom: 16px;
+            padding: 16px;
+            background: linear-gradient(135deg, #fffbf7 0%, #fff4e6 100%);
+            border-radius: 8px;
+            border: 1px solid #ffe8d1;
+        }
+
+        .skills-section h4 {
+            color: #cc4125;
+            font-size: 15px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .skills-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 5px;
+            scrollbar-width: thin;
+            scrollbar-color: #ff8c42 #ffe8d1;
+        }
+
+        /* Custom scrollbar for webkit browsers */
+        .skills-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .skills-container::-webkit-scrollbar-track {
+            background: #ffe8d1;
+            border-radius: 3px;
+        }
+
+        .skills-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #ff8c42, #ffab73);
+            border-radius: 3px;
+        }
+
+        .skills-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, #ff6b35, #ff8c42);
+        }
+
+        .skill-tag {
+            background: linear-gradient(135deg, #fff4e6 0%, #ffe8d1 100%);
+            color: #cc4125;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #ff8c42;
+            box-shadow: 0 1px 2px rgba(255, 107, 53, 0.1);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-width: fit-content;
+        }
+
+        .skill-tag:hover {
+            background: linear-gradient(135deg, #ffe8d1 0%, #ffd4b3 100%);
+            transform: translateY(-1px);
+        }
+
+        /* Scroll hint for better UX */
+        .skills-section::after {
+            content: "← Vuốt để xem thêm →";
+            display: block;
+            text-align: center;
+            font-size: 10px;
+            color: #cc4125;
+            opacity: 0.6;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* Text handling for long content */
+        .job-title,
+        .company-name,
+        .job-description {
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                padding: 20px 15px;
+            }
+
+            .job-details {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .job-detail {
+                text-align: center;
+                max-width: none;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .header p {
+                font-size: 15px;
+            }
+
+            .job-title {
+                font-size: 18px;
+            }
+
+            .company-name {
+                font-size: 14px;
+            }
+
+            .job-header {
+                padding: 16px 18px;
+            }
+
+            .job-body {
+                padding: 16px 18px;
+            }
+
+            .skills-section {
+                padding: 12px 14px;
+            }
+
+            .apply-button,
+            .cta-button {
+                width: 100%;
+                padding: 14px 20px;
+            }
+
+            .cta-section {
+                margin-top: 25px;
+                padding: 20px 15px;
+            }
+
+            .cta-section h3 {
+                font-size: 16px;
+            }
+
+            .skill-tag {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+
+            .skills-container::-webkit-scrollbar {
+                height: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .email-container {
+                margin: 0 10px;
+            }
+
+            .content {
+                padding: 15px 12px;
+            }
+
+            .job-header,
+            .job-body {
+                padding: 14px 16px;
+            }
+
+            .cta-section {
+                padding: 18px 12px;
+            }
+
+            .skills-section::after {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <!-- Header -->
+    <div class="header">
+        <h1>🔥 Cơ Hội Việc Làm Hot</h1>
+        <p>Những công việc tuyệt vời đang chờ đợi bạn!</p>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Job Cards -->
+        <div th:each="job, iterStat : ${jobs}" class="job-card">
+            <div class="job-header">
+                <div class="job-title" th:text="${job.name}">[HN] Business Analyst</div>
+                <div class="company-name"
+                     th:text="${job.company != null ? job.company.name : 'Công ty không xác định'}">Giao Hàng Tiết Kiệm
+                </div>
+            </div>
+            <div class="job-body">
+                <div class="job-details">
+                    <span class="job-detail"
+                          th:text="${job.salary != null ? ('💰 ' + #numbers.formatDecimal(job.salary, 0, 0) + ' VNĐ') : '💰 Thỏa thuận'}">💰 700 VNĐ</span>
+                    <span class="job-detail"
+                          th:text="${job.company != null and job.company.location != null ? ('📍 ' + job.company.location) : '📍 Địa điểm linh hoạt'}">📍 Ha Noi</span>
+                    <span th:if="${job.skills != null and !job.skills.isEmpty()}"
+                          class="job-detail"
+                          th:text="${'🛠️ ' + job.skills.size() + ' kỹ năng yêu cầu'}">🛠️ 5 kỹ năng yêu cầu</span>
+                </div>
+
+                <!-- Skills Section with Horizontal Scroll -->
+                <div th:if="${job.skills != null and !job.skills.isEmpty()}" class="skills-section">
+                    <h4>🔧 Kỹ năng yêu cầu:</h4>
+                    <div class="skills-container">
+                        <span th:each="skill : ${job.skills}" class="skill-tag" th:text="${skill.name}">SQL</span>
+                    </div>
+                </div>
+
+                <a href="#" class="apply-button" th:href="${job.applyUrl}">🎯 Ứng Tuyển Ngay</a>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h3>🌟 Khám Phá Thêm Cơ Hội!</h3>
+            <p>Còn hàng ngàn việc làm hấp dẫn khác đang chờ đợi bạn trên TalentBridge</p>
+            <a href="https://talentbridge.com" class="cta-button"
+               th:href="${homePageUrl ?: 'https://talentbridge.com'}">
+                🏠 Tới Ngay Trang Chủ TalentBridge
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p><strong>TalentBridge Vietnam</strong></p>
+        <p>Kết nối tài năng - Tạo cơ hội - Thành công cùng nhau</p>
+    </div>
+</div>
+</body>
+</html>
