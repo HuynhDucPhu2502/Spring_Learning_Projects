@@ -45,7 +45,7 @@ public class SubscriberServiceImpl implements me.huynhducphu.talent_bridge.servi
             List<Long> skillIds = defaultSubscriberRequestDto
                     .getSkills()
                     .stream()
-                    .map(s -> s.getId())
+                    .map(DefaultSubscriberRequestDto.SkillId::getId)
                     .toList();
             List<Skill> skills = skillRepository.findAllById(skillIds);
 
@@ -75,7 +75,7 @@ public class SubscriberServiceImpl implements me.huynhducphu.talent_bridge.servi
             List<Long> skillIds = defaultSubscriberRequestDto
                     .getSkills()
                     .stream()
-                    .map(s -> s.getId())
+                    .map(DefaultSubscriberRequestDto.SkillId::getId)
                     .toList();
             List<Skill> skills = skillRepository.findAllById(skillIds);
 
