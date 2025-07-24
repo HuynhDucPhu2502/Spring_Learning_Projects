@@ -27,4 +27,8 @@ public class Skill extends BaseEntity {
     @ManyToMany(mappedBy = "skills")
     @ToString.Exclude
     private List<Job> jobs;
+
+    @ManyToMany(mappedBy = "skills", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Subscriber> subscribers;
 }
