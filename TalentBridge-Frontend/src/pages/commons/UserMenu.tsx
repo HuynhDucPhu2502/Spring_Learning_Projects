@@ -1,4 +1,11 @@
-import { User, LogOut, Briefcase, LockKeyhole, Shield } from "lucide-react";
+import {
+  User,
+  LogOut,
+  Briefcase,
+  LockKeyhole,
+  Shield,
+  Mail,
+} from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import {
   DropdownMenu,
@@ -36,7 +43,9 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className={`group flex h-auto items-center gap-3 px-3 py-2 transition-colors ${blackTheme ? "hover:bg-blue-300" : "hover:bg-orange-300"}`}
+          className={`group flex h-auto items-center gap-3 px-3 py-2 transition-colors ${
+            blackTheme ? "hover:bg-blue-300" : "hover:bg-orange-300"
+          }`}
         >
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9 ring-2 ring-blue-100 transition-all group-hover:ring-orange-200">
@@ -90,34 +99,44 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
         <DropdownMenuItem>
           <Link
             to={"/user/info"}
-            className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-blue-50"
+            className="flex cursor-pointer items-center gap-3 rounded-lg"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
               <User className="h-4 w-4 text-gray-600" />
             </div>
             <div className="min-w-0">
               <p className="font-medium">Thông tin người dùng</p>
-              <p className="text-xs text-gray-500">
-                Xem và chỉnh sửa thông tin
-              </p>
             </div>
           </Link>
         </DropdownMenuItem>
+
+        <HasPermission perm={"GET /subscribers/me"}>
+          <DropdownMenuItem>
+            <Link
+              to={"/recruiter"}
+              className="flex cursor-pointer items-center gap-3 rounded-lg"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
+                <Mail className="h-4 w-4 text-gray-600" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-medium">Đăng ký thông báo</p>
+              </div>
+            </Link>
+          </DropdownMenuItem>
+        </HasPermission>
 
         <HasPermission perm={"POST /resumes"}>
           <DropdownMenuItem>
             <Link
               to={"/user/resumes"}
-              className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-blue-50"
+              className="flex cursor-pointer items-center gap-3 rounded-lg"
             >
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
                 <Briefcase className="h-4 w-4 text-gray-600" />
               </div>
               <div className="min-w-0">
                 <p className="font-medium">Hồ sơ tuyển dụng</p>
-                <p className="text-xs text-gray-500">
-                  Hồ sơ bạn đã nộp cho ứng tuyển
-                </p>
               </div>
             </Link>
           </DropdownMenuItem>
@@ -126,16 +145,13 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
         <DropdownMenuItem>
           <Link
             to={"/user/sessions"}
-            className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-blue-50"
+            className="flex cursor-pointer items-center gap-3 rounded-lg"
           >
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
               <LockKeyhole className="h-4 w-4 text-gray-600" />
             </div>
             <div className="min-w-0">
               <p className="font-medium">Bảo mật</p>
-              <p className="text-xs text-gray-500">
-                Xem các phiên đăng nhập tài khoản bạn
-              </p>
             </div>
           </Link>
         </DropdownMenuItem>
@@ -144,16 +160,13 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
           <DropdownMenuItem>
             <Link
               to={"/recruiter"}
-              className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-purple-200"
+              className="flex cursor-pointer items-center gap-3 rounded-lg"
             >
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-500">
                 <Briefcase className="h-4 w-4 text-white" />
               </div>
               <div className="min-w-0">
                 <p className="font-medium">Tuyển dụng</p>
-                <p className="text-xs text-gray-500">
-                  Trang đặc quyền giành cho RECRUITER
-                </p>
               </div>
             </Link>
           </DropdownMenuItem>
@@ -163,16 +176,13 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
           <DropdownMenuItem>
             <Link
               to={"/admin"}
-              className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-blue-200"
+              className="flex cursor-pointer items-center gap-3 rounded-lg"
             >
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500">
                 <Shield className="h-4 w-4 text-white" />
               </div>
               <div className="min-w-0">
                 <p className="font-medium">Quản trị</p>
-                <p className="text-xs text-gray-500">
-                  Trang đặc quyền giành cho ADMIN
-                </p>
               </div>
             </Link>
           </DropdownMenuItem>
@@ -182,14 +192,13 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
 
         <DropdownMenuItem
           onClick={handleLogout}
-          className="flex cursor-pointer items-center gap-3 rounded-lg p-3 text-red-600 hover:bg-red-50 hover:text-red-700"
+          className="flex cursor-pointer items-center gap-3 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-700"
         >
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100">
             <LogOut className="h-4 w-4 text-red-600" />
           </div>
           <div className="min-w-0">
             <p className="font-medium">Đăng xuất</p>
-            <p className="text-xs text-red-500">Thoát khỏi hệ thống</p>
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

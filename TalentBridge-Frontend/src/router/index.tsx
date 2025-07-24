@@ -28,6 +28,7 @@ import PermissionManagerPage from "@/pages/admin/access-control-page/permission-
 import RoleManagerPage from "@/pages/admin/access-control-page/role-page";
 import UserManagerPage from "@/pages/admin/user-page/user-manager-page";
 import UserUpsertPage from "@/pages/admin/user-page/user-upsert-page";
+import UserSubscriberPage from "@/pages/user/user-subscriber-page";
 
 // RECRUITER PAGE
 import RecruiterPage from "@/pages/recruiter";
@@ -36,11 +37,11 @@ import ResumeManagerRecruiterPage from "@/pages/recruiter/resume-page";
 import JobManagerRecruiterPage from "@/pages/recruiter/job-page";
 import JobUpsertRecruiterPage from "@/pages/recruiter/job-upsert-page";
 import CompanyManagerRecruiterPage from "@/pages/recruiter/self-company-page";
+import MemberManagePage from "@/pages/recruiter/member-page";
 
 // Components
 import ErrorPage from "@/components/custom/ErrorPage";
 import { ProtectedRoute } from "@/pages/commons/ProtectedRoute.tsx";
-import MemberManagePage from "@/pages/recruiter/member-page";
 
 const router = createBrowserRouter([
   // =========================
@@ -66,6 +67,17 @@ const router = createBrowserRouter([
             element: <Navigate to={"info"} />,
           },
           { path: "info", element: <UserInfoPage /> },
+          {
+            path: "subscriber",
+            element: (
+              <ProtectedRoute
+                to="/user"
+                requiredPermission="GET /subscribers/me"
+              >
+                <UserSubscriberPage />
+              </ProtectedRoute>
+            ),
+          },
           {
             path: "resumes",
             element: (

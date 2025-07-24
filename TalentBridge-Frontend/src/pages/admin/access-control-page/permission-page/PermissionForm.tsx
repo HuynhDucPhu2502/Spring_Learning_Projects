@@ -36,6 +36,7 @@ const MODULES = [
   "SKILL",
   "JOB",
   "RESUME",
+  "SUBSCRIBER",
   "ACCESS-CONTROLLER",
 ];
 const METHODS = ["GET", "POST", "PUT", "DELETE"];

@@ -1,9 +1,10 @@
-import { User, BarChart3, Settings } from "lucide-react";
+import { User, BarChart3, Settings, Mail } from "lucide-react";
 import { useAppSelector } from "@/features/hooks";
 import { Navigate, NavLink, Outlet } from "react-router-dom";
 
 const navigationItems = [
   { title: "Thông tin", icon: User, href: "info" },
+  { title: "Đăng ký thông báo", icon: Mail, href: "subscriber" },
   { title: "Hồ sơ tuyển dụng", icon: BarChart3, href: "resumes" },
   { title: "Bảo mật", icon: Settings, href: "sessions" },
 ];
@@ -33,9 +34,12 @@ export default function UserPage() {
             <ul className="space-y-2">
               {navigationItems
                 .filter((item) => {
-                  if (item.title === "Hồ sơ tuyển dụng") {
+                  if (item.title === "Hồ sơ tuyển dụng")
                     return user.permissions?.includes("POST /resumes");
-                  }
+
+                  if (item.title === "Đăng ký thông báo")
+                    return user.permissions?.includes("GET /subscribers/me");
+
                   return true;
                 })
                 .map((item) => (
