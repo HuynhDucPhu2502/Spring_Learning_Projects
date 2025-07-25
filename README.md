@@ -26,13 +26,12 @@ TalentBridge là nền tảng tuyển dụng thế hệ mới – nơi kết n�
 
 - Quản lý toàn bộ hệ thống: duyệt, chỉnh sửa, khóa/xóa mọi loại tài khoản.
 - Tạo, chỉnh sửa và phân quyền vai trò cực kỳ chi tiết cho từng tài khoản, nhóm người dùng.
-- Theo dõi hoạt động, log hệ thống, xử lý vi phạm, quản lý nội dung, cấu hình và hỗ trợ kỹ thuật toàn diện.
 
 ---
 
 ## 🚩 Tổng quan công nghệ
 
-TalentBridge kết hợp sức mạnh của **Spring Boot** và **React**, hướng tới trải nghiệm nhanh, ổn định, dễ bảo trì — phù hợp cả startup lẫn doanh nghiệp lớn.
+TalentBridge kết hợp sức mạnh của **Spring Boot** và **React**
 
 ---
 
@@ -45,7 +44,7 @@ TalentBridge kết hợp sức mạnh của **Spring Boot** và **React**, hư�
 - **Spring Mail + Thymeleaf**: Gửi email tự động, template đẹp, cá nhân hóa nội dung gửi đi.
 - **Cronjob**: Gửi email gợi ý việc làm mỗi 8h sáng — luôn giữ kết nối với user.
 - **Swagger**: Docs API cho dev/test, nhanh gọn, dễ mở rộng.
-- **Và hơn thế nữa**: CORS, cookie, global exception, giới hạn page size, tối ưu hiệu năng, bảo mật đa tầng.
+- **Và hơn thế nữa**: CORS, cookie, global exception, giới hạn page size.
 
 ---
 
@@ -59,16 +58,16 @@ TalentBridge kết hợp sức mạnh của **Spring Boot** và **React**, hư�
 - **React Quill + dompurify**: Editor WYSIWYG an toàn, chống XSS tối đa.
 - **PDF Viewer**: Xem trực tiếp file PDF trên web, không cần tải về.
 - **React Router v7**: Điều hướng đa trang, có route bảo vệ role-based.
-- **Tiện ích nâng cao**: Dark mode, theming, toast, animation, icon, tooltip, avatar, html-to-text...
 
 ---
 
 ## ⚙️ Cấu hình backend (`application.properties`)
 
 > **Chạy file InitDataScript.sql (Dùng HeidiSQL hoặc cái khác) để init data cơ bản**
-- Tạo các table cơ bản 
-- Tạo role ADMIN, RECRUITER, USER 
-- Tạo User ADMIN với mật khẩu 123456 
+
+- Tạo các table cơ bản
+- Tạo role ADMIN, RECRUITER, USER
+- Tạo User ADMIN với mật khẩu 123456
 
 > **Config các service Backend dùng tại `application.properties` với nội dung sau, tuỳ chỉnh các biến theo môi trường của bạn**
 
@@ -117,5 +116,74 @@ spring.mail.password=
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 ```
+
+> **Config `S3 Service` trên AWS**
+
+`Bucket policy`
+Thay bucket-name bằng bucket của bạn
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::<bucket-name>/public/*"
+        },
+        {
+            "Sid": "Statement2",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::<bucket-name>/company-logos/*"
+        },
+        {
+            "Sid": "Statement3",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::<bucket-name>/avatar/*"
+        }
+    ]
+}
+```
+
+`CROS Config`
+
+```
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "GET",
+            "HEAD",
+            "PUT",
+            "POST",
+            "DELETE"
+        ],
+        "AllowedOrigins": [
+            "*"
+        ],
+        "ExposeHeaders": [
+            "ETag",
+            "Content-Length"
+        ]
+    }
+]
+```
+
+`Block public accessg`
+
+**Bỏ chọn** hai dòng sau:
+
+- Block public access to buckets and objects granted through new public bucket or access point policies
+- Block public and cross-account access to buckets and objects through any public bucket or access point policies
+
+> ✔ Giữ nguyên hai dòng ACL được **check** để bảo mật tốt hơn (nếu không dùng ACL).
 
 ---
