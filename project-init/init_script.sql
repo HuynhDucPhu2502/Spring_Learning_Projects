@@ -396,7 +396,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Dumping data for table talentbridge_db.users: ~1 rows (approximately)
 INSERT INTO `users` (`id`, `email`, `name`, `password`, `created_at`, `created_by`, `modified_by`, `updated_at`, `address`, `gender`, `company_id`, `role_id`, `logo_url`, `dob`) VALUES
-	(7, 'admin@gmail.com', 'ADMIN', '$2a$10$BYbZRlqTUA1RTKpG6QXlg.zuJqrV5cQcy7VP9fFg8WYJo9aygzEXa', NULL, NULL, 'admin@gmail.com', '2025-07-24 10:35:52.547706', 'TalentBridge', 'MALE', NULL, 3, 'https://huynhducphu-24062025.s3.ap-southeast-2.amazonaws.com/avatar/7', '2003-02-25');
+	(7, 'admin@gmail.com', 'ADMIN', '$2a$10$BYbZRlqTUA1RTKpG6QXlg.zuJqrV5cQcy7VP9fFg8WYJo9aygzEXa', NULL, NULL, 'admin@gmail.com', '2025-07-24 10:35:52.547706', 'TalentBridge', 'MALE', NULL, 3, NULL, '2003-02-25');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
