@@ -1,7 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
 -- Server version:               11.6.2-MariaDB - mariadb.org binary distribution
--- Server OS:                    Win64
 -- HeidiSQL Version:             12.8.0.6908
 -- --------------------------------------------------------
 
@@ -16,8 +14,8 @@
 
 
 -- Dumping database structure for talentbridge_db
-CREATE DATABASE IF NOT EXISTS `talentbridge2_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci */;
-USE `talentbridge2_db`;
+CREATE DATABASE IF NOT EXISTS `talentbridge_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci */;
+USE `talentbridge_db`;
 
 -- Dumping structure for table talentbridge_db.companies
 CREATE TABLE IF NOT EXISTS `companies` (
