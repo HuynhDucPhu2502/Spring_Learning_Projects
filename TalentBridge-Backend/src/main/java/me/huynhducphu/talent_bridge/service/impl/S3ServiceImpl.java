@@ -50,7 +50,7 @@ public class S3ServiceImpl implements me.huynhducphu.talent_bridge.service.S3Ser
                 return String.format("https://%s.s3.%s.amazonaws.com/%s", awsBucketName, awsRegion, key);
             else return key;
         } catch (IOException e) {
-            throw new S3UploadException("Lỗi khi đọc dữ liệu từ tệp logo");
+            throw new S3UploadException("Lỗi khi đọc dữ liệu từ tệp");
         } catch (Exception e) {
             throw new S3UploadException("Lỗi khi upload file lên S3");
         }
