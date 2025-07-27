@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -193,6 +194,7 @@ public class UserServiceImpl implements me.huynhducphu.talent_bridge.service.Use
             user.setLogoUrl(url);
         }
 
+        user.setUpdatedAt(Instant.now());
         userRepository.saveAndFlush(user);
     }
 

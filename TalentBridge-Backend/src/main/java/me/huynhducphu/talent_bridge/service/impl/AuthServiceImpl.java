@@ -237,7 +237,8 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
                 companyId,
                 role.getName(),
                 permissions,
-                user.getLogoUrl()
+                user.getLogoUrl(),
+                user.getUpdatedAt().toString()
         );
     }
 

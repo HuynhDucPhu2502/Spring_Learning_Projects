@@ -20,4 +20,5 @@ public class UserSessionResponseDto {
     private String role;
     private List<String> permissions;
     private String logoUrl;
+    private String updatedAt;
 }
