@@ -25,6 +25,7 @@ import { logout } from "@/features/slices/auth/authThunk.ts";
 import { Link } from "react-router-dom";
 import { Badge } from "../../components/ui/badge.tsx";
 import HasPermission from "./HasPermission.tsx";
+import { useEffect, useState } from "react";
 
 interface UserMenuProps {
   blackTheme?: boolean;
@@ -34,9 +35,17 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
+  const [avatarVersion, setAvatarVersion] = useState(Date.now());
+
   const handleLogout = () => {
     dispatch(logout());
   };
+
+  useEffect(() => {
+    if (user?.updatedAt) {
+      setAvatarVersion(Date.now());
+    }
+  }, [user?.updatedAt]);
 
   return (
     <DropdownMenu>
@@ -49,7 +58,14 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
         >
           <div className="flex items-center gap-3">
             <Avatar className="h-9 w-9 ring-2 ring-blue-100 transition-all group-hover:ring-orange-200">
-              <AvatarImage src={user.logoUrl} alt={user?.name || "User"} />
+              <AvatarImage
+                src={
+                  user.logoUrl
+                    ? `${user.logoUrl}?v=${avatarVersion}`
+                    : undefined
+                }
+                alt={user?.name || "User"}
+              />
               <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 font-semibold text-white">
                 {user?.name
                   ?.split(" ")
@@ -71,7 +87,9 @@ const UserMenu = ({ blackTheme }: UserMenuProps) => {
         <div className="mb-2 flex items-center gap-3 rounded-lg bg-gradient-to-r from-blue-50 to-blue-100 p-3">
           <Avatar className="h-12 w-12 ring-2 ring-white">
             <AvatarImage
-              src="/placeholder.svg?height=48&width=48"
+              src={
+                user.logoUrl ? `${user.logoUrl}?v=${avatarVersion}` : undefined
+              }
               alt={user?.name || "User"}
             />
             <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 font-semibold text-white">

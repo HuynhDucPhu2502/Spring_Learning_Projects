@@ -13,7 +13,16 @@ type AuthState = {
 };
 
 const initialValue: AuthState = {
-  user: { id: "", name: "", email: "", logoUrl: "", permissions: [], role: "" },
+  user: {
+    id: "",
+    name: "",
+    email: "",
+    logoUrl: "",
+    permissions: [],
+    role: "",
+    companyId: "",
+    updatedAt: "",
+  },
   isLogin: false,
   isLoading: false,
   error: null,
@@ -60,6 +69,9 @@ const authSlice = createSlice({
           email: "",
           logoUrl: "",
           permissions: [],
+          role: "",
+          companyId: "",
+          updatedAt: "",
         };
         state.isLogin = false;
         state.isLoading = false;

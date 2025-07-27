@@ -14,6 +14,7 @@ export interface UserSessionResponseDto {
   role: string;
   companyId: string;
   logoUrl: string;
+  updatedAt: string;
 }
 
 export interface UserDetailsResponseDto {

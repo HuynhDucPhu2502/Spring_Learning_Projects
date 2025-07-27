@@ -46,7 +46,7 @@ const UserInfoPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Force reload avatar
+  // Avatar versionning
   const [avatarVersion, setAvatarVersion] = useState(Date.now());
 
   // Form State
@@ -64,7 +64,6 @@ const UserInfoPage = () => {
       const res = await getUserDetails();
       setUserDetails(res.data.data);
 
-      // Nếu upload avatar xong, force reload
       setAvatarVersion(Date.now());
     } catch (err) {
       toast.error(
@@ -125,8 +124,8 @@ const UserInfoPage = () => {
       else toast.error("File ảnh không được trống");
 
       await selfUserAvatarUpdateApi(data);
-      // Sau khi upload, refetch và tăng version để reload ảnh
       await fetchUserDetails();
+      dispatch(getAccount());
       setAvatarVersion(Date.now());
       toast.success("Cập nhật ảnh đại diện thành công");
       setisOpenAvatarUploadForm(false);
