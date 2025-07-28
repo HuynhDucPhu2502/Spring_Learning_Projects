@@ -43,7 +43,7 @@ TalentBridge kết hợp sức mạnh của **Spring Boot** và **React**
 - **Redis + Spring Cache**: Quản lý refresh_token và link tạm thời, block link hết hạn, giữ dữ liệu luôn riêng tư.
 - **Spring Mail + Thymeleaf**: Gửi email tự động, template đẹp, cá nhân hóa nội dung gửi đi.
 - **Cronjob**: Gửi email gợi ý việc làm mỗi 8h sáng — luôn giữ kết nối với user.
-- **Swagger**: Swagger được cấu hình sẵn trong dự án. Không cần cài thêm, chỉ cần chạy ứng dụng là có thể truy cập tài liệu API.
+- **Swagger**: Swagger được cấu hình sẵn trong dự án. Không cần cài thêm, chỉ cần chạy ứng dụng là có thể truy cập tài liệu API. (Khi App khởi động, Swagger sẽ hiện ở: http://localhost:8080/swagger-ui/index.html)
 
 <p align="center"> <img src="project-showcase/swagger-ui.PNG" alt="Swagger UI Screenshot" width="80%" /> </p>
 
