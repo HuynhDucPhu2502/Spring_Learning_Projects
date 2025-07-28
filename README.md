@@ -3,7 +3,7 @@
 TalentBridge là nền tảng tuyển dụng thế hệ mới – nơi kết nối nhà tuyển dụng, ứng viên và admin trong một hệ sinh thái tiện lợi, minh bạch và bảo mật. Không chỉ đơn thuần là website tra cứu việc làm, TalentBridge còn giúp tối ưu hóa quy trình tuyển dụng, trải nghiệm người dùng và hiệu quả quản lý cho mọi bên.
 
 <p align="center">
-  <img src="TalentBridge-Frontend/public/web-logo.png" alt="TalentBridge Logo" width="160" />
+  <img src="project-showcase/logo.png" alt="TalentBridge Logo" width="160" />
 </p>
 
 ## 👥 3 nhóm người dùng – Mỗi vai trò, mỗi trải nghiệm
@@ -43,8 +43,9 @@ TalentBridge kết hợp sức mạnh của **Spring Boot** và **React**
 - **Redis + Spring Cache**: Quản lý refresh_token và link tạm thời, block link hết hạn, giữ dữ liệu luôn riêng tư.
 - **Spring Mail + Thymeleaf**: Gửi email tự động, template đẹp, cá nhân hóa nội dung gửi đi.
 - **Cronjob**: Gửi email gợi ý việc làm mỗi 8h sáng — luôn giữ kết nối với user.
-- **Swagger**: Docs API cho dev/test, nhanh gọn, dễ mở rộng.
-- **Và hơn thế nữa**: CORS, cookie, global exception, giới hạn page size.
+- **Swagger**: Swagger được cấu hình sẵn trong dự án. Không cần cài thêm, chỉ cần chạy ứng dụng là có thể truy cập tài liệu API.
+
+<p align="center"> <img src="project-showcase/swagger-ui.PNG" alt="Swagger UI Screenshot" width="80%" /> </p>
 
 ---
 
