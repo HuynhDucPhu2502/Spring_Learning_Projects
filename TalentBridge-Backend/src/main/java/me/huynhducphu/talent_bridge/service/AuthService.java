@@ -26,9 +26,9 @@ public interface AuthService {
 
     AuthResult handleRefresh(String refreshToken, SessionMetaRequest sessionMetaRequest);
 
-    void removeSession(String sessionId);
+    void removeSelfSession(String sessionId);
 
-    List<SessionMetaResponse> getAllSessionMetas(String refreshToken);
+    List<SessionMetaResponse> getAllSelfSessionMetas(String refreshToken);
 
     UserSessionResponseDto getCurrentUser();
 

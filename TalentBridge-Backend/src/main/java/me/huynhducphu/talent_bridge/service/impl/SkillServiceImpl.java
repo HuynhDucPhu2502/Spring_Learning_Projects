@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.skill.CreateSkillRequestDto;
 import me.huynhducphu.talent_bridge.dto.request.skill.UpdateSkillResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.skill.DefaultSkillResponseDto;
-import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
+import me.huynhducphu.talent_bridge.advice.exception.ResourceAlreadyExistsException;
 import me.huynhducphu.talent_bridge.model.Skill;
 import me.huynhducphu.talent_bridge.repository.SkillRepository;
 import org.springframework.data.domain.Page;

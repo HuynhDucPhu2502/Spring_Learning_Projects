@@ -29,8 +29,7 @@ public class SubscriberController {
     @PreAuthorize("hasAuthority('POST /subscribers/me')")
     @Operation(
             summary = "Tạo subscriber cho người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>POST /subscribers/me</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>POST /subscribers/me</b>"
     )
     public ResponseEntity<DefaultSubscriberResponseDto> saveSelfSubscriber(
             @Valid @RequestBody DefaultSubscriberRequestDto defaultSubscriberRequestDto
@@ -43,8 +42,7 @@ public class SubscriberController {
     @PreAuthorize("hasAuthority('GET /subscribers/me')")
     @Operation(
             summary = "Lấy subscriber cho người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>GET /subscribers/me</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /subscribers/me</b>"
     )
     public ResponseEntity<DefaultSubscriberResponseDto> findSelfSubscriber() {
         return ResponseEntity.ok(subscriberService.findSelfSubscriber());
@@ -55,8 +53,7 @@ public class SubscriberController {
     @PreAuthorize("hasAuthority('PUT /subscribers/me')")
     @Operation(
             summary = "Cập nhật subscriber cho người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>PUT /subscribers/me</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>PUT /subscribers/me</b>"
     )
     public ResponseEntity<DefaultSubscriberResponseDto> updateSelfSubscriber(
             @Valid @RequestBody DefaultSubscriberRequestDto defaultSubscriberRequestDto
@@ -69,8 +66,7 @@ public class SubscriberController {
     @PreAuthorize("hasAuthority('DELETE /subscribers/me')")
     @Operation(
             summary = "Xóa subscriber cho người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>DELETE /subscribers/me</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>DELETE /subscribers/me</b>"
     )
     public ResponseEntity<Void> deleteSelfSubscriber() {
         subscriberService.deleteSelfSubscriber();

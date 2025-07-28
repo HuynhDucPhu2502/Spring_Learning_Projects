@@ -151,7 +151,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     }
 
     @Override
-    public List<SessionMetaResponse> getAllSessionMetas(String refreshToken) {
+    public List<SessionMetaResponse> getAllSelfSessionMetas(String refreshToken) {
         String email = jwtDecoder.decode(refreshToken).getSubject();
 
         User user = userRepository
@@ -197,7 +197,7 @@ public class AuthServiceImpl implements me.huynhducphu.talent_bridge.service.Aut
     }
 
     @Override
-    public void removeSession(String sessionId) {
+    public void removeSelfSession(String sessionId) {
         String[] part = sessionId.split(":");
         String sessionUserId = part[3];
 

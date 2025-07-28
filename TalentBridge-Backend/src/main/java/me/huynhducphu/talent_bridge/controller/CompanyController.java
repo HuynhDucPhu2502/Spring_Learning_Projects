@@ -2,7 +2,7 @@ package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +38,7 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('POST /companies')")
     @Operation(
             summary = "Tạo Company",
-            description = "Yêu cầu quyền: <b>POST /companies</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>POST /companies</b>"
     )
     public ResponseEntity<?> saveCompany(
             @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
@@ -55,8 +54,7 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('POST /companies/me')")
     @Operation(
             summary = "Tạo Company cho người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>POST /companies/me</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>POST /companies/me</b>"
     )
     public ResponseEntity<?> saveSelfCompany(
             @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
@@ -72,9 +70,9 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('GET /companies') OR isAnonymous()")
     @Operation(
             summary = "Lấy danh sách Company",
-            description = "Yêu cầu quyền: <b>GET /companies</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /companies</b>"
     )
+    @SecurityRequirements()
     public ResponseEntity<?> findAllCompanies(
             @Filter Specification<Company> spec,
             @PageableDefault(size = 5) Pageable pageable
@@ -97,9 +95,9 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('GET /companies/with-jobs-count') OR isAnonymous()")
     @Operation(
             summary = "Lấy danh sách Company kèm với số lượng nghề",
-            description = "Yêu cầu quyền: <b>GET /companies/with-jobs-count</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /companies/with-jobs-count</b>"
     )
+    @SecurityRequirements()
     public ResponseEntity<?> findAllCompaniesWithJobsCount(
             @Filter Specification<Company> spec,
             @PageableDefault(size = 9) Pageable pageable
@@ -122,9 +120,9 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('GET /companies/{id}') OR isAnonymous()")
     @Operation(
             summary = "Lấy Company theo id",
-            description = "Yêu cầu quyền: <b>GET /companies/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /companies/{id}</b>"
     )
+    @SecurityRequirements()
     public ResponseEntity<DefaultCompanyResponseDto> findCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.findCompanyById(id));
     }
@@ -134,8 +132,7 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('GET /companies/me')")
     @Operation(
             summary = "Lấy Company theo người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>GET /companies/me</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /companies/me</b>"
     )
     public ResponseEntity<?> findSelfCompany() {
         return ResponseEntity.ok(
@@ -148,8 +145,7 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('GET /companies/me/users')")
     @Operation(
             summary = "Lấy danh sách users recruiter của người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>GET /companies/me/users</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /companies/me/users</b>"
     )
     public ResponseEntity<?> findAllRecruitersBySelfCompany() {
         return ResponseEntity.ok(
@@ -162,8 +158,7 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('PUT /companies/{id}')")
     @Operation(
             summary = "Cập nhật Company theo id",
-            description = "Yêu cầu quyền: <b>PUT /companies/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>PUT /companies/{id}</b>"
     )
     public ResponseEntity<?> updateCompanyById(
             @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
@@ -178,8 +173,7 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('PUT /companies/me')")
     @Operation(
             summary = "Cập nhật Company của người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>PUT /companies/me</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>PUT /companies/me</b>"
     )
     public ResponseEntity<?> updateSelfCompany(
             @Valid @RequestPart("company") DefaultCompanyRequestDto defaultCompanyRequestDto,
@@ -195,8 +189,7 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('DELETE /companies/{id}')")
     @Operation(
             summary = "Xóa company theo id",
-            description = "Yêu cầu quyền: <b>DELETE /companies/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>DELETE /companies/{id}</b>"
     )
     public ResponseEntity<?> deleteCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(
@@ -213,8 +206,7 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('POST /companies/me/users')")
     @Operation(
             summary = "Thêm người dùng khác vào company của người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>POST /companies/me/users</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>POST /companies/me/users</b>"
     )
     public ResponseEntity<Void> addMemberToCompany(
             @Valid @RequestBody RecruiterRequestDto recruiterRequestDto
@@ -228,8 +220,7 @@ public class CompanyController {
     @PreAuthorize("hasAuthority('PUT /companies/me/users')")
     @Operation(
             summary = "Loại bỏ người dùng khác khỏi company của người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>PUT /companies/me/users</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>PUT /companies/me/users</b>"
     )
     public ResponseEntity<Void> removeMemberFromCompany(
             @Valid @RequestBody RecruiterRequestDto recruiterRequestDto
@@ -237,5 +228,5 @@ public class CompanyController {
         companyService.removeMemberFromCompany(recruiterRequestDto);
         return ResponseEntity.ok().build();
     }
-    
+
 }

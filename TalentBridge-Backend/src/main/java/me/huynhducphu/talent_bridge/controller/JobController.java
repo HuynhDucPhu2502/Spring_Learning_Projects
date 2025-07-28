@@ -2,7 +2,7 @@ package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +36,7 @@ public class JobController {
     @PreAuthorize("hasAuthority('POST /jobs')")
     @Operation(
             summary = "Tạo Job",
-            description = "Yêu cầu quyền: <b>POST /jobs</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>POST /jobs</b>"
     )
     public ResponseEntity<?> saveJob(@Valid @RequestBody JobRequestDto jobRequestDto) {
         return ResponseEntity.ok(jobService.saveJob(jobRequestDto, false));
@@ -48,8 +47,7 @@ public class JobController {
     @PreAuthorize("hasAuthority('POST /jobs/company')")
     @Operation(
             summary = "Tạo Job thuộc company của người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>POST /jobs/company</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>POST /jobs/company</b>"
     )
     public ResponseEntity<?> saveJobForRecruiterPage(@Valid @RequestBody JobRequestDto jobRequestDto) {
         return ResponseEntity.ok(jobService.saveJob(jobRequestDto, true));
@@ -60,9 +58,9 @@ public class JobController {
     @PreAuthorize("hasAuthority('GET /jobs') OR isAnonymous()")
     @Operation(
             summary = "Lấy danh sách Job",
-            description = "Yêu cầu quyền: <b>GET /jobs</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /jobs</b>"
     )
+    @SecurityRequirements()
     public ResponseEntity<?> findAllJobs(
             @Filter Specification<Job> spec,
             @PageableDefault(size = 5) Pageable pageable
@@ -85,9 +83,9 @@ public class JobController {
     @PreAuthorize("hasAuthority('GET /jobs/{id}') OR isAnonymous()")
     @Operation(
             summary = "Lấy Job theo id",
-            description = "Yêu cầu quyền: <b>GET /jobs/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /jobs/{id}</b>"
     )
+    @SecurityRequirements()
     public ResponseEntity<?> findJobById(@PathVariable Long id) {
         return ResponseEntity.ok(jobService.findJobById(id));
     }
@@ -97,9 +95,9 @@ public class JobController {
     @PreAuthorize("hasAuthority('GET /jobs/companies/{id}') OR isAnonymous()")
     @Operation(
             summary = "Lấy Job theo Company",
-            description = "Yêu cầu quyền: <b>GET /jobs/companies/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /jobs/companies/{id}</b>"
     )
+    @SecurityRequirements()
     public ResponseEntity<?> findJobByCompanyId(@PathVariable Long id) {
         return ResponseEntity.ok(jobService.findJobByCompanyId(id));
     }
@@ -109,8 +107,7 @@ public class JobController {
     @PreAuthorize("hasAuthority('GET /jobs/company')")
     @Operation(
             summary = "Lấy danh sách Job theo company của người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>GET /jobs/company</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /jobs/company</b>"
     )
     public ResponseEntity<?> findAllJobsForRecruiterCompany(
             @Filter Specification<Job> spec,
@@ -134,8 +131,7 @@ public class JobController {
     @PreAuthorize("hasAuthority('PUT /jobs/{id}')")
     @Operation(
             summary = "Cập nhật Job theo id",
-            description = "Yêu cầu quyền: <b>PUT /jobs/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>PUT /jobs/{id}</b>"
     )
     public ResponseEntity<?> updateJobById(
             @PathVariable Long id,
@@ -149,8 +145,7 @@ public class JobController {
     @PreAuthorize("hasAuthority('PUT /jobs/company/{id}')")
     @Operation(
             summary = "Cập nhật Job theo id thuộc company của người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>PUT /jobs/company/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>PUT /jobs/company/{id}</b>"
     )
     public ResponseEntity<?> updateJobByIdForRecruiterCompany(
             @PathVariable Long id,
@@ -165,8 +160,7 @@ public class JobController {
     @PreAuthorize("hasAuthority('DELETE /jobs/{id}')")
     @Operation(
             summary = "Xóa Job theo id",
-            description = "Yêu cầu quyền: <b>DELETE jobs/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>DELETE jobs/{id}</b>"
     )
     public ResponseEntity<?> deleteJobById(@PathVariable Long id) {
         return ResponseEntity.ok(jobService.deleteJobById(id));
@@ -177,8 +171,7 @@ public class JobController {
     @PreAuthorize("hasAuthority('DELETE /jobs/company/{id}')")
     @Operation(
             summary = "Xóa Job theo id thuộc company của người dùng hiện tại",
-            description = "Yêu cầu quyền: <b>DELETE jobs/company/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>DELETE jobs/company/{id}</b>"
     )
     public ResponseEntity<?> deleteJobByIdForRecruiterCompany(@PathVariable Long id) {
         return ResponseEntity.ok(jobService.deleteJobByIdForRecruiterCompany(id));

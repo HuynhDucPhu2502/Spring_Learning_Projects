@@ -2,7 +2,7 @@ package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +37,11 @@ public class SkillController {
     @PreAuthorize("hasAuthority('POST /skills')")
     @Operation(
             summary = "Tạo Skill",
-            description = "Yêu cầu quyền: <b>POST /skills</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>POST /skills</b>"
     )
-    public ResponseEntity<DefaultSkillResponseDto> saveSkill(@Valid @RequestBody CreateSkillRequestDto createSkillRequestDto) {
+    public ResponseEntity<DefaultSkillResponseDto> saveSkill(
+            @Valid @RequestBody CreateSkillRequestDto createSkillRequestDto
+    ) {
         return ResponseEntity
                 .ok(skillService.saveSkill(createSkillRequestDto));
     }
@@ -50,9 +51,9 @@ public class SkillController {
     @PreAuthorize("hasAuthority('GET /skills') OR isAnonymous()")
     @Operation(
             summary = "Lấy danh sách Skill",
-            description = "Yêu cầu quyền: <b>GET /skills</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /skills</b>"
     )
+    @SecurityRequirements()
     public ResponseEntity<PageResponseDto<DefaultSkillResponseDto>> findAllSkills(
             @Filter Specification<Skill> spec,
             @PageableDefault(size = 5) Pageable pageable) {
@@ -70,27 +71,24 @@ public class SkillController {
         return ResponseEntity.ok(res);
     }
 
-    // NON USE
     @GetMapping("/{id}")
     @ApiMessage(value = "Lấy Skill theo id")
     @PreAuthorize("hasAuthority('GET /skills/{id}') OR isAnonymous()")
     @Operation(
             summary = "Lấy Skill theo id",
-            description = "Yêu cầu quyền: <b>GET /skills/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /skills/{id}</b>"
     )
+    @SecurityRequirements()
     public ResponseEntity<DefaultSkillResponseDto> findSkillById(@PathVariable Long id) {
         return ResponseEntity.ok(skillService.findSkillById(id));
     }
-
 
     @PutMapping
     @ApiMessage(value = "Cập nhật Skill")
     @PreAuthorize("hasAuthority('PUT /skills')")
     @Operation(
             summary = "Cập nhật Skill",
-            description = "Yêu cầu quyền: <b>PUT /skills</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>PUT /skills</b>"
     )
     public ResponseEntity<DefaultSkillResponseDto> updateSkill(
             @Valid @RequestBody UpdateSkillResponseDto updateSkillResponseDto) {
@@ -103,8 +101,7 @@ public class SkillController {
     @PreAuthorize("hasAuthority('DELETE /skills/{id}')")
     @Operation(
             summary = "Xóa Skill theo id",
-            description = "Yêu cầu quyền: <b>DELETE /skills/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>DELETE /skills/{id}</b>"
     )
     public ResponseEntity<DefaultSkillResponseDto> deleteSkillById(@PathVariable Long id) {
         return ResponseEntity.ok(skillService.deleteSkillById(id));

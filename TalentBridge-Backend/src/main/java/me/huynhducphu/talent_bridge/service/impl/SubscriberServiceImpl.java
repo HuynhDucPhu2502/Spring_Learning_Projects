@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import me.huynhducphu.talent_bridge.dto.request.subscriber.DefaultSubscriberRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.subscriber.DefaultSubscriberResponseDto;
-import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
+import me.huynhducphu.talent_bridge.advice.exception.ResourceAlreadyExistsException;
 import me.huynhducphu.talent_bridge.model.Skill;
 import me.huynhducphu.talent_bridge.model.Subscriber;
 import me.huynhducphu.talent_bridge.repository.SkillRepository;

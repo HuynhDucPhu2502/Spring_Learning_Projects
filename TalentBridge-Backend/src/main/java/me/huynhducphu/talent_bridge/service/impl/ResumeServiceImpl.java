@@ -8,7 +8,7 @@ import me.huynhducphu.talent_bridge.dto.response.resume.CreateResumeResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.DefaultResumeResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.GetResumeFileResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.resume.ResumeForDisplayResponseDto;
-import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
+import me.huynhducphu.talent_bridge.advice.exception.ResourceAlreadyExistsException;
 import me.huynhducphu.talent_bridge.model.Job;
 import me.huynhducphu.talent_bridge.model.Resume;
 import me.huynhducphu.talent_bridge.model.Skill;

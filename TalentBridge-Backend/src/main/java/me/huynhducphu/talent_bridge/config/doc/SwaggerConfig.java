@@ -18,9 +18,8 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(
-                        new Components().addSecuritySchemes(
-                                "bearerAuth",
+                .components(new Components()
+                        .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
@@ -30,7 +29,7 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("Talent Bridge API")
                         .version("1.0")
-                        .description("API documentation"));
+                        .description("API documentation with JWT secured endpoints"));
     }
 
 }

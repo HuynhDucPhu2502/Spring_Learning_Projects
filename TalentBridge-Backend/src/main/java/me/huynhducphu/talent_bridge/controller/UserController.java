@@ -37,8 +37,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('POST /users')")
     @Operation(
             summary = "Tạo User",
-            description = "Yêu cầu quyền: <b>POST /users</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>POST /users</b>"
     )
     public ResponseEntity<DefaultUserResponseDto> saveUser(
             @Valid @RequestBody UserCreateRequestDto userCreateRequestDto
@@ -53,8 +52,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('GET /users')")
     @Operation(
             summary = "Lấy danh sách User",
-            description = "Yêu cầu quyền: <b>GET /users</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /users</b>"
     )
     public ResponseEntity<PageResponseDto<DefaultUserResponseDto>> findAllUsers(
             @Filter Specification<User> spec,
@@ -80,8 +78,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('GET /users/{id}')")
     @Operation(
             summary = "Tìm User theo id",
-            description = "Yêu cầu quyền: <b>GET /users/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /users/{id}</b>"
     )
     public ResponseEntity<DefaultUserResponseDto> findUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findUserById(id));
@@ -92,8 +89,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('PUT /users')")
     @Operation(
             summary = "Cập nhật User",
-            description = "Yêu cầu quyền: <b>PUT /users</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>PUT /users</b>"
     )
     public ResponseEntity<DefaultUserResponseDto> updateUser(
             @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto
@@ -106,8 +102,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('DELETE /users/{id}')")
     @Operation(
             summary = "Xóa User theo id",
-            description = "Yêu cầu quyền: <b>DELETE /users/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>DELETE /users/{id}</b>"
     )
     public ResponseEntity<DefaultUserResponseDto> deleteUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.deleteUserById(id));
@@ -115,6 +110,7 @@ public class UserController {
 
     @PostMapping("/me/update-profile")
     @ApiMessage(value = "Cập nhật Profile của người dùng hiện tại")
+    @Operation(summary = "Cập nhật Profile của người dùng hiện tại")
     public ResponseEntity<DefaultUserResponseDto> updateSelfUserProfile(
             @Valid @RequestBody SelfUserUpdateProfileRequestDto selfUserUpdateProfileRequestDto
     ) {
@@ -123,6 +119,7 @@ public class UserController {
 
     @PostMapping("/me/update-password")
     @ApiMessage(value = "Cập nhật Password của người dùng hiện tại")
+    @Operation(summary = "Cập nhật Password của người dùng hiện tại")
     public ResponseEntity<DefaultUserResponseDto> updateSelfUserPassword(
             @Valid @RequestBody SelfUserUpdatePasswordRequestDto selfUserUpdatePasswordRequestDto
     ) {
@@ -131,6 +128,7 @@ public class UserController {
 
     @PostMapping("/me/upload-avatar")
     @ApiMessage(value = "Cập nhật Avatar của người dùng hiện tại")
+    @Operation(summary = "Cập nhật Avatar của người dùng hiện tại")
     public void updateSelfUserAvatar(
             @RequestParam("avatar") MultipartFile avatarFile
     ) {

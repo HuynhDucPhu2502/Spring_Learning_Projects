@@ -2,7 +2,6 @@ package me.huynhducphu.talent_bridge.controller;
 
 import com.turkraft.springfilter.boot.Filter;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +36,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('POST /roles')")
     @Operation(
             summary = "Tạo Role",
-            description = "Yêu cầu quyền: <b>POST /roles</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>POST /roles</b>"
     )
     public ResponseEntity<DefaultRoleResponseDto> saveRole(
             @Valid @RequestBody DefaultRoleRequestDto defaultRoleRequestDto
@@ -53,8 +51,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('GET /roles')")
     @Operation(
             summary = "Lấy danh sách Role",
-            description = "Yêu cầu quyền: <b>GET /roles</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>GET /roles</b>"
     )
     public ResponseEntity<PageResponseDto<DefaultRoleResponseDto>> findAllRoles(
             @Filter Specification<Role> spec,
@@ -78,8 +75,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('PUT /roles/{id}')")
     @Operation(
             summary = "Câp nhật Role",
-            description = "Yêu cầu quyền: <b>PUT /roles/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>PUT /roles/{id}</b>"
     )
     public ResponseEntity<DefaultRoleResponseDto> updateRoleById(
             @PathVariable Long id,
@@ -93,8 +89,7 @@ public class RoleController {
     @PreAuthorize("hasAuthority('DELETE /roles/{id}')")
     @Operation(
             summary = "Xóa Role theo id",
-            description = "Yêu cầu quyền: <b>DELETE /roles/{id}</b>",
-            security = @SecurityRequirement(name = "bearerAuth")
+            description = "Yêu cầu quyền: <b>DELETE /roles/{id}</b>"
     )
     public ResponseEntity<DefaultRoleResponseDto> deleteRoleById(@PathVariable Long id) {
         return ResponseEntity.ok(roleService.deleteRoleById(id));

@@ -1,5 +1,7 @@
 package me.huynhducphu.talent_bridge.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,8 @@ public class AuthController {
 
     @PostMapping("/register")
     @ApiMessage(value = "Đăng ký thành công")
+    @Operation(summary = "Người dùng đăng ký")
+    @SecurityRequirements()
     public ResponseEntity<UserSessionResponseDto> register(
             @Valid @RequestBody UserRegisterRequestDto userRegisterRequestDto
     ) {
@@ -41,6 +45,8 @@ public class AuthController {
 
     @PostMapping("/login")
     @ApiMessage(value = "Đăng nhập thành công")
+    @Operation(summary = "Người dùng đăng nhập")
+    @SecurityRequirements()
     public ResponseEntity<AuthTokenResponseDto> login(
             @Valid @RequestBody UserLoginRequestDto userLoginRequestDto
     ) {
@@ -56,6 +62,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "Người dùng đăng xuất")
+    @SecurityRequirements()
     public ResponseEntity<Void> logout(
             @CookieValue(value = "refresh_token", required = false) String refreshToken
     ) {
@@ -69,18 +77,21 @@ public class AuthController {
 
     @GetMapping("/me")
     @ApiMessage(value = "Trả về thông tin phiên đăng nhập của người dùng hiện tại")
+    @Operation(summary = "Lấy thông tin phiên đăng nhập của người dùng hiện tại")
     public ResponseEntity<UserSessionResponseDto> getCurrentUser() {
         return ResponseEntity.ok(authService.getCurrentUser());
     }
 
     @GetMapping("/me/details")
     @ApiMessage(value = "Trả về thông tin chi tiết của người dùng hiện tại")
+    @Operation(summary = "Lấy thông tin chi tiết của người dùng hiện tại")
     public ResponseEntity<UserDetailsResponseDto> getCurrentUserDetails() {
         return ResponseEntity.ok(authService.getCurrentUserDetails());
     }
 
     @PostMapping("/refresh-token")
     @ApiMessage(value = "Lấy refresh token")
+    @Operation(summary = "Cấp lại access token và refresh token mới")
     public ResponseEntity<AuthTokenResponseDto> refreshToken(
             @CookieValue(value = "refresh_token") String refreshToken,
             @RequestBody SessionMetaRequest sessionMetaRequest
@@ -98,14 +109,16 @@ public class AuthController {
 
     @GetMapping("/sessions")
     @ApiMessage(value = "Lấy session")
-    public ResponseEntity<List<SessionMetaResponse>> getSessions(@CookieValue(value = "refresh_token") String refreshToken) {
-        return ResponseEntity.ok(authService.getAllSessionMetas(refreshToken));
+    @Operation(summary = "Lấy tất cả phiên đăng nhập của người dùng hiện tại")
+    public ResponseEntity<List<SessionMetaResponse>> getAllSelfSessionMetas(@CookieValue(value = "refresh_token") String refreshToken) {
+        return ResponseEntity.ok(authService.getAllSelfSessionMetas(refreshToken));
     }
 
     @DeleteMapping("/sessions/{sessionId}")
     @ApiMessage(value = "Xóa session")
-    public ResponseEntity<Void> removeSession(@PathVariable String sessionId) {
-        authService.removeSession(sessionId);
+    @Operation(summary = "Xóa phiên đăng nhập của người dùng theo id phiên")
+    public ResponseEntity<Void> removeSelfSession(@PathVariable String sessionId) {
+        authService.removeSelfSession(sessionId);
 
         return ResponseEntity.ok().build();
     }

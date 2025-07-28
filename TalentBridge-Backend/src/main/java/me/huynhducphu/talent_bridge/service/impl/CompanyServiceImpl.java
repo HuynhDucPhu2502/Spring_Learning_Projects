@@ -7,7 +7,7 @@ import me.huynhducphu.talent_bridge.dto.request.user.RecruiterRequestDto;
 import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyExtendedResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.company.DefaultCompanyResponseDto;
 import me.huynhducphu.talent_bridge.dto.response.user.RecruiterResponseDto;
-import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
+import me.huynhducphu.talent_bridge.advice.exception.ResourceAlreadyExistsException;
 import me.huynhducphu.talent_bridge.model.Company;
 import me.huynhducphu.talent_bridge.model.CompanyLogo;
 import me.huynhducphu.talent_bridge.model.User;
@@ -265,7 +265,7 @@ public class CompanyServiceImpl implements me.huynhducphu.talent_bridge.service.
         recruiter.setCompany(null);
         userRepository.saveAndFlush(recruiter);
     }
-    
+
     @Override
     public DefaultCompanyResponseDto deleteCompanyById(Long id) {
         Company company = companyRepository.findById(id)
