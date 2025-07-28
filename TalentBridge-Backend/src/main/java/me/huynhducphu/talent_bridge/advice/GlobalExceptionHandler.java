@@ -1,10 +1,10 @@
-package me.huynhducphu.talent_bridge.exception.handler;
+package me.huynhducphu.talent_bridge.advice;
 
 import jakarta.persistence.EntityNotFoundException;
 import me.huynhducphu.talent_bridge.dto.response.ApiResponse;
-import me.huynhducphu.talent_bridge.exception.custom.ImmutableFieldException;
-import me.huynhducphu.talent_bridge.exception.custom.InvalidImageDataException;
-import me.huynhducphu.talent_bridge.exception.custom.ResourceAlreadyExistsException;
+import me.huynhducphu.talent_bridge.advice.exception.ImmutableFieldException;
+import me.huynhducphu.talent_bridge.advice.exception.InvalidImageDataException;
+import me.huynhducphu.talent_bridge.advice.exception.ResourceAlreadyExistsException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -185,7 +185,7 @@ public class GlobalExceptionHandler {
         String message = "Không có quyền truy cập";
         if (ex.getMessage() != null)
             message = ex.getMessage();
-        
+
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiResponse<>(

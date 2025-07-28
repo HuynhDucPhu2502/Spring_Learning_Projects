@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.exception.custom;
+package me.huynhducphu.talent_bridge.advice.exception;
 
 /**
  * Admin 6/25/2025

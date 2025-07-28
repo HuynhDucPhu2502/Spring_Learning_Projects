@@ -1,4 +1,4 @@
-package me.huynhducphu.talent_bridge.exception.handler;
+package me.huynhducphu.talent_bridge.advice;
 
 import jakarta.servlet.http.HttpServletResponse;
 import me.huynhducphu.talent_bridge.annotation.ApiMessage;
@@ -53,14 +53,9 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 
         Class<?> returnTypeClass = returnType.getParameterType();
 
-        if (returnTypeClass == byte[].class
-                || org.springframework.core.io.Resource.class.isAssignableFrom(returnTypeClass)
-                || org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody.class.isAssignableFrom(returnTypeClass)
-        ) {
-            return false;
-        }
-
-        return true;
+        return returnTypeClass != byte[].class
+                && !org.springframework.core.io.Resource.class.isAssignableFrom(returnTypeClass)
+                && !org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody.class.isAssignableFrom(returnTypeClass);
     }
 
     @Override

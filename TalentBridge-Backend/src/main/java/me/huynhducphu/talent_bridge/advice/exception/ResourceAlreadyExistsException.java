@@ -1,7 +1,4 @@
-package me.huynhducphu.talent_bridge.exception.custom;
-
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+package me.huynhducphu.talent_bridge.advice.exception;
 
 /**
  * Admin 6/23/2025

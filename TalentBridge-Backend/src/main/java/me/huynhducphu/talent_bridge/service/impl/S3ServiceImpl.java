@@ -1,7 +1,7 @@
 package me.huynhducphu.talent_bridge.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import me.huynhducphu.talent_bridge.exception.custom.S3UploadException;
+import me.huynhducphu.talent_bridge.advice.exception.S3UploadException;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
