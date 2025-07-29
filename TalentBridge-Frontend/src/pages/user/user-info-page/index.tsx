@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type {
   SelfUserUpdatePasswordRequestDto,
   SelfUserUpdateProfileRequestDto,
@@ -50,10 +50,14 @@ const UserInfoPage = () => {
   const [avatarVersion, setAvatarVersion] = useState(Date.now());
 
   // Form State
-  const [isOpenProfileEditForm, setisOpenProfileEditForm] = useState(false);
-  const [isOpenPasswordChangeForm, setisOpenPasswordChangeForm] =
+  const [isOpenProfileEditForm, setIsOpenProfileEditForm] = useState(false);
+  const [isOpenPasswordChangeForm, setIsOpenPasswordChangeForm] =
     useState(false);
-  const [isOpenAvatarUploadForm, setisOpenAvatarUploadForm] = useState(false);
+  const [isOpenAvatarUploadForm, setIsOpenAvatarUploadForm] = useState(false);
+
+  // Ref
+  const profileFormRef = useRef<HTMLDivElement | null>(null);
+  const passwordFormRef = useRef<HTMLDivElement | null>(null);
 
   // ======================================
   // Handle Fetching User Details
@@ -81,9 +85,30 @@ const UserInfoPage = () => {
     fetchUserDetails();
   }, [fetchUserDetails]);
 
-  // ===================
-  // Handle Actions
-  // ===================
+  // ======================================
+  // Handle Open Form
+  // ======================================
+  useEffect(() => {
+    if (isOpenProfileEditForm && profileFormRef.current) {
+      profileFormRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [isOpenProfileEditForm]);
+
+  useEffect(() => {
+    if (isOpenPasswordChangeForm && passwordFormRef.current) {
+      passwordFormRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [isOpenPasswordChangeForm]);
+
+  // ======================================
+  // Handle Actions Call API
+  // ======================================
   const handleUpdateProfile = async (data: SelfUserUpdateProfileRequestDto) => {
     try {
       setIsUpdating(true);
@@ -91,7 +116,7 @@ const UserInfoPage = () => {
       await fetchUserDetails();
       dispatch(getAccount());
       toast.success("Cập nhật thông tin thành công");
-      setisOpenProfileEditForm(false);
+      setIsOpenProfileEditForm(false);
     } catch (err) {
       toast.error(getErrorMessage(err, "Thao tác thất bại"));
     } finally {
@@ -107,7 +132,7 @@ const UserInfoPage = () => {
       await selfUserPasswordUpdateApi(data);
       await fetchUserDetails();
       toast.success("Cập nhật mật khẩu thành công");
-      setisOpenPasswordChangeForm(false);
+      setIsOpenPasswordChangeForm(false);
     } catch (err) {
       toast.error(getErrorMessage(err, "Thao tác thất bại"));
     } finally {
@@ -128,7 +153,7 @@ const UserInfoPage = () => {
       dispatch(getAccount());
       setAvatarVersion(Date.now());
       toast.success("Cập nhật ảnh đại diện thành công");
-      setisOpenAvatarUploadForm(false);
+      setIsOpenAvatarUploadForm(false);
     } catch (err) {
       toast.error(getErrorMessage(err, "Thao tác thất bại"));
     } finally {
@@ -266,7 +291,7 @@ const UserInfoPage = () => {
                 {/* Camera Overlay */}
                 <div
                   className="bg-opacity-50 absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-gray-300 opacity-0 transition-opacity duration-200 group-hover:opacity-90"
-                  onClick={() => setisOpenAvatarUploadForm(true)}
+                  onClick={() => setIsOpenAvatarUploadForm(true)}
                 >
                   <Camera className="h-8 w-8 text-white" />
                 </div>
@@ -290,7 +315,7 @@ const UserInfoPage = () => {
               {/* Action Buttons */}
               <div className="space-y-3">
                 <Button
-                  onClick={() => setisOpenProfileEditForm(true)}
+                  onClick={() => setIsOpenProfileEditForm(true)}
                   className="w-full bg-orange-500 text-white hover:bg-orange-600"
                   size="lg"
                 >
@@ -299,7 +324,7 @@ const UserInfoPage = () => {
                 </Button>
 
                 <Button
-                  onClick={() => setisOpenPasswordChangeForm(true)}
+                  onClick={() => setIsOpenPasswordChangeForm(true)}
                   variant="outline"
                   className="w-full border-orange-500 bg-transparent text-orange-600 hover:bg-orange-50"
                   size="lg"
@@ -426,36 +451,44 @@ const UserInfoPage = () => {
       </div>
 
       {/* Forms */}
-      {isOpenProfileEditForm && userDetails && (
-        <ProfileEditForm
-          userDetails={userDetails}
-          onSubmit={handleUpdateProfile}
-          onCancel={() => setisOpenProfileEditForm(false)}
-          isLoading={isUpdating}
-        />
-      )}
 
-      {isOpenPasswordChangeForm && (
-        <PasswordChangeForm
-          onSubmit={handleUpdatePassword}
-          onCancel={() => setisOpenPasswordChangeForm(false)}
-          isLoading={isUpdating}
-        />
-      )}
+      {userDetails && (
+        <div>
+          <div ref={profileFormRef}>
+            {isOpenProfileEditForm && (
+              <ProfileEditForm
+                userDetails={userDetails}
+                onSubmit={handleUpdateProfile}
+                onCancel={() => setIsOpenProfileEditForm(false)}
+                isLoading={isUpdating}
+              />
+            )}
+          </div>
 
-      {/* Avatar Upload Dialog */}
-      {isOpenAvatarUploadForm && userDetails && (
-        <AvatarUploadForm
-          currentAvatarUrl={
-            userDetails.logoUrl
-              ? `${userDetails.logoUrl}?v=${avatarVersion}`
-              : "/placeholder.svg"
-          }
-          userName={userDetails.name}
-          onSubmit={handleAvatarUpload}
-          onCancel={() => setisOpenAvatarUploadForm(false)}
-          isLoading={isUpdating}
-        />
+          <div ref={passwordFormRef}>
+            {isOpenPasswordChangeForm && (
+              <PasswordChangeForm
+                onSubmit={handleUpdatePassword}
+                onCancel={() => setIsOpenPasswordChangeForm(false)}
+                isLoading={isUpdating}
+              />
+            )}
+          </div>
+
+          {isOpenAvatarUploadForm && (
+            <AvatarUploadForm
+              currentAvatarUrl={
+                userDetails.logoUrl
+                  ? `${userDetails.logoUrl}?v=${avatarVersion}`
+                  : "/placeholder.svg"
+              }
+              userName={userDetails.name}
+              onSubmit={handleAvatarUpload}
+              onCancel={() => setIsOpenAvatarUploadForm(false)}
+              isLoading={isUpdating}
+            />
+          )}
+        </div>
       )}
     </div>
   );
