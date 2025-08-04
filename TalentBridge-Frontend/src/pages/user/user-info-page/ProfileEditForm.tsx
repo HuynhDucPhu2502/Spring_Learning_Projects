@@ -1,8 +1,7 @@
 import type React from "react";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,11 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { X, Save, User } from "lucide-react";
 import type {
   SelfUserUpdateProfileRequestDto,
   UserDetailsResponseDto,
 } from "@/types/user.d.ts";
+import { Save, User, X } from "lucide-react";
+import { useState } from "react";
 
 interface ProfileEditFormProps {
   userDetails: UserDetailsResponseDto;

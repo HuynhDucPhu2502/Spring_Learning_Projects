@@ -2,7 +2,6 @@ import { getErrorMessage } from "@/features/slices/auth/authThunk";
 import { registerApi } from "@/services/authApi";
 import type { UserRegisterRequestDto } from "@/types/user";
 import type React from "react";
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";

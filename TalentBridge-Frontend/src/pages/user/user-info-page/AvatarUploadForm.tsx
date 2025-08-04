@@ -1,12 +1,12 @@
 import type React from "react";
 
-import { useState, useRef } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { X, Upload, Camera, ImageIcon } from "lucide-react";
+import { Camera, ImageIcon, Upload, X } from "lucide-react";
+import { useRef, useState } from "react";
 
 interface AvatarUploadFormProps {
   currentAvatarUrl?: string;

@@ -1,14 +1,4 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { findCompanyById } from "@/services/companyApi.ts";
-import { findJobByCompanyId } from "@/services/jobApi.ts";
-import { toast } from "sonner";
-import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
 import LoadingSpinner from "@/components/custom/LoadingSpinner.tsx";
-import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
-import type { Job } from "@/types/job";
-import JobsSection from "../../commons/company-details-components/JobsSection.tsx";
-import CompanySection from "../../commons/company-details-components/CompanySection.tsx";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,6 +7,16 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb.tsx";
+import { getErrorMessage } from "@/features/slices/auth/authThunk.ts";
+import { findCompanyById } from "@/services/companyApi.ts";
+import { findJobByCompanyId } from "@/services/jobApi.ts";
+import type { DefaultCompanyResponseDto } from "@/types/company.d.ts";
+import type { Job } from "@/types/job";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
+import CompanySection from "../../commons/company-details-components/CompanySection.tsx";
+import JobsSection from "../../commons/company-details-components/JobsSection.tsx";
 
 type CompanyDetailsProp = {
   initialCompany?: DefaultCompanyResponseDto;
@@ -24,7 +24,9 @@ type CompanyDetailsProp = {
 
 const CompanyDetailsClientPage = ({ initialCompany }: CompanyDetailsProp) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [company, setCompany] = useState<DefaultCompanyResponseDto | undefined>(initialCompany);
+  const [company, setCompany] = useState<DefaultCompanyResponseDto | undefined>(
+    initialCompany,
+  );
   const [jobs, setJobs] = useState<Job[]>([]);
   const { id } = useParams();
   const navigate = useNavigate();

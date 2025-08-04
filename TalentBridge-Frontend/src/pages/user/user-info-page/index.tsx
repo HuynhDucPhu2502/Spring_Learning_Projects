@@ -1,42 +1,42 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import type {
-  SelfUserUpdatePasswordRequestDto,
-  SelfUserUpdateProfileRequestDto,
-  UserDetailsResponseDto,
-} from "@/types/user.d.ts";
-import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAppDispatch } from "@/features/hooks";
 import {
   getAccount,
   getErrorMessage,
 } from "@/features/slices/auth/authThunk.ts";
 import { getUserDetails } from "@/services/authApi.ts";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  User,
-  Mail,
-  Calendar,
-  MapPin,
-  Users,
-  Edit,
-  Lock,
-  Clock,
-  Camera,
-  Shield,
-  Cake,
-} from "lucide-react";
-import ProfileEditForm from "./ProfileEditForm";
-import PasswordChangeForm from "./PasswordChangeForm";
 import {
   selfUserAvatarUpdateApi,
   selfUserPasswordUpdateApi,
   selfUserProfileUpdateApi,
 } from "@/services/userApi";
+import type {
+  SelfUserUpdatePasswordRequestDto,
+  SelfUserUpdateProfileRequestDto,
+  UserDetailsResponseDto,
+} from "@/types/user.d.ts";
+import {
+  Cake,
+  Calendar,
+  Camera,
+  Clock,
+  Edit,
+  Lock,
+  Mail,
+  MapPin,
+  Shield,
+  User,
+  Users,
+} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import AvatarUploadForm from "./AvatarUploadForm";
-import { useAppDispatch } from "@/features/hooks";
+import PasswordChangeForm from "./PasswordChangeForm";
+import ProfileEditForm from "./ProfileEditForm";
 
 const UserInfoPage = () => {
   const dispatch = useAppDispatch();

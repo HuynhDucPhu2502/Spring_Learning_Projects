@@ -1,12 +1,12 @@
 import type React from "react";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X, Lock, Eye, EyeOff } from "lucide-react";
 import type { SelfUserUpdatePasswordRequestDto } from "@/types/user.d.ts";
+import { Eye, EyeOff, Lock, X } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface PasswordChangeFormProps {

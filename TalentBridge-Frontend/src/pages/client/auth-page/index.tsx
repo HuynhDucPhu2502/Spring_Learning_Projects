@@ -1,8 +1,8 @@
+import { useAppSelector } from "@/features/hooks";
+import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
-import { useAppSelector } from "@/features/hooks";
-import { useEffect, useRef } from "react";
 
 const AuthPage = () => {
   const navigate = useNavigate();
